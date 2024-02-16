@@ -9,8 +9,8 @@ RUN apk add curl
 WORKDIR ${GOOSE_DIR}
 
 RUN curl -fsSL \
-	https://raw.githubusercontent.com/pressly/goose/master/install.sh |\
-	GOOSE_INSTALL=${GOOSE_DIR} sh
+	https://raw.githubusercontent.com/pressly/goose/master/install.sh | GOOSE_INSTALL=${GOOSE_DIR} sh
 
-CMD ["tail", "-F", "non-existent-file"]
+# command below is used to prevent the container to be closed just after the goose's installation
+CMD ["tail", "-F", "any-file"]
 
