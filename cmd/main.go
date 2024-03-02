@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -21,6 +22,7 @@ type Envs struct {
 	PostgresPassword string
 	PostgresDatabase string
 	PostgresPort     int
+	APIPort          string
 }
 
 func ReadEnvFromOS() Envs {
@@ -51,12 +53,18 @@ func ReadEnvFromOS() Envs {
 		}
 	}
 
+	apiPort := "1212"
+	if port := os.Getenv("API_PORT"); port != "" {
+		apiPort = port
+	}
+
 	return Envs{
 		PostgresHost:     postgresHost,
 		PostgresUserName: postgresUsername,
 		PostgresPassword: postgresPassword,
 		PostgresDatabase: postgresDatabase,
 		PostgresPort:     postgresPort,
+		APIPort:          apiPort,
 	}
 }
 
@@ -92,5 +100,5 @@ func main() {
 	usersRouter.Post("/", handlers.CreateUserHandle(userService))
 	r.Mount("/users", usersRouter)
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), r)
 }
