@@ -5,13 +5,14 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
 type UserService struct {
-	repo domain.UserRepository
+	repo ports.UserRepository
 }
 
-func NewUserService(repo domain.UserRepository) UserService {
+func NewUserService(repo ports.UserRepository) UserService {
 	return UserService{
 		repo: repo,
 	}
