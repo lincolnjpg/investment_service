@@ -25,7 +25,7 @@ type Envs struct {
 	APIPort          string
 }
 
-func ReadEnvFromOS() Envs {
+func ReadEnvsFromOS() Envs {
 	postgresHost := "localhost"
 	if host := os.Getenv("POSTGRES_HOST"); host != "" {
 		postgresHost = host
@@ -74,7 +74,7 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	envs := ReadEnvFromOS()
+	envs := ReadEnvsFromOS()
 
 	dbConnParams := infra.DBConnParams{
 		Host:     envs.PostgresHost,
@@ -92,13 +92,13 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
-	r := chi.NewRouter()
-	r.Use(middleware.Logger)
-	r.Use(middleware.Heartbeat("/ping"))
+	router := chi.NewRouter()
+	router.Use(middleware.Logger)
+	router.Use(middleware.Heartbeat("/ping"))
 
 	usersRouter := chi.NewRouter()
 	usersRouter.Post("/", handlers.CreateUserHandle(userService))
-	r.Mount("/users", usersRouter)
+	router.Mount("/users", usersRouter)
 
-	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), r)
+	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
 }
