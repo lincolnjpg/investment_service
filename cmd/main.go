@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/adapters/services"
@@ -92,13 +92,16 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
-	router := chi.NewRouter()
-	router.Use(middleware.Logger)
-	router.Use(middleware.Heartbeat("/ping"))
+	router := mux.NewRouter()
+	usersRouter := router.PathPrefix("/users").Subrouter() //use the path prefix "/users{_:/?}"" to match /users and /users/
+	usersRouter.HandleFunc("", handlers.CreateUserHandle(userService)).Methods("POST")
 
-	usersRouter := chi.NewRouter()
-	usersRouter.Post("/", handlers.CreateUserHandle(userService))
-	router.Mount("/users", usersRouter)
+	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), removeTrailingSlash(router))
+}
 
-	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
+func removeTrailingSlash(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		r.URL.Path = strings.TrimSuffix(r.URL.Path, "/")
+		next.ServeHTTP(w, r)
+	})
 }

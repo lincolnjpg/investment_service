@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/domain"
@@ -20,7 +19,6 @@ func NewUserService(repo ports.UserRepository) UserService {
 }
 
 func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
-	fmt.Println("REPO OK")
 	return domain.CreateUserOutput{}, nil
 }
 
