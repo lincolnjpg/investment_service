@@ -3,15 +3,15 @@ package domain
 import "github.com/google/uuid"
 
 const (
-	CONSERVATIVE = iota + 1
-	MODERATE
-	AGGRESSIVE
+	CONSERVATIVE = "conservative"
+	MODERATE     = "moderate"
+	AGGRESSIVE   = "aggressive"
 )
 
-type InvestorTypeEnum int
+type InvestorProfileEnum string
 
 type User struct {
-	Id           uuid.UUID
-	Name         string
-	InvestorType InvestorTypeEnum
+	Id              uuid.UUID
+	Name            string
+	InvestorProfile InvestorProfileEnum
 }

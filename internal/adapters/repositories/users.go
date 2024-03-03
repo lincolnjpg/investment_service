@@ -21,7 +21,7 @@ func NewUserRepository(db *pgx.Conn) UserRepository {
 
 func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
 	fmt.Println(input)
-	_, err := r.db.Exec(ctx, "INSERT INTO users(name, investor_type) VALUES($1, $2)", []interface{}{input.Name, input.InvestorType})
+	_, err := r.db.Exec(ctx, "INSERT INTO users(name, investor_profile) VALUES($1, $2)", []interface{}{input.Name, input.InvestorProfile}...)
 	if err != nil {
 		fmt.Println(err)
 		return domain.User{}, err
