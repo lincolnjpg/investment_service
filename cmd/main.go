@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/joho/godotenv"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/adapters/services"
@@ -96,16 +96,13 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
-	router := mux.NewRouter()
-	usersRouter := router.PathPrefix("/users").Subrouter() //use the path prefix "/users{_:/?}"" to match /users and /users/
-	usersRouter.HandleFunc("", handlers.CreateUserHandle(ctx, userService)).Methods("POST")
+	router := chi.NewRouter()
+	router.Use(middleware.Logger)
+	router.Use(middleware.Heartbeat("/ping"))
 
-	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), removeTrailingSlash(router))
-}
+	usersRouter := chi.NewRouter()
+	usersRouter.Post("/", handlers.CreateUserHandle(ctx, userService))
+	router.Mount("/users", usersRouter)
 
-func removeTrailingSlash(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		r.URL.Path = strings.TrimSuffix(r.URL.Path, "/")
-		next.ServeHTTP(w, r)
-	})
+	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
 }
