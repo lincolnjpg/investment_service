@@ -3,13 +3,13 @@ package domain
 import "github.com/google/uuid"
 
 type CreateUserInput struct {
-	Name             string
-	InvestorTypeEnum InvestorTypeEnum
+	Name         string           `json:"name,omitempty"`
+	InvestorType InvestorTypeEnum `json:"investor_type,omitempty"`
 }
 
 type UpdateUserInput struct {
-	Name             string
-	InvestorTypeEnum InvestorTypeEnum
+	Name         string
+	InvestorType InvestorTypeEnum
 }
 
 type CreateUserOutput struct {

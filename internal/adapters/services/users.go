@@ -19,6 +19,7 @@ func NewUserService(repo ports.UserRepository) UserService {
 }
 
 func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
+	s.repo.Create(ctx, input)
 	return domain.CreateUserOutput{}, nil
 }
 

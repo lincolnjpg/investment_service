@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -84,17 +85,20 @@ func main() {
 		Port:     envs.PostgresPort,
 	}
 
+	ctx := context.Background()
+
 	db, err := infra.NewPostgres(dbConnParams)
 	if err != nil {
 		panic(err)
 	}
+	defer db.Close(ctx)
 
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
 	router := mux.NewRouter()
 	usersRouter := router.PathPrefix("/users").Subrouter() //use the path prefix "/users{_:/?}"" to match /users and /users/
-	usersRouter.HandleFunc("", handlers.CreateUserHandle(userService)).Methods("POST")
+	usersRouter.HandleFunc("", handlers.CreateUserHandle(ctx, userService)).Methods("POST")
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), removeTrailingSlash(router))
 }

@@ -31,7 +31,6 @@ func NewPostgres(params DBConnParams) (*pgx.Conn, error) {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
-	defer conn.Close(context.Background())
 
 	return conn, err
 }
