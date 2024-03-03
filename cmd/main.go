@@ -8,8 +8,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/adapters/services"
@@ -98,6 +98,7 @@ func main() {
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
 	router.Use(middleware.Heartbeat("/ping"))
 
 	usersRouter := chi.NewRouter()
