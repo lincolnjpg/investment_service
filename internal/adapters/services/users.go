@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -18,19 +19,19 @@ func NewUserService(repo ports.UserRepository) UserService {
 	}
 }
 
-func (s UserService) Create(input domain.CreateUserInput) (domain.CreateUserOutput, error) {
+func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
 	fmt.Println("REPO OK")
 	return domain.CreateUserOutput{}, nil
 }
 
-func (s UserService) Update(input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
+func (s UserService) Update(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
 	return domain.UpdateUserOutput{}, nil
 }
 
-func (s UserService) GetById(id uuid.UUID) (domain.GetUserByIdOutput, error) {
+func (s UserService) GetById(ctx context.Context, id uuid.UUID) (domain.GetUserByIdOutput, error) {
 	return domain.GetUserByIdOutput{}, nil
 }
 
-func (s UserService) DeleteById(id uuid.UUID) error {
+func (s UserService) DeleteById(ctx context.Context, id uuid.UUID) error {
 	return nil
 }

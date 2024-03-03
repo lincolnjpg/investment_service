@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/domain"
@@ -16,18 +18,18 @@ func NewUserRepository(db *pgx.Conn) UserRepository {
 	}
 }
 
-func (r UserRepository) Create(input domain.CreateUserInput) (domain.User, error) {
+func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
 	return domain.User{}, nil
 }
 
-func (r UserRepository) Update(input domain.UpdateUserInput) (domain.User, error) {
+func (r UserRepository) Update(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
 	return domain.User{}, nil
 }
 
-func (r UserRepository) GetById(id uuid.UUID) (domain.User, error) {
+func (r UserRepository) GetById(ctx context.Context, id uuid.UUID) (domain.User, error) {
 	return domain.User{}, nil
 }
 
-func (r UserRepository) DeleteById(id uuid.UUID) error {
+func (r UserRepository) DeleteById(ctx context.Context, id uuid.UUID) error {
 	return nil
 }
