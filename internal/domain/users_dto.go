@@ -13,7 +13,7 @@ type UpdateUserInput struct {
 }
 
 type CreateUserOutput struct {
-	Id uuid.UUID
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type UpdateUserOutput struct {

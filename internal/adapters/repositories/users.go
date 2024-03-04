@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
@@ -20,13 +19,22 @@ func NewUserRepository(db *pgx.Conn) UserRepository {
 }
 
 func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
-	fmt.Println(input)
-	_, err := r.db.Exec(ctx, "INSERT INTO users(name, investor_profile) VALUES($1, $2)", []interface{}{input.Name, input.InvestorProfile}...)
-	if err != nil {
-		fmt.Println(err)
-		return domain.User{}, err
+	var user domain.User
+
+	row := r.db.QueryRow(
+		ctx,
+		`
+		INSERT INTO users(name, investor_profile)
+		VALUES($1, $2)
+		RETURNING id, name, investor_profile;
+		`,
+		[]interface{}{input.Name, input.InvestorProfile}...,
+	)
+	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
+		return user, err
 	}
-	return domain.User{}, nil
+
+	return user, nil
 }
 
 func (r UserRepository) Update(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
