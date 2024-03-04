@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"strconv"
@@ -72,7 +72,7 @@ func ReadEnvsFromOS() Envs {
 func main() {
 	err := godotenv.Load("../.env")
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		panic("Error loading .env file")
 	}
 
 	envs := ReadEnvsFromOS()
@@ -93,8 +93,10 @@ func main() {
 	}
 	defer db.Close(ctx)
 
-	userRepo := repositories.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+
+	userRepo := repositories.NewUserRepository(ctx, logger, db)
+	userService := services.NewUserService(ctx, logger, userRepo)
 
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
@@ -102,7 +104,7 @@ func main() {
 	router.Use(middleware.Heartbeat("/ping"))
 
 	usersRouter := chi.NewRouter()
-	usersRouter.Post("/", handlers.CreateUserHandle(ctx, userService))
+	usersRouter.Post("/", handlers.CreateUserHandle(ctx, logger, userService))
 	router.Mount("/users", usersRouter)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)

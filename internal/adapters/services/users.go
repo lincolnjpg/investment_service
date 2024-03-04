@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/domain"
@@ -9,17 +10,21 @@ import (
 )
 
 type UserService struct {
-	repo ports.UserRepository
+	ctx    context.Context
+	logger *slog.Logger
+	repo   ports.UserRepository
 }
 
-func NewUserService(repo ports.UserRepository) UserService {
+func NewUserService(ctx context.Context, logger *slog.Logger, repo ports.UserRepository) UserService {
 	return UserService{
-		repo: repo,
+		ctx:    ctx,
+		logger: logger,
+		repo:   repo,
 	}
 }
 
-func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
-	user, err := s.repo.Create(ctx, input)
+func (s UserService) Create(input domain.CreateUserInput) (domain.CreateUserOutput, error) {
+	user, err := s.repo.Create(input)
 	if err != nil {
 		return domain.CreateUserOutput{}, err
 	}
@@ -27,14 +32,14 @@ func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (
 	return domain.CreateUserOutput{Id: user.Id}, nil
 }
 
-func (s UserService) Update(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
+func (s UserService) Update(input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
 	return domain.UpdateUserOutput{}, nil
 }
 
-func (s UserService) GetById(ctx context.Context, id uuid.UUID) (domain.GetUserByIdOutput, error) {
+func (s UserService) GetById(id uuid.UUID) (domain.GetUserByIdOutput, error) {
 	return domain.GetUserByIdOutput{}, nil
 }
 
-func (s UserService) DeleteById(ctx context.Context, id uuid.UUID) error {
+func (s UserService) DeleteById(id uuid.UUID) error {
 	return nil
 }
