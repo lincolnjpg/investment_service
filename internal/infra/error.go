@@ -1,19 +1,21 @@
 package infra
 
-import "fmt"
+import (
+	"github.com/rotisserie/eris"
+)
 
-type apiError struct {
-	StatusCode int    `json:"status_code,omitempty"`
-	Message    string `json:"message,omitempty"`
+type APIError struct {
+	Err        error `json:"err,omitempty"`
+	StatusCode int   `json:"status_code,omitempty"`
 }
 
-func (e apiError) Error() string {
-	return fmt.Sprintf("status code: %d\nmessage: %s", e.StatusCode, e.Message)
+func (e APIError) Error() string {
+	return e.Err.Error()
 }
 
-func NewAPIError(statusCode int, message string) apiError {
-	return apiError{
+func NewAPIError(message string, statusCode int) APIError {
+	return APIError{
+		Err:        eris.New(message),
 		StatusCode: statusCode,
-		Message:    message,
 	}
 }

@@ -2,11 +2,9 @@ package services
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/domain"
-	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
@@ -23,7 +21,7 @@ func NewUserService(repo ports.UserRepository) UserService {
 func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
 	user, err := s.repo.Create(ctx, input)
 	if err != nil {
-		return domain.CreateUserOutput{}, infra.NewAPIError(http.StatusInternalServerError, err.Error())
+		return domain.CreateUserOutput{}, err
 	}
 
 	return domain.CreateUserOutput{Id: user.Id}, nil

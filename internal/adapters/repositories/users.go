@@ -33,7 +33,7 @@ func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput
 		[]interface{}{input.Name, input.InvestorProfile}...,
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
-		return user, infra.NewAPIError(http.StatusInternalServerError, err.Error())
+		return user, infra.NewAPIError(err.Error(), http.StatusInternalServerError)
 	}
 
 	return user, nil
