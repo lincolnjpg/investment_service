@@ -2,10 +2,12 @@ package repositories
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
 type UserRepository struct {
@@ -31,7 +33,7 @@ func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput
 		[]interface{}{input.Name, input.InvestorProfile}...,
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
-		return user, err
+		return user, infra.NewAPIError(http.StatusInternalServerError, err.Error())
 	}
 
 	return user, nil
