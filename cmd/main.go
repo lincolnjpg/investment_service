@@ -7,9 +7,11 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
+	chimiddlewares "github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/httplog/v2"
 	"github.com/joho/godotenv"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/adapters/services"
@@ -93,18 +95,27 @@ func main() {
 	}
 	defer db.Close(ctx)
 
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	logger := httplog.NewLogger(
+		"investment_service",
+		httplog.Options{
+			JSON:            true,
+			LevelFieldName:  "severity",
+			LogLevel:        slog.LevelDebug,
+			Concise:         true,
+			RequestHeaders:  true,
+			TimeFieldFormat: time.RFC3339Nano,
+		},
+	)
 
-	userRepo := repositories.NewUserRepository(ctx, logger, db)
-	userService := services.NewUserService(ctx, logger, userRepo)
+	userRepo := repositories.NewUserRepository(logger, db)
+	userService := services.NewUserService(logger, userRepo)
 
 	router := chi.NewRouter()
-	router.Use(middleware.Logger)
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.Heartbeat("/ping"))
+	router.Use(httplog.RequestLogger(logger))
+	router.Use(chimiddlewares.Heartbeat("/ping"))
 
 	usersRouter := chi.NewRouter()
-	usersRouter.Post("/", handlers.CreateUserHandle(ctx, logger, userService))
+	usersRouter.Post("/", handlers.CreateUserHandle(logger, userService))
 	router.Mount("/users", usersRouter)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)

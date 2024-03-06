@@ -1,8 +1,6 @@
 package infra
 
-import (
-	"github.com/rotisserie/eris"
-)
+import "errors"
 
 type APIError struct {
 	Err        error `json:"err,omitempty"`
@@ -15,7 +13,7 @@ func (e APIError) Error() string {
 
 func NewAPIError(message string, statusCode int) APIError {
 	return APIError{
-		Err:        eris.New(message),
+		Err:        errors.New(message),
 		StatusCode: statusCode,
 	}
 }

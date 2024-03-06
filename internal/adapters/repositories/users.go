@@ -2,35 +2,32 @@ package repositories
 
 import (
 	"context"
-	"log/slog"
 	"net/http"
 
+	"github.com/go-chi/httplog/v2"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/domain"
 	"github.com/lincolnjpg/investment_service/internal/infra"
-	"github.com/rotisserie/eris"
 )
 
 type UserRepository struct {
-	ctx    context.Context
-	logger *slog.Logger
+	logger *httplog.Logger
 	db     *pgx.Conn
 }
 
-func NewUserRepository(ctx context.Context, logger *slog.Logger, db *pgx.Conn) UserRepository {
+func NewUserRepository(logger *httplog.Logger, db *pgx.Conn) UserRepository {
 	return UserRepository{
-		ctx:    ctx,
 		logger: logger,
 		db:     db,
 	}
 }
 
-func (r UserRepository) Create(input domain.CreateUserInput) (domain.User, error) {
+func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
 	var user domain.User
 
 	row := r.db.QueryRow(
-		r.ctx,
+		ctx,
 		`
 		INSERT INTO users(name, investor_profile)
 		VALUES($1, $2)
@@ -40,7 +37,6 @@ func (r UserRepository) Create(input domain.CreateUserInput) (domain.User, error
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		err := infra.NewAPIError(err.Error(), http.StatusInternalServerError)
-		r.logger.Error("Error while persisting new user", "error", eris.ToJSON(err.Err, true))
 
 		return user, err
 	}
@@ -48,14 +44,14 @@ func (r UserRepository) Create(input domain.CreateUserInput) (domain.User, error
 	return user, nil
 }
 
-func (r UserRepository) Update(input domain.UpdateUserInput) (domain.User, error) {
+func (r UserRepository) Update(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
 	return domain.User{}, nil
 }
 
-func (r UserRepository) GetById(id uuid.UUID) (domain.User, error) {
+func (r UserRepository) GetById(ctx context.Context, id uuid.UUID) (domain.User, error) {
 	return domain.User{}, nil
 }
 
-func (r UserRepository) DeleteById(id uuid.UUID) error {
+func (r UserRepository) DeleteById(ctx context.Context, id uuid.UUID) error {
 	return nil
 }

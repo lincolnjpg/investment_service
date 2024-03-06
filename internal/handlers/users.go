@@ -1,29 +1,32 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"log/slog"
 	"net/http"
 
+	"github.com/go-chi/httplog/v2"
 	"github.com/lincolnjpg/investment_service/internal/domain"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
-	"github.com/rotisserie/eris"
 	"github.com/unrolled/render"
 )
 
-func CreateUserHandle(ctx context.Context, logger *slog.Logger, userService ports.UserService) func(http.ResponseWriter, *http.Request) {
+func CreateUserHandle(logger *httplog.Logger, userService ports.UserService) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
 		var body domain.CreateUserInput
 		json.NewDecoder(r.Body).Decode(&body)
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
 		render := render.New()
 
-		user, err := userService.Create(body)
+		user, err := userService.Create(ctx, body)
 		if err != nil {
 			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, eris.ToJSON(apiError.Err, true))
+			render.JSON(w, apiError.StatusCode, map[string]interface{}{"error": apiError.Err.Error()})
+
 			return
 		}
 
