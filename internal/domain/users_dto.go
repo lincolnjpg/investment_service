@@ -1,10 +1,25 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/google/uuid"
+)
 
 type CreateUserInput struct {
 	Name            string              `json:"name,omitempty"`
 	InvestorProfile InvestorProfileEnum `json:"investor_type,omitempty"`
+}
+
+func (i CreateUserInput) Validate() error {
+	return validation.ValidateStruct(
+		&i,
+		validation.Field(
+			&i.Name,
+			validation.Required,
+			validation.Length(1, 100),
+		),
+		validation.Field(&i.InvestorProfile),
+	)
 }
 
 type UpdateUserInput struct {

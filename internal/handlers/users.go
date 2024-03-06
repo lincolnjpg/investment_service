@@ -12,15 +12,22 @@ import (
 	"github.com/unrolled/render"
 )
 
-func CreateUserHandle(logger *httplog.Logger, userService ports.UserService) func(http.ResponseWriter, *http.Request) {
+func CreateUserHandle(userService ports.UserService) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
+		render := render.New()
 
 		var body domain.CreateUserInput
 		json.NewDecoder(r.Body).Decode(&body)
-		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		render := render.New()
+		err := body.Validate()
+		if err != nil {
+			render.JSON(w, http.StatusUnprocessableEntity, map[string]interface{}{"error": err.Error()})
+
+			return
+		}
+
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
 		user, err := userService.Create(ctx, body)
 		if err != nil {

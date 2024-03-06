@@ -1,6 +1,9 @@
 package domain
 
-import "github.com/google/uuid"
+import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/google/uuid"
+)
 
 const (
 	CONSERVATIVE = "conservative"
@@ -9,6 +12,14 @@ const (
 )
 
 type InvestorProfileEnum string
+
+func (t InvestorProfileEnum) Validate() error {
+	return validation.Validate(
+		string(t),
+		validation.Required,
+		validation.In(CONSERVATIVE, MODERATE, AGGRESSIVE),
+	)
+}
 
 type User struct {
 	Id              uuid.UUID
