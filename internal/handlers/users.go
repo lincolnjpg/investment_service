@@ -12,6 +12,7 @@ import (
 	"github.com/unrolled/render"
 )
 
+// validator como dep
 func CreateUserHandle(userService ports.UserService) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
@@ -22,7 +23,14 @@ func CreateUserHandle(userService ports.UserService) func(http.ResponseWriter, *
 
 		err := body.Validate()
 		if err != nil {
-			render.JSON(w, http.StatusUnprocessableEntity, map[string]interface{}{"error": err.Error()})
+			render.JSON(w, http.StatusUnprocessableEntity,
+				map[string]map[string]interface{}{
+					"error": {
+						"message": "input validation error",
+						"fields":  err,
+					},
+				},
+			)
 
 			return
 		}
@@ -32,7 +40,7 @@ func CreateUserHandle(userService ports.UserService) func(http.ResponseWriter, *
 		user, err := userService.Create(ctx, body)
 		if err != nil {
 			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, map[string]interface{}{"error": apiError.Err.Error()})
+			render.JSON(w, apiError.StatusCode, apiError.ToMap())
 
 			return
 		}
