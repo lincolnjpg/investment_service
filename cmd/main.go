@@ -107,8 +107,8 @@ func main() {
 		},
 	)
 
-	userRepo := repositories.NewUserRepository(logger, db)
-	userService := services.NewUserService(logger, userRepo)
+	userRepo := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
 
 	router := chi.NewRouter()
 	router.Use(httplog.RequestLogger(logger))

@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/go-chi/httplog/v2"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/domain"
@@ -12,14 +11,12 @@ import (
 )
 
 type UserRepository struct {
-	logger *httplog.Logger
-	db     *pgx.Conn
+	db *pgx.Conn
 }
 
-func NewUserRepository(logger *httplog.Logger, db *pgx.Conn) UserRepository {
+func NewUserRepository(db *pgx.Conn) UserRepository {
 	return UserRepository{
-		logger: logger,
-		db:     db,
+		db: db,
 	}
 }
 

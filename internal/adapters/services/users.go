@@ -3,21 +3,18 @@ package services
 import (
 	"context"
 
-	"github.com/go-chi/httplog/v2"
 	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/domain"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
 type UserService struct {
-	logger *httplog.Logger
-	repo   ports.UserRepository
+	repo ports.UserRepository
 }
 
-func NewUserService(logger *httplog.Logger, repo ports.UserRepository) UserService {
+func NewUserService(repo ports.UserRepository) UserService {
 	return UserService{
-		logger: logger,
-		repo:   repo,
+		repo: repo,
 	}
 }
 
