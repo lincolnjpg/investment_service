@@ -10,7 +10,7 @@ import (
 type UserService interface {
 	Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error)
 	Update(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error)
-	GetById(ctx context.Context, id uuid.UUID) (domain.GetUserByIdOutput, error)
+	GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error)
 	DeleteById(ctx context.Context, id uuid.UUID) error
 }
 

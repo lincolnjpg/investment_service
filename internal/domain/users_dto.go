@@ -2,6 +2,7 @@ package domain
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
 )
 
@@ -22,6 +23,21 @@ func (i CreateUserInput) Validate() error {
 	)
 }
 
+type GetUserByIDInput struct {
+	ID string `json:"id,omitempty"`
+}
+
+func (i GetUserByIDInput) Validate() error {
+	return validation.ValidateStruct(
+		&i,
+		validation.Field(
+			&i.ID,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}
+
 type UpdateUserInput struct {
 	Name            string
 	InvestorProfile InvestorProfileEnum
@@ -36,7 +52,7 @@ type UpdateUserOutput struct {
 }
 
 type GetUserByIdOutput struct {
-	Id              uuid.UUID
-	Name            string
-	InvestorProfile InvestorProfileEnum
+	Id              uuid.UUID           `json:"id,omitempty"`
+	Name            string              `json:"name,omitempty"`
+	InvestorProfile InvestorProfileEnum `json:"investor_profile,omitempty"`
 }

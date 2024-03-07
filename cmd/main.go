@@ -115,7 +115,8 @@ func main() {
 	router.Use(chimiddlewares.Heartbeat("/ping"))
 
 	usersRouter := chi.NewRouter()
-	usersRouter.Post("/", handlers.CreateUserHandle(userService))
+	usersRouter.Post("/", handlers.CreateUserHandler(userService))
+	usersRouter.Get("/{id}", handlers.GetUserByIDHandler(userService))
 	router.Mount("/users", usersRouter)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)

@@ -31,8 +31,15 @@ func (s UserService) Update(ctx context.Context, input domain.UpdateUserInput) (
 	return domain.UpdateUserOutput{}, nil
 }
 
-func (s UserService) GetById(ctx context.Context, id uuid.UUID) (domain.GetUserByIdOutput, error) {
-	return domain.GetUserByIdOutput{}, nil
+func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {
+	id, _ := uuid.Parse(input.ID)
+
+	user, err := s.repo.GetById(ctx, id)
+	if err != nil {
+		return domain.GetUserByIdOutput{}, nil
+	}
+
+	return domain.GetUserByIdOutput(user), nil
 }
 
 func (s UserService) DeleteById(ctx context.Context, id uuid.UUID) error {
