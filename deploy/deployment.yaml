@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: investment-service
+  labels:
+    app: investment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: investment-service
+  template:
+    metadata:
+      labels:
+        app: investment-service
+    spec:
+      serviceAccountName: ksa-cloud-sql
+      containers:
+      - name: investment-service
+        image: us-central1-docker.pkg.dev/study-and-learn-400500/investment-service/investment-service:0.1
+        command:
+        - "./investment_service"
+        ports:
+        - containerPort: 80
+        env:
+        - name: POSTGRES_HOST
+          value: "127.0.0.1"
+        - name: POSTGRES_USERNAME
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: "3;KGkcKQ&a1b+JAP"
+        - name: POSTGRES_DATABASE
+          value: postgres
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: API_PORT
+          value: "3000"
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "10m"
+          limits:
+            memory: "100Mi"
+            cpu: "30m"
+      - name: cloud-sql-proxy
+        # This uses the latest version of the Cloud SQL Proxy
+        # It is recommended to use a specific version for production environments.
+        # See: https://github.com/GoogleCloudPlatform/cloudsql-proxy
+        image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest
+        args:
+          # If connecting from a VPC-native GKE cluster, you can use the
+          # following flag to have the proxy connect over private IP
+          # - "--private-ip"
+
+          # If you are not connecting with Automatic IAM, you can delete
+          # the following flag.
+          - "--auto-iam-authn"
+
+          # tcp should be set to the port the proxy should listen on
+          # and should match the DB_PORT value set above.
+          # Defaults: MySQL: 3306, Postgres: 5432, SQLServer: 1433
+          - "--port=5432"
+          - "study-and-learn-400500:us-central1:study-and-learn-db"
+        securityContext:
+          # The default Cloud SQL proxy image runs as the
+          # "nonroot" user and group (uid: 65532) by default.
+          runAsNonRoot: true      
+

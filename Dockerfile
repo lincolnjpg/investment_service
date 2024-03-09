@@ -12,6 +12,4 @@ FROM alpine:3.19
 
 COPY --from=build /server/investment_service ./investment_service
 
-COPY --from=build /server/.env ./.env
-
 ENTRYPOINT ["./investment_service"]

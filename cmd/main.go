@@ -72,10 +72,7 @@ func ReadEnvsFromOS() Envs {
 }
 
 func main() {
-	err := godotenv.Load("../.env")
-	if err != nil {
-		panic("Error loading .env file")
-	}
+	godotenv.Load()
 
 	envs := ReadEnvsFromOS()
 
