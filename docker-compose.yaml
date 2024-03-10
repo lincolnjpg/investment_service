@@ -3,15 +3,23 @@ version: '3.9'
 
 services:
 
-  db:
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: example
-    volumes:
-      - db_data:/var/lib/postgresql/data
+  # db:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: example
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+  #   ports:
+  #     - 5432:5432
+
+  cloud_sql_proxy:
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.9.0-alpine
+    command: study-and-learn-400500:us-central1:study-and-learn-db --credentials-file /config/application_default_credentials.json --address 0.0.0.0 --port 5432 --run-connection-test
     ports:
       - 5432:5432
+    volumes:
+      - /home/lincolnjpg/.config/gcloud/application_default_credentials.json:/config/application_default_credentials.json
 
   migrations:
     build:
