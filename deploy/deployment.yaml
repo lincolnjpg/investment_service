@@ -18,8 +18,6 @@ spec:
       containers:
       - name: investment-service
         image: us-central1-docker.pkg.dev/study-and-learn-400500/investment-service/investment-service:0.1
-        #command:
-        #- "./investment_service"
         ports:
         - containerPort: 80
         env:
