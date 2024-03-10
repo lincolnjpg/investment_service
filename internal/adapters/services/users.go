@@ -24,11 +24,16 @@ func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (
 		return domain.CreateUserOutput{}, err
 	}
 
-	return domain.CreateUserOutput{Id: user.Id}, nil
+	return domain.CreateUserOutput{Id: user.ID}, nil
 }
 
 func (s UserService) Update(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
-	return domain.UpdateUserOutput{}, nil
+	user, err := s.repo.Update(ctx, input)
+	if err != nil {
+		return domain.UpdateUserOutput{}, err
+	}
+
+	return domain.UpdateUserOutput{ID: user.ID}, nil
 }
 
 func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {
