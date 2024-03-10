@@ -60,9 +60,7 @@ func (r UserRepository) GetById(ctx context.Context, id uuid.UUID) (domain.User,
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		if err == pgx.ErrNoRows {
-			err := infra.NewAPIError(fmt.Sprintf("user not found: %s", err.Error()), http.StatusNotFound)
-
-			return user, err
+			return user, infra.NewAPIError(fmt.Sprintf("user not found: %s", err.Error()), http.StatusNotFound)
 		}
 
 		err := infra.NewAPIError(fmt.Sprintf("could not get user from database: %s", err.Error()), http.StatusInternalServerError)

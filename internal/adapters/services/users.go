@@ -36,7 +36,7 @@ func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput)
 
 	user, err := s.repo.GetById(ctx, id)
 	if err != nil {
-		return domain.GetUserByIdOutput{}, nil
+		return domain.GetUserByIdOutput{}, err
 	}
 
 	return domain.GetUserByIdOutput(user), nil
