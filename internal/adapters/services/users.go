@@ -26,13 +26,13 @@ func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (
 	return domain.CreateUserOutput{Id: user.ID}, nil
 }
 
-func (s UserService) Update(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
+func (s UserService) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
 	_, err := s.GetById(ctx, domain.GetUserByIDInput{ID: input.ID})
 	if err != nil {
 		return domain.UpdateUserOutput{}, err
 	}
 
-	user, err := s.repo.Update(ctx, input)
+	user, err := s.repo.UpdateById(ctx, input)
 	if err != nil {
 		return domain.UpdateUserOutput{}, err
 	}

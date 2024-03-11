@@ -42,7 +42,7 @@ func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput
 	return user, nil
 }
 
-func (r UserRepository) Update(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
+func (r UserRepository) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
 	var user domain.User
 
 	row := r.db.QueryRow(

@@ -114,7 +114,7 @@ func main() {
 	usersRouter := chi.NewRouter()
 	usersRouter.Post("/", handlers.CreateUserHandler(userService))
 	usersRouter.Get("/{id}", handlers.GetUserByIDHandler(userService))
-	usersRouter.Put("/{id}", handlers.UpateUserHandler(userService))
+	usersRouter.Put("/{id}", handlers.UpateUserByIdHandler(userService))
 	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(userService))
 
 	router.Mount("/users", usersRouter)

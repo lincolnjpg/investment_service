@@ -86,7 +86,7 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 	}
 }
 
-func UpateUserHandler(userService ports.UserService) func(http.ResponseWriter, *http.Request) {
+func UpateUserByIdHandler(userService ports.UserService) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		render := render.New()
@@ -111,7 +111,7 @@ func UpateUserHandler(userService ports.UserService) func(http.ResponseWriter, *
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := userService.Update(ctx, body)
+		user, err := userService.UpdateById(ctx, body)
 		if err != nil {
 			apiError := err.(infra.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
