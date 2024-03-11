@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/domain"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
@@ -42,9 +41,7 @@ func (s UserService) Update(ctx context.Context, input domain.UpdateUserInput) (
 }
 
 func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {
-	id, _ := uuid.Parse(input.ID)
-
-	user, err := s.repo.GetById(ctx, id)
+	user, err := s.repo.GetById(ctx, input)
 	if err != nil {
 		return domain.GetUserByIdOutput{}, err
 	}
@@ -52,6 +49,16 @@ func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput)
 	return domain.GetUserByIdOutput(user), nil
 }
 
-func (s UserService) DeleteById(ctx context.Context, id uuid.UUID) error {
+func (s UserService) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
+	_, err := s.GetById(ctx, domain.GetUserByIDInput(input))
+	if err != nil {
+		return err
+	}
+
+	err = s.repo.DeleteById(ctx, input)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

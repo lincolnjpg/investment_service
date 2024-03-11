@@ -55,6 +55,21 @@ func (i UpdateUserInput) Validate() error {
 	)
 }
 
+type DeleteUserByIDInput struct {
+	ID string `json:"id,omitempty"`
+}
+
+func (i DeleteUserByIDInput) Validate() error {
+	return validation.ValidateStruct(
+		&i,
+		validation.Field(
+			&i.ID,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}
+
 type CreateUserOutput struct {
 	Id string `json:"id,omitempty"`
 }

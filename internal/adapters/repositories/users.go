@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/domain"
 	"github.com/lincolnjpg/investment_service/internal/infra"
@@ -68,7 +67,7 @@ func (r UserRepository) Update(ctx context.Context, input domain.UpdateUserInput
 	return user, nil
 }
 
-func (r UserRepository) GetById(ctx context.Context, id uuid.UUID) (domain.User, error) {
+func (r UserRepository) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error) {
 	var user domain.User
 
 	row := r.db.QueryRow(
@@ -77,7 +76,7 @@ func (r UserRepository) GetById(ctx context.Context, id uuid.UUID) (domain.User,
 			SELECT * FROM users
 			WHERE id = $1;
 		`,
-		id.String(),
+		input.ID,
 	)
 	if err := row.Scan(&user.ID, &user.Name, &user.InvestorProfile); err != nil {
 		if err == pgx.ErrNoRows {
@@ -92,6 +91,21 @@ func (r UserRepository) GetById(ctx context.Context, id uuid.UUID) (domain.User,
 	return user, nil
 }
 
-func (r UserRepository) DeleteById(ctx context.Context, id uuid.UUID) error {
+func (r UserRepository) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
+	_, err := r.db.Exec(
+		ctx,
+		`
+			DELETE FROM users
+			WHERE id = $1;
+		`,
+		input.ID,
+	)
+
+	if err != nil {
+		err := infra.NewAPIError(fmt.Sprintf("could not delete user: %s", err.Error()), http.StatusInternalServerError)
+
+		return err
+	}
+
 	return nil
 }

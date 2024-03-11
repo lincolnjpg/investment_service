@@ -115,6 +115,8 @@ func main() {
 	usersRouter.Post("/", handlers.CreateUserHandler(userService))
 	usersRouter.Get("/{id}", handlers.GetUserByIDHandler(userService))
 	usersRouter.Put("/{id}", handlers.UpateUserHandler(userService))
+	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(userService))
+
 	router.Mount("/users", usersRouter)
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
