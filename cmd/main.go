@@ -118,6 +118,7 @@ func main() {
 	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(userService))
 
 	router.Mount("/users", usersRouter)
+	router.Mount("/debug", chimiddlewares.Profiler())
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
 }
