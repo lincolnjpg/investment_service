@@ -18,12 +18,12 @@ type DBConnParams struct {
 
 func NewPostgres(params DBConnParams) (*pgx.Conn, error) {
 	connString := fmt.Sprintf(
-		"postgres://%s:%s@%s:%s/%s",
-		os.Getenv("POSTGRES_USERNAME"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_HOST"),
-		os.Getenv("POSTGRES_PORT"),
-		os.Getenv("POSTGRES_DATABASE"),
+		"postgres://%s:%s@%s:%d/%s",
+		params.UserName,
+		params.Password,
+		params.Host,
+		params.Port,
+		params.Database,
 	)
 
 	conn, err := pgx.Connect(context.Background(), connString)
