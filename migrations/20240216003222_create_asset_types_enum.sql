@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE asset_types AS ENUM ('fixed', 'variable');
+CREATE TYPE asset_classes AS ENUM ('FIXED_INCOME', 'VARIABLE_INCOME');
 
 -- +goose Down
-DROP TYPE asset_types;
+DROP TYPE asset_classes;
