@@ -16,7 +16,7 @@ func (i CreateUserInput) Validate() error {
 		validation.Field(
 			&i.Name,
 			validation.Required,
-			validation.Length(1, 100),
+			validation.Length(1, 50),
 		),
 		validation.Field(&i.InvestorProfile),
 	)

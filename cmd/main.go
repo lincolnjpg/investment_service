@@ -79,7 +79,7 @@ func main() {
 	dbConnParams := infra.DBConnParams{
 		Host:     envs.PostgresHost,
 		UserName: envs.PostgresUserName,
-		Password: envs.PostgresUserName,
+		Password: envs.PostgresPassword,
 		Database: envs.PostgresDatabase,
 		Port:     envs.PostgresPort,
 	}
@@ -107,6 +107,9 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
+	assetTypesRepo := repositories.NewAssetTypeRepository(db)
+	assetTypeService := services.NewAssetTypeService(assetTypesRepo)
+
 	router := chi.NewRouter()
 	router.Use(httplog.RequestLogger(logger))
 	router.Use(chimiddlewares.Heartbeat("/ping"))
@@ -117,7 +120,11 @@ func main() {
 	usersRouter.Put("/{id}", handlers.UpateUserByIdHandler(userService))
 	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(userService))
 
+	assetTypesRouter := chi.NewRouter()
+	assetTypesRouter.Post("/", handlers.CreateAssetTypeHandler(assetTypeService))
+
 	router.Mount("/users", usersRouter)
+	router.Mount("/types", assetTypesRouter)
 	router.Mount("/debug", chimiddlewares.Profiler())
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
