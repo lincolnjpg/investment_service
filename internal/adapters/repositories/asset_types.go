@@ -32,7 +32,7 @@ func (r AssetTypeRepository) Create(ctx context.Context, input domain.CreateAsse
 		input.Description,
 		input.Class,
 	)
-	if err := row.Scan(&assetType.ID, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
+	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not create a new asset type: %s", err.Error()), http.StatusInternalServerError)
 
 		return assetType, err
@@ -54,9 +54,9 @@ func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetT
 			WHERE
 				id = $1;
 		`,
-		input.ID,
+		input.Id,
 	)
-	if err := row.Scan(&assetType.ID, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
+	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
 		if err == pgx.ErrNoRows {
 			return assetType, infra.NewAPIError(fmt.Sprintf("asset type not found: %s", err.Error()), http.StatusNotFound)
 		}

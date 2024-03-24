@@ -23,11 +23,11 @@ func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (
 		return domain.CreateUserOutput{}, err
 	}
 
-	return domain.CreateUserOutput{Id: user.ID}, nil
+	return domain.CreateUserOutput{Id: user.Id}, nil
 }
 
 func (s UserService) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
-	_, err := s.GetById(ctx, domain.GetUserByIDInput{ID: input.ID})
+	_, err := s.GetById(ctx, domain.GetUserByIDInput{Id: input.Id})
 	if err != nil {
 		return domain.UpdateUserOutput{}, err
 	}
@@ -37,7 +37,7 @@ func (s UserService) UpdateById(ctx context.Context, input domain.UpdateUserInpu
 		return domain.UpdateUserOutput{}, err
 	}
 
-	return domain.UpdateUserOutput{ID: user.ID}, nil
+	return domain.UpdateUserOutput{Id: user.Id}, nil
 }
 
 func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {

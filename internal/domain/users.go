@@ -21,7 +21,7 @@ func (t InvestorProfileEnum) Validate() error {
 }
 
 type User struct {
-	ID              string
+	Id              string
 	Name            string
 	InvestorProfile InvestorProfileEnum
 }

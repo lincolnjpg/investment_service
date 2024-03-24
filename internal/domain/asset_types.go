@@ -39,7 +39,7 @@ func (t AssetClassEnum) Validate() error {
 }
 
 type AssetType struct {
-	ID          string             `json:"id,omitempty"`
+	Id          string             `json:"id,omitempty"`
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`

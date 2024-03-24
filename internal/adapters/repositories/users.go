@@ -31,7 +31,7 @@ func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput
 		input.Name,
 		input.InvestorProfile,
 	)
-	if err := row.Scan(&user.ID, &user.Name, &user.InvestorProfile); err != nil {
+	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not create a new user: %s", err.Error()), http.StatusInternalServerError)
 
 		return user, err
@@ -51,12 +51,12 @@ func (r UserRepository) UpdateById(ctx context.Context, input domain.UpdateUserI
 			WHERE id = $1
 			RETURNING id, name, investor_profile;
 		`,
-		input.ID,
+		input.Id,
 		input.Name,
 		input.InvestorProfile,
 	)
 
-	if err := row.Scan(&user.ID, &user.Name, &user.InvestorProfile); err != nil {
+	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not update user: %s", err.Error()), http.StatusInternalServerError)
 
 		return user, err
@@ -74,9 +74,9 @@ func (r UserRepository) GetById(ctx context.Context, input domain.GetUserByIDInp
 			SELECT * FROM users
 			WHERE id = $1;
 		`,
-		input.ID,
+		input.Id,
 	)
-	if err := row.Scan(&user.ID, &user.Name, &user.InvestorProfile); err != nil {
+	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		if err == pgx.ErrNoRows {
 			return user, infra.NewAPIError(fmt.Sprintf("user not found: %s", err.Error()), http.StatusNotFound)
 		}
@@ -96,7 +96,7 @@ func (r UserRepository) DeleteById(ctx context.Context, input domain.DeleteUserB
 			DELETE FROM users
 			WHERE id = $1;
 		`,
-		input.ID,
+		input.Id,
 	)
 
 	if err != nil {

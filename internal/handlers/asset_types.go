@@ -55,7 +55,7 @@ func GetAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(http.
 		render := render.New()
 
 		body := domain.GetAssetTypeByIDInput{
-			ID: chi.URLParam(r, "id"),
+			Id: chi.URLParam(r, "id"),
 		}
 
 		err := body.Validate()

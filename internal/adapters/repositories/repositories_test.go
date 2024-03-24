@@ -34,7 +34,7 @@ var _ = Describe("user creation", func() {
 		Expect(count).To(BeEquivalentTo(1))
 	})
 
-	It("creates a user and returns a non empty ID that represents the created user", func() {
+	It("creates a user and returns a non empty Id that represents the created user", func() {
 		user, err := repo.Create(
 			context.Background(),
 			domain.CreateUserInput{
@@ -44,7 +44,7 @@ var _ = Describe("user creation", func() {
 		)
 
 		Expect(err).To(Succeed())
-		Expect(user.ID).NotTo(Equal(""))
+		Expect(user.Id).NotTo(Equal(""))
 	})
 
 	It("creates a user and returns it to the caller", func() {
@@ -66,11 +66,11 @@ var _ = Describe("user creation", func() {
 				SELECT * FROM users
 				WHERE id = $1;
 			`,
-			user.ID,
+			user.Id,
 		)
 
 		Expect(row.Scan(&id, &name, &investor_profile)).To(Succeed())
-		Expect(user.ID).To(Equal(id))
+		Expect(user.Id).To(Equal(id))
 		Expect(user.Name).To(Equal(name))
 		Expect(user.InvestorProfile).To(BeEquivalentTo(investor_profile))
 	})

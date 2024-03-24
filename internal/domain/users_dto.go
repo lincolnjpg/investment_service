@@ -23,14 +23,14 @@ func (i CreateUserInput) Validate() error {
 }
 
 type GetUserByIDInput struct {
-	ID string `json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 }
 
 func (i GetUserByIDInput) Validate() error {
 	return validation.ValidateStruct(
 		&i,
 		validation.Field(
-			&i.ID,
+			&i.Id,
 			validation.Required,
 			is.UUIDv4,
 		),
@@ -38,7 +38,7 @@ func (i GetUserByIDInput) Validate() error {
 }
 
 type UpdateUserInput struct {
-	ID              string              `json:"id,omitempty"`
+	Id              string              `json:"id,omitempty"`
 	Name            string              `json:"name,omitempty"`
 	InvestorProfile InvestorProfileEnum `json:"investor_profile,omitempty"`
 }
@@ -56,14 +56,14 @@ func (i UpdateUserInput) Validate() error {
 }
 
 type DeleteUserByIDInput struct {
-	ID string `json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 }
 
 func (i DeleteUserByIDInput) Validate() error {
 	return validation.ValidateStruct(
 		&i,
 		validation.Field(
-			&i.ID,
+			&i.Id,
 			validation.Required,
 			is.UUIDv4,
 		),
@@ -75,11 +75,11 @@ type CreateUserOutput struct {
 }
 
 type UpdateUserOutput struct {
-	ID string `json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 }
 
 type GetUserByIdOutput struct {
-	ID              string              `json:"id,omitempty"`
+	Id              string              `json:"id,omitempty"`
 	Name            string              `json:"name,omitempty"`
 	InvestorProfile InvestorProfileEnum `json:"investor_profile,omitempty"`
 }

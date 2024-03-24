@@ -55,7 +55,7 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 		render := render.New()
 
 		body := domain.GetUserByIDInput{
-			ID: chi.URLParam(r, "id"),
+			Id: chi.URLParam(r, "id"),
 		}
 
 		err := body.Validate()
@@ -93,7 +93,7 @@ func UpateUserByIdHandler(userService ports.UserService) func(http.ResponseWrite
 
 		var body domain.UpdateUserInput
 		json.NewDecoder(r.Body).Decode(&body)
-		body.ID = chi.URLParam(r, "id")
+		body.Id = chi.URLParam(r, "id")
 
 		err := body.Validate()
 		if err != nil {
@@ -129,7 +129,7 @@ func DeleteUserByIDHandler(userService ports.UserService) func(http.ResponseWrit
 		render := render.New()
 
 		body := domain.DeleteUserByIDInput{
-			ID: chi.URLParam(r, "id"),
+			Id: chi.URLParam(r, "id"),
 		}
 
 		err := body.Validate()

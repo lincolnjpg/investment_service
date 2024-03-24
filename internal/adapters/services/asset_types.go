@@ -21,7 +21,7 @@ func (s AssetTypeService) Create(ctx context.Context, input domain.CreateAssetTy
 		return domain.CreateAssetTypeOutput{}, err
 	}
 
-	return domain.CreateAssetTypeOutput{ID: assetType.ID}, nil
+	return domain.CreateAssetTypeOutput{Id: assetType.Id}, nil
 }
 
 func (s AssetTypeService) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.GetAssetTypeByIDOutput, error) {

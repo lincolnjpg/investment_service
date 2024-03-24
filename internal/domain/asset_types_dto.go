@@ -25,15 +25,15 @@ func (i CreateAssetTypeInput) Validate() error {
 }
 
 type CreateAssetTypeOutput struct {
-	ID string `json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 }
 
 type GetAssetTypeByIDInput struct {
-	ID string `json:"id,omitempty"`
+	Id string `json:"id,omitempty"`
 }
 
 type GetAssetTypeByIDOutput struct {
-	ID          string             `json:"id,omitempty"`
+	Id          string             `json:"id,omitempty"`
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`
@@ -43,7 +43,7 @@ func (i GetAssetTypeByIDInput) Validate() error {
 	return validation.ValidateStruct(
 		&i,
 		validation.Field(
-			&i.ID,
+			&i.Id,
 			validation.Required,
 			is.UUIDv4,
 		),
