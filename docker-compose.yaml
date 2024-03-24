@@ -9,7 +9,7 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - dev_db_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -19,7 +19,7 @@ services:
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - test_db_data:/var/lib/postgresql/data
     ports:
       - 5433:5432
 
@@ -39,4 +39,5 @@ services:
       - ./migrations:/goose/migrations
 
 volumes:
-  db_data:
+  dev_db_data:
+  test_db_data:

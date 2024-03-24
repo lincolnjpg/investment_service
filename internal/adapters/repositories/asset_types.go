@@ -40,3 +40,31 @@ func (r AssetTypeRepository) Create(ctx context.Context, input domain.CreateAsse
 
 	return assetType, nil
 }
+
+func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.AssetType, error) {
+	var assetType domain.AssetType
+
+	row := r.db.QueryRow(
+		ctx,
+		`
+			SELECT
+				id, name, description, class
+			FROM
+				asset_types
+			WHERE
+				id = $1;
+		`,
+		input.ID,
+	)
+	if err := row.Scan(&assetType.ID, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
+		if err == pgx.ErrNoRows {
+			return assetType, infra.NewAPIError(fmt.Sprintf("asset type not found: %s", err.Error()), http.StatusNotFound)
+		}
+
+		err := infra.NewAPIError(fmt.Sprintf("could not get asset type from database: %s", err.Error()), http.StatusInternalServerError)
+
+		return assetType, err
+	}
+
+	return assetType, nil
+}
