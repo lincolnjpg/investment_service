@@ -49,3 +49,32 @@ func (i GetAssetTypeByIDInput) Validate() error {
 		),
 	)
 }
+
+type UpdateAssetTypeByIdInput struct {
+	Id          string             `json:"id,omitempty"`
+	Name        InvestmentTypeEnum `json:"name,omitempty"`
+	Description string             `json:"description,omitempty"`
+	Class       AssetClassEnum     `json:"class,omitempty"`
+}
+
+func (dto UpdateAssetTypeByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&dto,
+		validation.Field(
+			&dto.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+		validation.Field(&dto.Name),
+		validation.Field(
+			&dto.Description,
+			validation.Required,
+			validation.Length(1, 100),
+		),
+		validation.Field(&dto.Class),
+	)
+}
+
+type UpdateAssetTypeByIdOutput struct {
+	Id string `json:"id,omitempty"`
+}

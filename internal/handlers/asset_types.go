@@ -85,3 +85,40 @@ func GetAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(http.
 		render.JSON(w, http.StatusOK, map[string]interface{}{"data": user})
 	}
 }
+
+func UpdateAssetTypeByIdHandler(assetTypeService ports.AssetTypeService) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		render := render.New()
+
+		var body domain.UpdateAssetTypeByIdInput
+		json.NewDecoder(r.Body).Decode(&body)
+		body.Id = chi.URLParam(r, "id")
+
+		err := body.Validate()
+		if err != nil {
+			render.JSON(w, http.StatusUnprocessableEntity,
+				map[string]map[string]interface{}{
+					"error": {
+						"message": "input validation error",
+						"fields":  err,
+					},
+				},
+			)
+
+			return
+		}
+
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
+
+		user, err := assetTypeService.UpdateById(ctx, body)
+		if err != nil {
+			apiError := err.(infra.APIError)
+			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+
+			return
+		}
+
+		render.JSON(w, http.StatusOK, map[string]interface{}{"data": user})
+	}
+}

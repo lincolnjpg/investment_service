@@ -123,6 +123,7 @@ func main() {
 	assetTypesRouter := chi.NewRouter()
 	assetTypesRouter.Post("/", handlers.CreateAssetTypeHandler(assetTypeService))
 	assetTypesRouter.Get("/{id}", handlers.GetAssetTypeByIDHandler(assetTypeService))
+	assetTypesRouter.Put("/{id}", handlers.UpdateAssetTypeByIdHandler(assetTypeService))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/types", assetTypesRouter)

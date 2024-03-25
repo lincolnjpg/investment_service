@@ -68,3 +68,29 @@ func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetT
 
 	return assetType, nil
 }
+
+func (r AssetTypeRepository) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.AssetType, error) {
+	var assetType domain.AssetType
+
+	row := r.db.QueryRow(
+		ctx,
+		`
+			UPDATE asset_types
+			SET name = $2, description = $3, class = $4
+			WHERE id = $1
+			RETURNING id, name, description, class;
+		`,
+		input.Id,
+		input.Name,
+		input.Description,
+		input.Class,
+	)
+
+	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &input.Class); err != nil {
+		err := infra.NewAPIError(fmt.Sprintf("could not update asset type: %s", err.Error()), http.StatusInternalServerError)
+
+		return assetType, err
+	}
+
+	return assetType, nil
+}
