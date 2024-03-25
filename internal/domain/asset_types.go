@@ -9,7 +9,7 @@ const (
 	CRI            = "CRI"
 	CRA            = "CRA"
 	TESOURO_DIRETO = "TESOURO DIRETO"
-	STOCK          = "STOCK"
+	ACAO           = "AÇÃO"
 	FII            = "FII"
 )
 
@@ -19,7 +19,7 @@ func (t InvestmentTypeEnum) Validate() error {
 	return validation.Validate(
 		string(t),
 		validation.Required,
-		validation.In(CDB, LCI, LCA, CRI, CRA, TESOURO_DIRETO, STOCK, FII),
+		validation.In(CDB, LCI, LCA, CRI, CRA, TESOURO_DIRETO, ACAO, FII),
 	)
 }
 
