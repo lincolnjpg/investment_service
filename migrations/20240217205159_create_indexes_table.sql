@@ -1,8 +1,8 @@
 -- +goose Up
 CREATE TABLE indexes (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
-	name VARCHAR(100) NOT NULL,
-	acronym VARCHAR(10) NOT NULL,
+	name index_name NOT NULL,
+	acronym index_acronym NOT NULL,
 	PRIMARY KEY (id)
 );
 
