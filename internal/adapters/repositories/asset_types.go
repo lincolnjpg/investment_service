@@ -24,15 +24,16 @@ func (r AssetTypeRepository) Create(ctx context.Context, input domain.CreateAsse
 	row := r.db.QueryRow(
 		ctx,
 		`
-			INSERT INTO asset_types(name, description, class)
-			VALUES($1, $2, $3)
-			RETURNING id, name, description, class;
+			INSERT INTO asset_types(name, description, index_id, class)
+			VALUES($1, $2, $3, $4)
+			RETURNING id, name, description, index_id, class;
 		`,
 		input.Name,
 		input.Description,
+		input.IndexId,
 		input.Class,
 	)
-	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
+	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &assetType.IndexId, &assetType.Class); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not create a new asset type: %s", err.Error()), http.StatusInternalServerError)
 
 		return assetType, err
@@ -48,7 +49,7 @@ func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetT
 		ctx,
 		`
 			SELECT
-				id, name, description, class
+				id, name, description, index_id, class
 			FROM
 				asset_types
 			WHERE
@@ -56,7 +57,7 @@ func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetT
 		`,
 		input.Id,
 	)
-	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &assetType.Class); err != nil {
+	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &assetType.IndexId, &assetType.Class); err != nil {
 		if err == pgx.ErrNoRows {
 			return assetType, infra.NewAPIError(fmt.Sprintf("asset type not found: %s", err.Error()), http.StatusNotFound)
 		}
@@ -76,17 +77,18 @@ func (r AssetTypeRepository) UpdateById(ctx context.Context, input domain.Update
 		ctx,
 		`
 			UPDATE asset_types
-			SET name = $2, description = $3, class = $4
+			SET name = $2, description = $3, index_id = $4, class = $5
 			WHERE id = $1
-			RETURNING id, name, description, class;
+			RETURNING id, name, description, index_id, class;
 		`,
 		input.Id,
 		input.Name,
 		input.Description,
+		input.IndexId,
 		input.Class,
 	)
 
-	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &input.Class); err != nil {
+	if err := row.Scan(&assetType.Id, &assetType.Name, &assetType.Description, &input.IndexId, &input.Class); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not update asset type: %s", err.Error()), http.StatusInternalServerError)
 
 		return assetType, err

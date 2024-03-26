@@ -1,6 +1,8 @@
 package domain
 
-import validation "github.com/go-ozzo/ozzo-validation/v4"
+import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+)
 
 const (
 	CDB            = "CDB"
@@ -42,5 +44,6 @@ type AssetType struct {
 	Id          string             `json:"id,omitempty"`
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
+	IndexId     *string            `json:"index_id,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`
 }
