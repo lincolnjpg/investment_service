@@ -1,6 +1,9 @@
 package domain
 
-import validation "github.com/go-ozzo/ozzo-validation/v4"
+import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
+)
 
 type CreateAssetIndexInput struct {
 	Name    AssetIndexNameEnum    `json:"name,omitempty"`
@@ -17,4 +20,25 @@ func (i CreateAssetIndexInput) Validate() error {
 
 type CreateAssetIndexOutput struct {
 	Id string `json:"id,omitempty"`
+}
+
+type GetAssetIndexByIdInput struct {
+	Id string `json:"id,omitempty"`
+}
+
+func (dto GetAssetIndexByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&dto,
+		validation.Field(
+			&dto.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}
+
+type GetAssetIndexByIdOutput struct {
+	Id      string                `json:"id,omitempty"`
+	Name    AssetIndexNameEnum    `json:"name,omitempty"`
+	Acronym AssetIndexAcronymEnum `json:"acronym,omitempty"`
 }

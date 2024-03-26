@@ -39,3 +39,27 @@ func (repository AssetIndexRepository) Create(ctx context.Context, input domain.
 
 	return assetIndex, nil
 }
+
+func (repository AssetIndexRepository) GetById(ctx context.Context, input domain.GetAssetIndexByIdInput) (domain.AssetIndex, error) {
+	var assetIndex domain.AssetIndex
+
+	row := repository.db.QueryRow(
+		ctx,
+		`
+			SELECT * FROM asset_indexes
+			WHERE id = $1;
+		`,
+		input.Id,
+	)
+	if err := row.Scan(&assetIndex.Id, &assetIndex.Name, &assetIndex.Acronym); err != nil {
+		if err == pgx.ErrNoRows {
+			return assetIndex, infra.NewAPIError(fmt.Sprintf("asset index not found: %s", err.Error()), http.StatusNotFound)
+		}
+
+		err := infra.NewAPIError(fmt.Sprintf("could not get user from database: %s", err.Error()), http.StatusInternalServerError)
+
+		return assetIndex, err
+	}
+
+	return assetIndex, nil
+}
