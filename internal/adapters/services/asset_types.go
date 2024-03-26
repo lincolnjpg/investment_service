@@ -10,19 +10,19 @@ import (
 )
 
 type AssetTypeService struct {
-	repo ports.AssetTypeRepository
+	repository ports.AssetTypeRepository
 }
 
-func NewAssetTypeService(repo ports.AssetTypeRepository) AssetTypeService {
-	return AssetTypeService{repo: repo}
+func NewAssetTypeService(repository ports.AssetTypeRepository) AssetTypeService {
+	return AssetTypeService{repository: repository}
 }
 
-func (s AssetTypeService) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.CreateAssetTypeOutput, error) {
+func (service AssetTypeService) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.CreateAssetTypeOutput, error) {
 	if input.Class == domain.VARIABLE_INCOME && input.IndexId != nil {
 		return domain.CreateAssetTypeOutput{}, infra.NewAPIError("this asset class can not be indexed", http.StatusBadRequest)
 	}
 
-	assetType, err := s.repo.Create(ctx, input)
+	assetType, err := service.repository.Create(ctx, input)
 	if err != nil {
 		return domain.CreateAssetTypeOutput{}, err
 	}
@@ -30,8 +30,8 @@ func (s AssetTypeService) Create(ctx context.Context, input domain.CreateAssetTy
 	return domain.CreateAssetTypeOutput{Id: assetType.Id}, nil
 }
 
-func (s AssetTypeService) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.GetAssetTypeByIDOutput, error) {
-	assetType, err := s.repo.GetById(ctx, input)
+func (service AssetTypeService) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.GetAssetTypeByIDOutput, error) {
+	assetType, err := service.repository.GetById(ctx, input)
 	if err != nil {
 		return domain.GetAssetTypeByIDOutput{}, err
 	}
@@ -39,17 +39,17 @@ func (s AssetTypeService) GetById(ctx context.Context, input domain.GetAssetType
 	return domain.GetAssetTypeByIDOutput(assetType), nil
 }
 
-func (s AssetTypeService) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.UpdateAssetTypeByIdOutput, error) {
+func (service AssetTypeService) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.UpdateAssetTypeByIdOutput, error) {
 	if input.Class == domain.VARIABLE_INCOME && input.IndexId != nil {
 		return domain.UpdateAssetTypeByIdOutput{}, infra.NewAPIError("this asset class can not be indexed", http.StatusBadRequest)
 	}
 
-	_, err := s.GetById(ctx, domain.GetAssetTypeByIDInput{Id: input.Id})
+	_, err := service.GetById(ctx, domain.GetAssetTypeByIDInput{Id: input.Id})
 	if err != nil {
 		return domain.UpdateAssetTypeByIdOutput{}, err
 	}
 
-	assetType, err := s.repo.UpdateById(ctx, input)
+	assetType, err := service.repository.UpdateById(ctx, input)
 	if err != nil {
 		return domain.UpdateAssetTypeByIdOutput{}, err
 	}

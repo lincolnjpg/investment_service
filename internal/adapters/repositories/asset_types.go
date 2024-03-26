@@ -18,10 +18,10 @@ func NewAssetTypeRepository(db *pgx.Conn) AssetTypeRepository {
 	return AssetTypeRepository{db: db}
 }
 
-func (r AssetTypeRepository) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.AssetType, error) {
+func (repository AssetTypeRepository) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.AssetType, error) {
 	var assetType domain.AssetType
 
-	row := r.db.QueryRow(
+	row := repository.db.QueryRow(
 		ctx,
 		`
 			INSERT INTO asset_types(name, description, index_id, class)
@@ -42,10 +42,10 @@ func (r AssetTypeRepository) Create(ctx context.Context, input domain.CreateAsse
 	return assetType, nil
 }
 
-func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.AssetType, error) {
+func (repository AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.AssetType, error) {
 	var assetType domain.AssetType
 
-	row := r.db.QueryRow(
+	row := repository.db.QueryRow(
 		ctx,
 		`
 			SELECT
@@ -70,10 +70,10 @@ func (r AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetT
 	return assetType, nil
 }
 
-func (r AssetTypeRepository) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.AssetType, error) {
+func (repository AssetTypeRepository) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.AssetType, error) {
 	var assetType domain.AssetType
 
-	row := r.db.QueryRow(
+	row := repository.db.QueryRow(
 		ctx,
 		`
 			UPDATE asset_types

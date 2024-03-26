@@ -18,10 +18,10 @@ func NewUserRepository(db *pgx.Conn) UserRepository {
 	return UserRepository{db: db}
 }
 
-func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
+func (repository UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
 	var user domain.User
 
-	row := r.db.QueryRow(
+	row := repository.db.QueryRow(
 		ctx,
 		`
 			INSERT INTO users(name, investor_profile)
@@ -40,10 +40,10 @@ func (r UserRepository) Create(ctx context.Context, input domain.CreateUserInput
 	return user, nil
 }
 
-func (r UserRepository) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
+func (repository UserRepository) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
 	var user domain.User
 
-	row := r.db.QueryRow(
+	row := repository.db.QueryRow(
 		ctx,
 		`
 			UPDATE users
@@ -65,10 +65,10 @@ func (r UserRepository) UpdateById(ctx context.Context, input domain.UpdateUserI
 	return user, nil
 }
 
-func (r UserRepository) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error) {
+func (repository UserRepository) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error) {
 	var user domain.User
 
-	row := r.db.QueryRow(
+	row := repository.db.QueryRow(
 		ctx,
 		`
 			SELECT * FROM users
@@ -89,8 +89,8 @@ func (r UserRepository) GetById(ctx context.Context, input domain.GetUserByIDInp
 	return user, nil
 }
 
-func (r UserRepository) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
-	_, err := r.db.Exec(
+func (repository UserRepository) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
+	_, err := repository.db.Exec(
 		ctx,
 		`
 			DELETE FROM users

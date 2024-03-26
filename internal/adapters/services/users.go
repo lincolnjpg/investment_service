@@ -8,17 +8,17 @@ import (
 )
 
 type UserService struct {
-	repo ports.UserRepository
+	repository ports.UserRepository
 }
 
-func NewUserService(repo ports.UserRepository) UserService {
+func NewUserService(repository ports.UserRepository) UserService {
 	return UserService{
-		repo: repo,
+		repository: repository,
 	}
 }
 
-func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
-	user, err := s.repo.Create(ctx, input)
+func (service UserService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
+	user, err := service.repository.Create(ctx, input)
 	if err != nil {
 		return domain.CreateUserOutput{}, err
 	}
@@ -26,13 +26,13 @@ func (s UserService) Create(ctx context.Context, input domain.CreateUserInput) (
 	return domain.CreateUserOutput{Id: user.Id}, nil
 }
 
-func (s UserService) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
-	_, err := s.GetById(ctx, domain.GetUserByIDInput{Id: input.Id})
+func (service UserService) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
+	_, err := service.GetById(ctx, domain.GetUserByIDInput{Id: input.Id})
 	if err != nil {
 		return domain.UpdateUserOutput{}, err
 	}
 
-	user, err := s.repo.UpdateById(ctx, input)
+	user, err := service.repository.UpdateById(ctx, input)
 	if err != nil {
 		return domain.UpdateUserOutput{}, err
 	}
@@ -40,8 +40,8 @@ func (s UserService) UpdateById(ctx context.Context, input domain.UpdateUserInpu
 	return domain.UpdateUserOutput{Id: user.Id}, nil
 }
 
-func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {
-	user, err := s.repo.GetById(ctx, input)
+func (service UserService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {
+	user, err := service.repository.GetById(ctx, input)
 	if err != nil {
 		return domain.GetUserByIdOutput{}, err
 	}
@@ -49,13 +49,13 @@ func (s UserService) GetById(ctx context.Context, input domain.GetUserByIDInput)
 	return domain.GetUserByIdOutput(user), nil
 }
 
-func (s UserService) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
-	_, err := s.GetById(ctx, domain.GetUserByIDInput(input))
+func (service UserService) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
+	_, err := service.GetById(ctx, domain.GetUserByIDInput(input))
 	if err != nil {
 		return err
 	}
 
-	err = s.repo.DeleteById(ctx, input)
+	err = service.repository.DeleteById(ctx, input)
 	if err != nil {
 		return err
 	}
