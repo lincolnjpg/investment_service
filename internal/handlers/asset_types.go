@@ -37,7 +37,7 @@ func CreateAssetTypeHandler(assetTypesService ports.AssetTypeService) func(http.
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := assetTypesService.Create(ctx, body)
+		assetType, err := assetTypesService.Create(ctx, body)
 		if err != nil {
 			apiError := err.(infra.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
@@ -45,7 +45,7 @@ func CreateAssetTypeHandler(assetTypesService ports.AssetTypeService) func(http.
 			return
 		}
 
-		render.JSON(w, http.StatusCreated, map[string]interface{}{"data": user})
+		render.JSON(w, http.StatusCreated, map[string]interface{}{"data": assetType})
 	}
 }
 
@@ -74,7 +74,7 @@ func GetAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(http.
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := assetTypeService.GetById(ctx, body)
+		assetType, err := assetTypeService.GetById(ctx, body)
 		if err != nil {
 			apiError := err.(infra.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
@@ -82,7 +82,7 @@ func GetAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(http.
 			return
 		}
 
-		render.JSON(w, http.StatusOK, map[string]interface{}{"data": user})
+		render.JSON(w, http.StatusOK, map[string]interface{}{"data": assetType})
 	}
 }
 
@@ -111,7 +111,7 @@ func UpdateAssetTypeByIdHandler(assetTypeService ports.AssetTypeService) func(ht
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := assetTypeService.UpdateById(ctx, body)
+		assetType, err := assetTypeService.UpdateById(ctx, body)
 		if err != nil {
 			apiError := err.(infra.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
@@ -119,6 +119,43 @@ func UpdateAssetTypeByIdHandler(assetTypeService ports.AssetTypeService) func(ht
 			return
 		}
 
-		render.JSON(w, http.StatusOK, map[string]interface{}{"data": user})
+		render.JSON(w, http.StatusOK, map[string]interface{}{"data": assetType})
+	}
+}
+
+func DeleteAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		render := render.New()
+
+		body := domain.DeleteAssetTypeByIdInput{
+			Id: chi.URLParam(r, "id"),
+		}
+
+		err := body.Validate()
+		if err != nil {
+			render.JSON(w, http.StatusUnprocessableEntity,
+				map[string]map[string]interface{}{
+					"error": {
+						"message": "input validation error",
+						"fields":  err,
+					},
+				},
+			)
+
+			return
+		}
+
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
+
+		err = assetTypeService.DeleteById(ctx, body)
+		if err != nil {
+			apiError := err.(infra.APIError)
+			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+
+			return
+		}
+
+		render.JSON(w, http.StatusNoContent, map[string]interface{}{})
 	}
 }

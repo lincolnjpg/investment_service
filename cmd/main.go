@@ -107,8 +107,8 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
-	assetTypesRepo := repositories.NewAssetTypeRepository(db)
-	assetTypeService := services.NewAssetTypeService(assetTypesRepo)
+	assetTypesRepository := repositories.NewAssetTypeRepository(db)
+	assetTypeService := services.NewAssetTypeService(assetTypesRepository)
 
 	router := chi.NewRouter()
 	router.Use(httplog.RequestLogger(logger))
@@ -124,6 +124,7 @@ func main() {
 	assetTypesRouter.Post("/", handlers.CreateAssetTypeHandler(assetTypeService))
 	assetTypesRouter.Get("/{id}", handlers.GetAssetTypeByIDHandler(assetTypeService))
 	assetTypesRouter.Put("/{id}", handlers.UpdateAssetTypeByIdHandler(assetTypeService))
+	assetTypesRouter.Delete("/{id}", handlers.DeleteAssetTypeByIDHandler(assetTypeService))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/types", assetTypesRouter)
