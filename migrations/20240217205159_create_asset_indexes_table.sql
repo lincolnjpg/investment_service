@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TABLE indexes (
+CREATE TABLE asset_indexes (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	name index_name NOT NULL,
 	acronym index_acronym NOT NULL,
@@ -7,4 +7,4 @@ CREATE TABLE indexes (
 );
 
 -- +goose Down
-DROP TABLE indexes;
+DROP TABLE asset_indexes;
