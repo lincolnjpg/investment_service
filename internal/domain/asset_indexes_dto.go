@@ -60,3 +60,18 @@ func (dto UpdateAssetIndexByIdInput) Validate() error {
 type UpdateAssetIndexByIdOutput struct {
 	Id string `json:"id,omitempty"`
 }
+
+type DeleteAssetIndexByIdInput struct {
+	Id string `json:"id,omitempty"`
+}
+
+func (i DeleteAssetIndexByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&i,
+		validation.Field(
+			&i.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}

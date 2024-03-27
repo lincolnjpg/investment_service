@@ -133,6 +133,7 @@ func main() {
 	assetIndexesRouter.Post("/", handlers.CreateAssetIndexHandler(assetIndexesService))
 	assetIndexesRouter.Get("/{id}", handlers.GetAssetIndexByIdHandler(assetIndexesService))
 	assetIndexesRouter.Put("/{id}", handlers.UpdateAssetIndexByIdHandler(assetIndexesService))
+	assetIndexesRouter.Delete("/{id}", handlers.DeleteAssetIndexByIDHandler(assetIndexesService))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/types", assetTypesRouter)

@@ -122,3 +122,40 @@ func UpdateAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) fu
 		render.JSON(w, http.StatusOK, map[string]interface{}{"data": assetType})
 	}
 }
+
+func DeleteAssetIndexByIDHandler(assetIndexesService ports.AssetIndexService) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		render := render.New()
+
+		body := domain.DeleteAssetIndexByIdInput{
+			Id: chi.URLParam(r, "id"),
+		}
+
+		err := body.Validate()
+		if err != nil {
+			render.JSON(w, http.StatusUnprocessableEntity,
+				map[string]map[string]interface{}{
+					"error": {
+						"message": "input validation error",
+						"fields":  err,
+					},
+				},
+			)
+
+			return
+		}
+
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
+
+		err = assetIndexesService.DeleteById(ctx, body)
+		if err != nil {
+			apiError := err.(infra.APIError)
+			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+
+			return
+		}
+
+		render.JSON(w, http.StatusNoContent, map[string]interface{}{})
+	}
+}
