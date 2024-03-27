@@ -42,3 +42,21 @@ type GetAssetIndexByIdOutput struct {
 	Name    AssetIndexNameEnum    `json:"name,omitempty"`
 	Acronym AssetIndexAcronymEnum `json:"acronym,omitempty"`
 }
+
+type UpdateAssetIndexByIdInput struct {
+	Id      string                `json:"id,omitempty"`
+	Name    AssetIndexNameEnum    `json:"name,omitempty"`
+	Acronym AssetIndexAcronymEnum `json:"acronym,omitempty"`
+}
+
+func (dto UpdateAssetIndexByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&dto,
+		validation.Field(&dto.Name),
+		validation.Field(&dto.Acronym),
+	)
+}
+
+type UpdateAssetIndexByIdOutput struct {
+	Id string `json:"id,omitempty"`
+}
