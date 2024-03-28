@@ -4,9 +4,7 @@ CREATE TABLE asset_types (
 	name investment_types NOT NULL,
 	description VARCHAR NOT NULL,
 	class asset_classes NOT NULL,
-	index_id UUID NULL,
-	PRIMARY KEY (id),
-	UNIQUE (name, index_id)
+	PRIMARY KEY (id)
 );
 
 -- +goose Down
