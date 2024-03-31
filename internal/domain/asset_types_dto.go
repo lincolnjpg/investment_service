@@ -8,7 +8,6 @@ import (
 type CreateAssetTypeInput struct {
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
-	IndexId     *string            `json:"index_id,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`
 }
 
@@ -20,10 +19,6 @@ func (i CreateAssetTypeInput) Validate() error {
 			&i.Description,
 			validation.Required,
 			validation.Length(1, 100),
-		),
-		validation.Field(
-			&i.IndexId,
-			is.UUIDv4,
 		),
 		validation.Field(&i.Class),
 	)
@@ -41,7 +36,6 @@ type GetAssetTypeByIDOutput struct {
 	Id          string             `json:"id,omitempty"`
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
-	IndexId     *string            `json:"index_id,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`
 }
 
@@ -60,7 +54,6 @@ type UpdateAssetTypeByIdInput struct {
 	Id          string             `json:"id,omitempty"`
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
-	IndexId     *string            `json:"index_id,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`
 }
 
@@ -77,10 +70,6 @@ func (dto UpdateAssetTypeByIdInput) Validate() error {
 			&dto.Description,
 			validation.Required,
 			validation.Length(1, 100),
-		),
-		validation.Field(
-			&dto.IndexId,
-			is.UUIDv4,
 		),
 		validation.Field(&dto.Class),
 	)

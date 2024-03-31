@@ -2,10 +2,8 @@ package services
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/lincolnjpg/investment_service/internal/domain"
-	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
@@ -18,10 +16,6 @@ func NewAssetTypeService(repository ports.AssetTypeRepository) AssetTypeService 
 }
 
 func (service AssetTypeService) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.CreateAssetTypeOutput, error) {
-	if input.Class == domain.VARIABLE_INCOME && input.IndexId != nil {
-		return domain.CreateAssetTypeOutput{}, infra.NewAPIError("this asset class can not be indexed", http.StatusBadRequest)
-	}
-
 	assetType, err := service.repository.Create(ctx, input)
 	if err != nil {
 		return domain.CreateAssetTypeOutput{}, err
@@ -40,10 +34,6 @@ func (service AssetTypeService) GetById(ctx context.Context, input domain.GetAss
 }
 
 func (service AssetTypeService) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.UpdateAssetTypeByIdOutput, error) {
-	if input.Class == domain.VARIABLE_INCOME && input.IndexId != nil {
-		return domain.UpdateAssetTypeByIdOutput{}, infra.NewAPIError("this asset class can not be indexed", http.StatusBadRequest)
-	}
-
 	_, err := service.GetById(ctx, domain.GetAssetTypeByIDInput{Id: input.Id})
 	if err != nil {
 		return domain.UpdateAssetTypeByIdOutput{}, err

@@ -44,6 +44,5 @@ type AssetType struct {
 	Id          string             `json:"id,omitempty"`
 	Name        InvestmentTypeEnum `json:"name,omitempty"`
 	Description string             `json:"description,omitempty"`
-	IndexId     *string            `json:"index_id,omitempty"`
 	Class       AssetClassEnum     `json:"class,omitempty"`
 }
