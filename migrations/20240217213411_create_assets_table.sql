@@ -4,7 +4,7 @@ CREATE TABLE assets (
 	name VARCHAR(100) NOT NULL,
 	asset_type_id UUID NOT NULL,
 	asset_index_id UUID NULL,
-	unit_value NUMERIC NOT NULL,
+	unit_price NUMERIC NOT NULL,
 	rentability NUMERIC NOT NULL,
 	ticker VARCHAR(10),
 	due_date DATE,

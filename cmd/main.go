@@ -113,6 +113,9 @@ func main() {
 	assetIndexesRepository := repositories.NewAssetIndexRepository(db)
 	assetIndexesService := services.NewAssetIndexService(assetIndexesRepository)
 
+	assetsRepository := repositories.NewAssetRepository(db)
+	assetsService := services.NewAssetService(assetsRepository)
+
 	router := chi.NewRouter()
 	router.Use(httplog.RequestLogger(logger))
 	router.Use(chimiddlewares.Heartbeat("/ping"))
@@ -135,9 +138,13 @@ func main() {
 	assetIndexesRouter.Put("/{id}", handlers.UpdateAssetIndexByIdHandler(assetIndexesService))
 	assetIndexesRouter.Delete("/{id}", handlers.DeleteAssetIndexByIDHandler(assetIndexesService))
 
+	assetsRouter := chi.NewRouter()
+	assetsRouter.Post("/", handlers.CreateAssetHandler(assetsService))
+
 	router.Mount("/users", usersRouter)
 	router.Mount("/types", assetTypesRouter)
 	router.Mount("/indexes", assetIndexesRouter)
+	router.Mount("/assets", assetsRouter)
 	router.Mount("/debug", chimiddlewares.Profiler())
 
 	http.ListenAndServe(fmt.Sprintf(":%s", envs.APIPort), router)
