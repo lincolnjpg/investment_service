@@ -42,3 +42,31 @@ func (repository AssetRepository) Create(ctx context.Context, input domain.Creat
 
 	return asset, nil
 }
+
+func (repository AssetRepository) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.Asset, error) {
+	var asset domain.Asset
+
+	row := repository.db.QueryRow(
+		ctx,
+		`
+			SELECT
+				id, name, unit_price, rentability, due_date, ticker, asset_type_id, asset_index_id
+			FROM
+				assets
+			WHERE
+				id = $1;
+		`,
+		input.Id,
+	)
+	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.AssetTypeId, &asset.AssetIndexId); err != nil {
+		if err == pgx.ErrNoRows {
+			return asset, infra.NewAPIError(fmt.Sprintf("asset not found: %s", err.Error()), http.StatusNotFound)
+		}
+
+		err := infra.NewAPIError(fmt.Sprintf("could not get asset from database: %s", err.Error()), http.StatusInternalServerError)
+
+		return asset, err
+	}
+
+	return asset, nil
+}

@@ -23,3 +23,12 @@ func (service AssetService) Create(ctx context.Context, input domain.CreateAsset
 
 	return domain.CreateAssetOutput{Id: asset.Id}, nil
 }
+
+func (service AssetService) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.GetAssetByIdOutput, error) {
+	asset, err := service.repository.GetById(ctx, input)
+	if err != nil {
+		return domain.GetAssetByIdOutput{}, err
+	}
+
+	return domain.GetAssetByIdOutput(asset), nil
+}
