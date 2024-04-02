@@ -2,6 +2,8 @@ package domain
 
 import "time"
 
+const MAX_CDI_RENTABILITY float64 = 150.0
+
 type Asset struct {
 	Id           string     `json:"id,omitempty"`
 	Name         string     `json:"name,omitempty"`

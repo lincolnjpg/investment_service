@@ -114,7 +114,7 @@ func main() {
 	assetIndexesService := services.NewAssetIndexService(assetIndexesRepository)
 
 	assetsRepository := repositories.NewAssetRepository(db)
-	assetsService := services.NewAssetService(assetsRepository)
+	assetsService := services.NewAssetService(assetsRepository, assetTypeService, assetIndexesService)
 
 	router := chi.NewRouter()
 	router.Use(httplog.RequestLogger(logger))
