@@ -54,3 +54,17 @@ func (service AssetService) GetById(ctx context.Context, input domain.GetAssetBy
 
 	return domain.GetAssetByIdOutput(asset), nil
 }
+
+func (service AssetService) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.UpdateAssetByIdOutput, error) {
+	_, err := service.GetById(ctx, domain.GetAssetByIdInput{Id: input.Id})
+	if err != nil {
+		return domain.UpdateAssetByIdOutput{}, err
+	}
+
+	asset, err := service.repository.UpdateById(ctx, input)
+	if err != nil {
+		return domain.UpdateAssetByIdOutput{}, err
+	}
+
+	return domain.UpdateAssetByIdOutput{Id: asset.Id}, nil
+}

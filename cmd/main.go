@@ -141,6 +141,7 @@ func main() {
 	assetsRouter := chi.NewRouter()
 	assetsRouter.Post("/", handlers.CreateAssetHandler(assetsService))
 	assetsRouter.Get("/{id}", handlers.GetAssetByIdHandler(assetsService))
+	assetsRouter.Put("/{id}", handlers.UpdateAssetByIdHandler(assetsService))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/types", assetTypesRouter)
