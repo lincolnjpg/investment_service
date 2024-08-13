@@ -39,7 +39,7 @@ func ReadEnvsFromOS() Envs {
 		postgresUsername = username
 	}
 
-	postgresPassword := "postgres"
+	postgresPassword := "example"
 	if password := os.Getenv("POSTGRES_PASSWORD"); password != "" {
 		postgresPassword = password
 	}
