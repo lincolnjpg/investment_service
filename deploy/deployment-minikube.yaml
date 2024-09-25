@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: investment-service
+  labels:
+    app: investment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: investment-service
+  template:
+    metadata:
+      labels:
+        app: investment-service
+    spec:
+      containers:
+      - name: investment-service
+        image: 942406647027.dkr.ecr.us-east-1.amazonaws.com/junin/investment-service:1.0.0
+        ports:
+        - containerPort: 1212
+        env:
+        - name: POSTGRES_HOST
+          valueFrom:
+            secretKeyRef:
+              name: investment-service-secret
+              key: POSTGRES_HOST
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: investment-service-secret
+              key: POSTGRES_USERNAME
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: investment-service-secret
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: investment-service-secret
+              key: POSTGRES_DATABASE
+        - name: POSTGRES_PORT
+          value: "5432"
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "10m"
+          limits:
+            memory: "100Mi"
+            cpu: "30m"
