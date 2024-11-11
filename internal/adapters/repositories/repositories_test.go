@@ -6,8 +6,11 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/domain"
 )
+
+var repo = repositories.NewUserRepository(db)
 
 var _ = Describe("user creation", func() {
 	It("creates a single in PostgreSQL", func() {

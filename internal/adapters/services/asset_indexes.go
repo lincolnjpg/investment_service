@@ -7,15 +7,15 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
-type AssetIndexService struct {
+type assetIndexService struct {
 	repository ports.AssetIndexRepository
 }
 
-func NewAssetIndexService(repository ports.AssetIndexRepository) AssetIndexService {
-	return AssetIndexService{repository: repository}
+func NewAssetIndexService(repository ports.AssetIndexRepository) assetIndexService {
+	return assetIndexService{repository: repository}
 }
 
-func (service AssetIndexService) Create(ctx context.Context, input domain.CreateAssetIndexInput) (domain.CreateAssetIndexOutput, error) {
+func (service assetIndexService) Create(ctx context.Context, input domain.CreateAssetIndexInput) (domain.CreateAssetIndexOutput, error) {
 	assetIndex, err := service.repository.Create(ctx, input)
 	if err != nil {
 		return domain.CreateAssetIndexOutput{}, err
@@ -24,7 +24,7 @@ func (service AssetIndexService) Create(ctx context.Context, input domain.Create
 	return domain.CreateAssetIndexOutput{Id: assetIndex.Id}, nil
 }
 
-func (service AssetIndexService) GetById(ctx context.Context, input domain.GetAssetIndexByIdInput) (domain.GetAssetIndexByIdOutput, error) {
+func (service assetIndexService) GetById(ctx context.Context, input domain.GetAssetIndexByIdInput) (domain.GetAssetIndexByIdOutput, error) {
 	assetIndex, err := service.repository.GetById(ctx, input)
 	if err != nil {
 		return domain.GetAssetIndexByIdOutput{}, err
@@ -33,7 +33,7 @@ func (service AssetIndexService) GetById(ctx context.Context, input domain.GetAs
 	return domain.GetAssetIndexByIdOutput(assetIndex), nil
 }
 
-func (service AssetIndexService) UpdateById(ctx context.Context, input domain.UpdateAssetIndexByIdInput) (domain.UpdateAssetIndexByIdOutput, error) {
+func (service assetIndexService) UpdateById(ctx context.Context, input domain.UpdateAssetIndexByIdInput) (domain.UpdateAssetIndexByIdOutput, error) {
 	_, err := service.GetById(ctx, domain.GetAssetIndexByIdInput{Id: input.Id})
 	if err != nil {
 		return domain.UpdateAssetIndexByIdOutput{}, err
@@ -47,7 +47,7 @@ func (service AssetIndexService) UpdateById(ctx context.Context, input domain.Up
 	return domain.UpdateAssetIndexByIdOutput{Id: assetIndex.Id}, nil
 }
 
-func (service AssetIndexService) DeleteById(ctx context.Context, input domain.DeleteAssetIndexByIdInput) error {
+func (service assetIndexService) DeleteById(ctx context.Context, input domain.DeleteAssetIndexByIdInput) error {
 	_, err := service.GetById(ctx, domain.GetAssetIndexByIdInput(input))
 	if err != nil {
 		return err

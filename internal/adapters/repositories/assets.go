@@ -10,15 +10,15 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
-type AssetRepository struct {
+type assetRepository struct {
 	db *pgx.Conn
 }
 
-func NewAssetRepository(db *pgx.Conn) AssetRepository {
-	return AssetRepository{db: db}
+func NewAssetRepository(db *pgx.Conn) assetRepository {
+	return assetRepository{db: db}
 }
 
-func (repository AssetRepository) Create(ctx context.Context, input domain.CreateAssetInput) (domain.Asset, error) {
+func (repository assetRepository) Create(ctx context.Context, input domain.CreateAssetInput) (domain.Asset, error) {
 	var asset domain.Asset
 
 	row := repository.db.QueryRow(
@@ -43,7 +43,7 @@ func (repository AssetRepository) Create(ctx context.Context, input domain.Creat
 	return asset, nil
 }
 
-func (repository AssetRepository) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.Asset, error) {
+func (repository assetRepository) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.Asset, error) {
 	var asset domain.Asset
 
 	row := repository.db.QueryRow(
@@ -71,7 +71,7 @@ func (repository AssetRepository) GetById(ctx context.Context, input domain.GetA
 	return asset, nil
 }
 
-func (repository AssetRepository) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.Asset, error) {
+func (repository assetRepository) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.Asset, error) {
 	var asset domain.Asset
 
 	row := repository.db.QueryRow(

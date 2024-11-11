@@ -10,15 +10,15 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
-type UserRepository struct {
+type userRepository struct {
 	db *pgx.Conn
 }
 
-func NewUserRepository(db *pgx.Conn) UserRepository {
-	return UserRepository{db: db}
+func NewUserRepository(db *pgx.Conn) userRepository {
+	return userRepository{db: db}
 }
 
-func (repository UserRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
+func (repository userRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
 	var user domain.User
 
 	row := repository.db.QueryRow(
@@ -40,7 +40,7 @@ func (repository UserRepository) Create(ctx context.Context, input domain.Create
 	return user, nil
 }
 
-func (repository UserRepository) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
+func (repository userRepository) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
 	var user domain.User
 
 	row := repository.db.QueryRow(
@@ -65,7 +65,7 @@ func (repository UserRepository) UpdateById(ctx context.Context, input domain.Up
 	return user, nil
 }
 
-func (repository UserRepository) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error) {
+func (repository userRepository) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error) {
 	var user domain.User
 
 	row := repository.db.QueryRow(
@@ -89,7 +89,7 @@ func (repository UserRepository) GetById(ctx context.Context, input domain.GetUs
 	return user, nil
 }
 
-func (repository UserRepository) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
+func (repository userRepository) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

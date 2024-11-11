@@ -4,14 +4,12 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
 var db *pgx.Conn
-var repo repositories.UserRepository
 var err error
 
 func TestRepositories(t *testing.T) {
@@ -29,6 +27,4 @@ var _ = BeforeSuite(func() {
 	})
 
 	Expect(err).To(Succeed())
-
-	repo = repositories.NewUserRepository(db)
 })

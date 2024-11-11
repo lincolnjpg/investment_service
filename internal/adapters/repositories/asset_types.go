@@ -10,15 +10,15 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
-type AssetTypeRepository struct {
+type assetTypeRepository struct {
 	db *pgx.Conn
 }
 
-func NewAssetTypeRepository(db *pgx.Conn) AssetTypeRepository {
-	return AssetTypeRepository{db: db}
+func NewAssetTypeRepository(db *pgx.Conn) assetTypeRepository {
+	return assetTypeRepository{db: db}
 }
 
-func (repository AssetTypeRepository) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.AssetType, error) {
+func (repository assetTypeRepository) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.AssetType, error) {
 	var assetType domain.AssetType
 
 	row := repository.db.QueryRow(
@@ -41,7 +41,7 @@ func (repository AssetTypeRepository) Create(ctx context.Context, input domain.C
 	return assetType, nil
 }
 
-func (repository AssetTypeRepository) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.AssetType, error) {
+func (repository assetTypeRepository) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.AssetType, error) {
 	var assetType domain.AssetType
 
 	row := repository.db.QueryRow(
@@ -69,7 +69,7 @@ func (repository AssetTypeRepository) GetById(ctx context.Context, input domain.
 	return assetType, nil
 }
 
-func (repository AssetTypeRepository) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.AssetType, error) {
+func (repository assetTypeRepository) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.AssetType, error) {
 	var assetType domain.AssetType
 
 	row := repository.db.QueryRow(
@@ -95,7 +95,7 @@ func (repository AssetTypeRepository) UpdateById(ctx context.Context, input doma
 	return assetType, nil
 }
 
-func (repository AssetTypeRepository) DeleteById(ctx context.Context, input domain.DeleteAssetTypeByIdInput) error {
+func (repository assetTypeRepository) DeleteById(ctx context.Context, input domain.DeleteAssetTypeByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

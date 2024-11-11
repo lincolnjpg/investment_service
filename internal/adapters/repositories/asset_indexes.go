@@ -10,15 +10,15 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
-type AssetIndexRepository struct {
+type assetIndexRepository struct {
 	db *pgx.Conn
 }
 
-func NewAssetIndexRepository(db *pgx.Conn) AssetIndexRepository {
-	return AssetIndexRepository{db: db}
+func NewAssetIndexRepository(db *pgx.Conn) assetIndexRepository {
+	return assetIndexRepository{db: db}
 }
 
-func (repository AssetIndexRepository) Create(ctx context.Context, input domain.CreateAssetIndexInput) (domain.AssetIndex, error) {
+func (repository assetIndexRepository) Create(ctx context.Context, input domain.CreateAssetIndexInput) (domain.AssetIndex, error) {
 	var assetIndex domain.AssetIndex
 
 	row := repository.db.QueryRow(
@@ -40,7 +40,7 @@ func (repository AssetIndexRepository) Create(ctx context.Context, input domain.
 	return assetIndex, nil
 }
 
-func (repository AssetIndexRepository) GetById(ctx context.Context, input domain.GetAssetIndexByIdInput) (domain.AssetIndex, error) {
+func (repository assetIndexRepository) GetById(ctx context.Context, input domain.GetAssetIndexByIdInput) (domain.AssetIndex, error) {
 	var assetIndex domain.AssetIndex
 
 	row := repository.db.QueryRow(
@@ -64,7 +64,7 @@ func (repository AssetIndexRepository) GetById(ctx context.Context, input domain
 	return assetIndex, nil
 }
 
-func (repository AssetIndexRepository) UpdateById(ctx context.Context, input domain.UpdateAssetIndexByIdInput) (domain.AssetIndex, error) {
+func (repository assetIndexRepository) UpdateById(ctx context.Context, input domain.UpdateAssetIndexByIdInput) (domain.AssetIndex, error) {
 	var assetIndex domain.AssetIndex
 
 	row := repository.db.QueryRow(
@@ -89,7 +89,7 @@ func (repository AssetIndexRepository) UpdateById(ctx context.Context, input dom
 	return assetIndex, nil
 }
 
-func (repository AssetIndexRepository) DeleteById(ctx context.Context, input domain.DeleteAssetIndexByIdInput) error {
+func (repository assetIndexRepository) DeleteById(ctx context.Context, input domain.DeleteAssetIndexByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

@@ -9,21 +9,21 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
-type AssetService struct {
+type assetService struct {
 	repository          ports.AssetRepository
 	assetTypesService   ports.AssetTypeService
 	assetIndexesService ports.AssetIndexService
 }
 
-func NewAssetService(repository ports.AssetRepository, assetTypesService ports.AssetTypeService, assetIndexesService ports.AssetIndexService) AssetService {
-	return AssetService{
+func NewAssetService(repository ports.AssetRepository, assetTypesService ports.AssetTypeService, assetIndexesService ports.AssetIndexService) assetService {
+	return assetService{
 		repository:          repository,
 		assetTypesService:   assetTypesService,
 		assetIndexesService: assetIndexesService,
 	}
 }
 
-func (service AssetService) Create(ctx context.Context, input domain.CreateAssetInput) (domain.CreateAssetOutput, error) {
+func (service assetService) Create(ctx context.Context, input domain.CreateAssetInput) (domain.CreateAssetOutput, error) {
 	_, err := service.assetTypesService.GetById(ctx, domain.GetAssetTypeByIDInput{Id: input.AssetTypeId})
 	if err != nil {
 		return domain.CreateAssetOutput{}, err
@@ -46,7 +46,7 @@ func (service AssetService) Create(ctx context.Context, input domain.CreateAsset
 	return domain.CreateAssetOutput{Id: asset.Id}, nil
 }
 
-func (service AssetService) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.GetAssetByIdOutput, error) {
+func (service assetService) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.GetAssetByIdOutput, error) {
 	asset, err := service.repository.GetById(ctx, input)
 	if err != nil {
 		return domain.GetAssetByIdOutput{}, err
@@ -55,7 +55,7 @@ func (service AssetService) GetById(ctx context.Context, input domain.GetAssetBy
 	return domain.GetAssetByIdOutput(asset), nil
 }
 
-func (service AssetService) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.UpdateAssetByIdOutput, error) {
+func (service assetService) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.UpdateAssetByIdOutput, error) {
 	_, err := service.GetById(ctx, domain.GetAssetByIdInput{Id: input.Id})
 	if err != nil {
 		return domain.UpdateAssetByIdOutput{}, err
