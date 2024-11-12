@@ -10,12 +10,10 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 )
 
-var repo = repositories.NewUserRepository(db)
-
 var _ = Describe("user creation", func() {
 	It("creates a single in PostgreSQL", func() {
 		var count int
-
+		repo := repositories.NewUserRepository(db)
 		_, err := repo.Create(
 			context.Background(),
 			dtos.CreateUserInput{
@@ -38,6 +36,7 @@ var _ = Describe("user creation", func() {
 	})
 
 	It("creates a user and returns a non empty Id that represents the created user", func() {
+		repo := repositories.NewUserRepository(db)
 		user, err := repo.Create(
 			context.Background(),
 			dtos.CreateUserInput{
@@ -52,7 +51,7 @@ var _ = Describe("user creation", func() {
 
 	It("creates a user and returns it to the caller", func() {
 		var id, name, investor_profile string
-
+		repo := repositories.NewUserRepository(db)
 		user, err := repo.Create(
 			context.Background(),
 			dtos.CreateUserInput{
