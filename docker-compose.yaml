@@ -1,8 +1,7 @@
 # Use postgres/example user/password credentials
-version: '3.9'
+version: "3.9"
 
 services:
-
   dev_db:
     image: postgres
     restart: always
@@ -30,13 +29,6 @@ services:
   #     - 5434:5432
   #   volumes:
   #     - /home/lincolnjpg/.config/gcloud/application_default_credentials.json:/config/application_default_credentials.json
-
-  migrations:
-    build:
-      context: ./migrations
-      dockerfile: Dockerfile
-    volumes:
-      - ./migrations:/goose/migrations
 
 volumes:
   dev_db_data:
