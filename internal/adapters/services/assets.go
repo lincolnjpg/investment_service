@@ -10,6 +10,8 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
+const MAX_CDI_RENTABILITY float64 = 150.0
+
 type assetService struct {
 	repository          ports.AssetRepository
 	assetTypesService   ports.AssetTypeService
@@ -35,7 +37,7 @@ func (service assetService) Create(ctx context.Context, input dtos.CreateAssetIn
 		return dtos.CreateAssetOutput{}, err
 	}
 
-	if assetIndex.Acronym == enum.CDI_ACRONYM && input.Rentability > enum.MAX_CDI_RENTABILITY {
+	if assetIndex.Acronym == enum.CDI_ACRONYM && input.Rentability > MAX_CDI_RENTABILITY {
 		return dtos.CreateAssetOutput{}, infra.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
 	}
 
