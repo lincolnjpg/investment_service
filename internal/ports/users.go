@@ -3,19 +3,20 @@ package ports
 import (
 	"context"
 
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/entities"
 )
 
 type UserService interface {
-	Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error)
-	UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error)
-	GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error)
-	DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error
+	Create(ctx context.Context, input dtos.CreateUserInput) (dtos.CreateUserOutput, error)
+	UpdateById(ctx context.Context, input dtos.UpdateUserInput) (dtos.UpdateUserOutput, error)
+	GetById(ctx context.Context, input dtos.GetUserByIDInput) (dtos.GetUserByIdOutput, error)
+	DeleteById(ctx context.Context, input dtos.DeleteUserByIDInput) error
 }
 
 type UserRepository interface {
-	Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error)
-	UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error)
-	GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error)
-	DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error
+	Create(ctx context.Context, input dtos.CreateUserInput) (entities.User, error)
+	UpdateById(ctx context.Context, input dtos.UpdateUserInput) (entities.User, error)
+	GetById(ctx context.Context, input dtos.GetUserByIDInput) (entities.User, error)
+	DeleteById(ctx context.Context, input dtos.DeleteUserByIDInput) error
 }

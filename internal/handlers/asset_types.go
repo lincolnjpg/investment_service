@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
@@ -18,7 +18,7 @@ func CreateAssetTypeHandler(assetTypesService ports.AssetTypeService) func(http.
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.CreateAssetTypeInput
+		var body dtos.CreateAssetTypeInput
 		json.NewDecoder(r.Body).Decode(&body)
 
 		err := body.Validate()
@@ -54,7 +54,7 @@ func GetAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(http.
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.GetAssetTypeByIDInput{
+		body := dtos.GetAssetTypeByIDInput{
 			Id: chi.URLParam(r, "id"),
 		}
 
@@ -91,7 +91,7 @@ func UpdateAssetTypeByIdHandler(assetTypeService ports.AssetTypeService) func(ht
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.UpdateAssetTypeByIdInput
+		var body dtos.UpdateAssetTypeByIdInput
 		json.NewDecoder(r.Body).Decode(&body)
 		body.Id = chi.URLParam(r, "id")
 
@@ -128,7 +128,7 @@ func DeleteAssetTypeByIDHandler(assetTypeService ports.AssetTypeService) func(ht
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.DeleteAssetTypeByIdInput{
+		body := dtos.DeleteAssetTypeByIdInput{
 			Id: chi.URLParam(r, "id"),
 		}
 

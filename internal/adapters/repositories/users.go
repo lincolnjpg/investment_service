@@ -6,7 +6,8 @@ import (
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/entities"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
@@ -18,8 +19,8 @@ func NewUserRepository(db *pgx.Conn) userRepository {
 	return userRepository{db: db}
 }
 
-func (repository userRepository) Create(ctx context.Context, input domain.CreateUserInput) (domain.User, error) {
-	var user domain.User
+func (repository userRepository) Create(ctx context.Context, input dtos.CreateUserInput) (entities.User, error) {
+	var user entities.User
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -40,8 +41,8 @@ func (repository userRepository) Create(ctx context.Context, input domain.Create
 	return user, nil
 }
 
-func (repository userRepository) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.User, error) {
-	var user domain.User
+func (repository userRepository) UpdateById(ctx context.Context, input dtos.UpdateUserInput) (entities.User, error) {
+	var user entities.User
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -65,8 +66,8 @@ func (repository userRepository) UpdateById(ctx context.Context, input domain.Up
 	return user, nil
 }
 
-func (repository userRepository) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.User, error) {
-	var user domain.User
+func (repository userRepository) GetById(ctx context.Context, input dtos.GetUserByIDInput) (entities.User, error) {
+	var user entities.User
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -89,7 +90,7 @@ func (repository userRepository) GetById(ctx context.Context, input domain.GetUs
 	return user, nil
 }
 
-func (repository userRepository) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
+func (repository userRepository) DeleteById(ctx context.Context, input dtos.DeleteUserByIDInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

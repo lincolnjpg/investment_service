@@ -1,4 +1,4 @@
-package domain
+package enum
 
 import validation "github.com/go-ozzo/ozzo-validation/v4"
 
@@ -9,6 +9,13 @@ const (
 
 type AssetIndexNameEnum string
 
+const (
+	CDI_ACRONYM  = "CDI"
+	IPCA_ACRONYM = "IPCA"
+)
+
+type AssetIndexAcronymEnum string
+
 func (t AssetIndexNameEnum) Validate() error {
 	return validation.Validate(
 		string(t),
@@ -17,23 +24,10 @@ func (t AssetIndexNameEnum) Validate() error {
 	)
 }
 
-const (
-	CDI_ACRONYM  = "CDI"
-	IPCA_ACRONYM = "IPCA"
-)
-
-type AssetIndexAcronymEnum string
-
 func (t AssetIndexAcronymEnum) Validate() error {
 	return validation.Validate(
 		string(t),
 		validation.Required,
 		validation.In(CDI_ACRONYM, IPCA_ACRONYM),
 	)
-}
-
-type AssetIndex struct {
-	Id      string
-	Name    AssetIndexNameEnum
-	Acronym AssetIndexAcronymEnum
 }

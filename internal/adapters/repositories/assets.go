@@ -6,7 +6,8 @@ import (
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/entities"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
@@ -18,8 +19,8 @@ func NewAssetRepository(db *pgx.Conn) assetRepository {
 	return assetRepository{db: db}
 }
 
-func (repository assetRepository) Create(ctx context.Context, input domain.CreateAssetInput) (domain.Asset, error) {
-	var asset domain.Asset
+func (repository assetRepository) Create(ctx context.Context, input dtos.CreateAssetInput) (entities.Asset, error) {
+	var asset entities.Asset
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -43,8 +44,8 @@ func (repository assetRepository) Create(ctx context.Context, input domain.Creat
 	return asset, nil
 }
 
-func (repository assetRepository) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.Asset, error) {
-	var asset domain.Asset
+func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAssetByIdInput) (entities.Asset, error) {
+	var asset entities.Asset
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -71,8 +72,8 @@ func (repository assetRepository) GetById(ctx context.Context, input domain.GetA
 	return asset, nil
 }
 
-func (repository assetRepository) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.Asset, error) {
-	var asset domain.Asset
+func (repository assetRepository) UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (entities.Asset, error) {
+	var asset entities.Asset
 
 	row := repository.db.QueryRow(
 		ctx,

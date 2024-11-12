@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
@@ -17,40 +17,40 @@ func NewUserService(repository ports.UserRepository) userService {
 	}
 }
 
-func (service userService) Create(ctx context.Context, input domain.CreateUserInput) (domain.CreateUserOutput, error) {
+func (service userService) Create(ctx context.Context, input dtos.CreateUserInput) (dtos.CreateUserOutput, error) {
 	user, err := service.repository.Create(ctx, input)
 	if err != nil {
-		return domain.CreateUserOutput{}, err
+		return dtos.CreateUserOutput{}, err
 	}
 
-	return domain.CreateUserOutput{Id: user.Id}, nil
+	return dtos.CreateUserOutput{Id: user.Id}, nil
 }
 
-func (service userService) UpdateById(ctx context.Context, input domain.UpdateUserInput) (domain.UpdateUserOutput, error) {
-	_, err := service.GetById(ctx, domain.GetUserByIDInput{Id: input.Id})
+func (service userService) UpdateById(ctx context.Context, input dtos.UpdateUserInput) (dtos.UpdateUserOutput, error) {
+	_, err := service.GetById(ctx, dtos.GetUserByIDInput{Id: input.Id})
 	if err != nil {
-		return domain.UpdateUserOutput{}, err
+		return dtos.UpdateUserOutput{}, err
 	}
 
 	user, err := service.repository.UpdateById(ctx, input)
 	if err != nil {
-		return domain.UpdateUserOutput{}, err
+		return dtos.UpdateUserOutput{}, err
 	}
 
-	return domain.UpdateUserOutput{Id: user.Id}, nil
+	return dtos.UpdateUserOutput{Id: user.Id}, nil
 }
 
-func (service userService) GetById(ctx context.Context, input domain.GetUserByIDInput) (domain.GetUserByIdOutput, error) {
+func (service userService) GetById(ctx context.Context, input dtos.GetUserByIDInput) (dtos.GetUserByIdOutput, error) {
 	user, err := service.repository.GetById(ctx, input)
 	if err != nil {
-		return domain.GetUserByIdOutput{}, err
+		return dtos.GetUserByIdOutput{}, err
 	}
 
-	return domain.GetUserByIdOutput(user), nil
+	return dtos.GetUserByIdOutput(user), nil
 }
 
-func (service userService) DeleteById(ctx context.Context, input domain.DeleteUserByIDInput) error {
-	_, err := service.GetById(ctx, domain.GetUserByIDInput(input))
+func (service userService) DeleteById(ctx context.Context, input dtos.DeleteUserByIDInput) error {
+	_, err := service.GetById(ctx, dtos.GetUserByIDInput(input))
 	if err != nil {
 		return err
 	}

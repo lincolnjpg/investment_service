@@ -6,7 +6,8 @@ import (
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/entities"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
@@ -18,8 +19,8 @@ func NewAssetTypeRepository(db *pgx.Conn) assetTypeRepository {
 	return assetTypeRepository{db: db}
 }
 
-func (repository assetTypeRepository) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.AssetType, error) {
-	var assetType domain.AssetType
+func (repository assetTypeRepository) Create(ctx context.Context, input dtos.CreateAssetTypeInput) (entities.AssetType, error) {
+	var assetType entities.AssetType
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -41,8 +42,8 @@ func (repository assetTypeRepository) Create(ctx context.Context, input domain.C
 	return assetType, nil
 }
 
-func (repository assetTypeRepository) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.AssetType, error) {
-	var assetType domain.AssetType
+func (repository assetTypeRepository) GetById(ctx context.Context, input dtos.GetAssetTypeByIDInput) (entities.AssetType, error) {
+	var assetType entities.AssetType
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -69,8 +70,8 @@ func (repository assetTypeRepository) GetById(ctx context.Context, input domain.
 	return assetType, nil
 }
 
-func (repository assetTypeRepository) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.AssetType, error) {
-	var assetType domain.AssetType
+func (repository assetTypeRepository) UpdateById(ctx context.Context, input dtos.UpdateAssetTypeByIdInput) (entities.AssetType, error) {
+	var assetType entities.AssetType
 
 	row := repository.db.QueryRow(
 		ctx,
@@ -95,7 +96,7 @@ func (repository assetTypeRepository) UpdateById(ctx context.Context, input doma
 	return assetType, nil
 }
 
-func (repository assetTypeRepository) DeleteById(ctx context.Context, input domain.DeleteAssetTypeByIdInput) error {
+func (repository assetTypeRepository) DeleteById(ctx context.Context, input dtos.DeleteAssetTypeByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

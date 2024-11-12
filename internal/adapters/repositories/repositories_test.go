@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 )
 
 var repo = repositories.NewUserRepository(db)
@@ -18,7 +18,7 @@ var _ = Describe("user creation", func() {
 
 		_, err := repo.Create(
 			context.Background(),
-			domain.CreateUserInput{
+			dtos.CreateUserInput{
 				Name:            "user_1",
 				InvestorProfile: "moderate",
 			},
@@ -40,7 +40,7 @@ var _ = Describe("user creation", func() {
 	It("creates a user and returns a non empty Id that represents the created user", func() {
 		user, err := repo.Create(
 			context.Background(),
-			domain.CreateUserInput{
+			dtos.CreateUserInput{
 				Name:            "user_1",
 				InvestorProfile: "moderate",
 			},
@@ -55,7 +55,7 @@ var _ = Describe("user creation", func() {
 
 		user, err := repo.Create(
 			context.Background(),
-			domain.CreateUserInput{
+			dtos.CreateUserInput{
 				Name:            "user_1",
 				InvestorProfile: "moderate",
 			},

@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
@@ -18,7 +18,7 @@ func CreateAssetIndexHandler(assetIndexesService ports.AssetIndexService) func(h
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.CreateAssetIndexInput
+		var body dtos.CreateAssetIndexInput
 		json.NewDecoder(r.Body).Decode(&body)
 
 		err := body.Validate()
@@ -54,7 +54,7 @@ func GetAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) func(
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.GetAssetIndexByIdInput{
+		body := dtos.GetAssetIndexByIdInput{
 			Id: chi.URLParam(r, "id"),
 		}
 
@@ -91,7 +91,7 @@ func UpdateAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) fu
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.UpdateAssetIndexByIdInput
+		var body dtos.UpdateAssetIndexByIdInput
 		json.NewDecoder(r.Body).Decode(&body)
 		body.Id = chi.URLParam(r, "id")
 
@@ -128,7 +128,7 @@ func DeleteAssetIndexByIDHandler(assetIndexesService ports.AssetIndexService) fu
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.DeleteAssetIndexByIdInput{
+		body := dtos.DeleteAssetIndexByIdInput{
 			Id: chi.URLParam(r, "id"),
 		}
 

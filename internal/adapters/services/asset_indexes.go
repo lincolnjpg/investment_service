@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
@@ -15,40 +15,40 @@ func NewAssetIndexService(repository ports.AssetIndexRepository) assetIndexServi
 	return assetIndexService{repository: repository}
 }
 
-func (service assetIndexService) Create(ctx context.Context, input domain.CreateAssetIndexInput) (domain.CreateAssetIndexOutput, error) {
+func (service assetIndexService) Create(ctx context.Context, input dtos.CreateAssetIndexInput) (dtos.CreateAssetIndexOutput, error) {
 	assetIndex, err := service.repository.Create(ctx, input)
 	if err != nil {
-		return domain.CreateAssetIndexOutput{}, err
+		return dtos.CreateAssetIndexOutput{}, err
 	}
 
-	return domain.CreateAssetIndexOutput{Id: assetIndex.Id}, nil
+	return dtos.CreateAssetIndexOutput{Id: assetIndex.Id}, nil
 }
 
-func (service assetIndexService) GetById(ctx context.Context, input domain.GetAssetIndexByIdInput) (domain.GetAssetIndexByIdOutput, error) {
+func (service assetIndexService) GetById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (dtos.GetAssetIndexByIdOutput, error) {
 	assetIndex, err := service.repository.GetById(ctx, input)
 	if err != nil {
-		return domain.GetAssetIndexByIdOutput{}, err
+		return dtos.GetAssetIndexByIdOutput{}, err
 	}
 
-	return domain.GetAssetIndexByIdOutput(assetIndex), nil
+	return dtos.GetAssetIndexByIdOutput(assetIndex), nil
 }
 
-func (service assetIndexService) UpdateById(ctx context.Context, input domain.UpdateAssetIndexByIdInput) (domain.UpdateAssetIndexByIdOutput, error) {
-	_, err := service.GetById(ctx, domain.GetAssetIndexByIdInput{Id: input.Id})
+func (service assetIndexService) UpdateById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (dtos.UpdateAssetIndexByIdOutput, error) {
+	_, err := service.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: input.Id})
 	if err != nil {
-		return domain.UpdateAssetIndexByIdOutput{}, err
+		return dtos.UpdateAssetIndexByIdOutput{}, err
 	}
 
 	assetIndex, err := service.repository.UpdateById(ctx, input)
 	if err != nil {
-		return domain.UpdateAssetIndexByIdOutput{}, err
+		return dtos.UpdateAssetIndexByIdOutput{}, err
 	}
 
-	return domain.UpdateAssetIndexByIdOutput{Id: assetIndex.Id}, nil
+	return dtos.UpdateAssetIndexByIdOutput{Id: assetIndex.Id}, nil
 }
 
-func (service assetIndexService) DeleteById(ctx context.Context, input domain.DeleteAssetIndexByIdInput) error {
-	_, err := service.GetById(ctx, domain.GetAssetIndexByIdInput(input))
+func (service assetIndexService) DeleteById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error {
+	_, err := service.GetById(ctx, dtos.GetAssetIndexByIdInput(input))
 	if err != nil {
 		return err
 	}

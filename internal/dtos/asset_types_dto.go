@@ -1,14 +1,15 @@
-package domain
+package dtos
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
 type CreateAssetTypeInput struct {
-	Name        InvestmentTypeEnum `json:"name,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Class       AssetClassEnum     `json:"class,omitempty"`
+	Name        enum.InvestmentTypeEnum `json:"name,omitempty"`
+	Description string                  `json:"description,omitempty"`
+	Class       enum.AssetClassEnum     `json:"class,omitempty"`
 }
 
 func (i CreateAssetTypeInput) Validate() error {
@@ -33,10 +34,10 @@ type GetAssetTypeByIDInput struct {
 }
 
 type GetAssetTypeByIDOutput struct {
-	Id          string             `json:"id,omitempty"`
-	Name        InvestmentTypeEnum `json:"name,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Class       AssetClassEnum     `json:"class,omitempty"`
+	Id          string                  `json:"id,omitempty"`
+	Name        enum.InvestmentTypeEnum `json:"name,omitempty"`
+	Description string                  `json:"description,omitempty"`
+	Class       enum.AssetClassEnum     `json:"class,omitempty"`
 }
 
 func (i GetAssetTypeByIDInput) Validate() error {
@@ -51,10 +52,10 @@ func (i GetAssetTypeByIDInput) Validate() error {
 }
 
 type UpdateAssetTypeByIdInput struct {
-	Id          string             `json:"id,omitempty"`
-	Name        InvestmentTypeEnum `json:"name,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Class       AssetClassEnum     `json:"class,omitempty"`
+	Id          string                  `json:"id,omitempty"`
+	Name        enum.InvestmentTypeEnum `json:"name,omitempty"`
+	Description string                  `json:"description,omitempty"`
+	Class       enum.AssetClassEnum     `json:"class,omitempty"`
 }
 
 func (dto UpdateAssetTypeByIdInput) Validate() error {

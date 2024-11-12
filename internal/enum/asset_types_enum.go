@@ -1,8 +1,6 @@
-package domain
+package enum
 
-import (
-	validation "github.com/go-ozzo/ozzo-validation/v4"
-)
+import validation "github.com/go-ozzo/ozzo-validation/v4"
 
 const (
 	CDB            = "CDB"
@@ -17,6 +15,13 @@ const (
 
 type InvestmentTypeEnum string
 
+const (
+	FIXED_INCOME    = "FIXED_INCOME"
+	VARIABLE_INCOME = "VARIABLE_INCOME"
+)
+
+type AssetClassEnum string
+
 func (t InvestmentTypeEnum) Validate() error {
 	return validation.Validate(
 		string(t),
@@ -25,24 +30,10 @@ func (t InvestmentTypeEnum) Validate() error {
 	)
 }
 
-const (
-	FIXED_INCOME    = "FIXED_INCOME"
-	VARIABLE_INCOME = "VARIABLE_INCOME"
-)
-
-type AssetClassEnum string
-
 func (t AssetClassEnum) Validate() error {
 	return validation.Validate(
 		string(t),
 		validation.Required,
 		validation.In(FIXED_INCOME, VARIABLE_INCOME),
 	)
-}
-
-type AssetType struct {
-	Id          string             `json:"id,omitempty"`
-	Name        InvestmentTypeEnum `json:"name,omitempty"`
-	Description string             `json:"description,omitempty"`
-	Class       AssetClassEnum     `json:"class,omitempty"`
 }

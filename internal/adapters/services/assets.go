@@ -4,7 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
@@ -23,48 +24,48 @@ func NewAssetService(repository ports.AssetRepository, assetTypesService ports.A
 	}
 }
 
-func (service assetService) Create(ctx context.Context, input domain.CreateAssetInput) (domain.CreateAssetOutput, error) {
-	_, err := service.assetTypesService.GetById(ctx, domain.GetAssetTypeByIDInput{Id: input.AssetTypeId})
+func (service assetService) Create(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error) {
+	_, err := service.assetTypesService.GetById(ctx, dtos.GetAssetTypeByIDInput{Id: input.AssetTypeId})
 	if err != nil {
-		return domain.CreateAssetOutput{}, err
+		return dtos.CreateAssetOutput{}, err
 	}
 
-	assetIndex, err := service.assetIndexesService.GetById(ctx, domain.GetAssetIndexByIdInput{Id: *input.AssetIndexId})
+	assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: *input.AssetIndexId})
 	if err != nil {
-		return domain.CreateAssetOutput{}, err
+		return dtos.CreateAssetOutput{}, err
 	}
 
-	if assetIndex.Acronym == domain.CDI_ACRONYM && input.Rentability > domain.MAX_CDI_RENTABILITY {
-		return domain.CreateAssetOutput{}, infra.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
+	if assetIndex.Acronym == enum.CDI_ACRONYM && input.Rentability > enum.MAX_CDI_RENTABILITY {
+		return dtos.CreateAssetOutput{}, infra.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
 	}
 
 	asset, err := service.repository.Create(ctx, input)
 	if err != nil {
-		return domain.CreateAssetOutput{}, err
+		return dtos.CreateAssetOutput{}, err
 	}
 
-	return domain.CreateAssetOutput{Id: asset.Id}, nil
+	return dtos.CreateAssetOutput{Id: asset.Id}, nil
 }
 
-func (service assetService) GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.GetAssetByIdOutput, error) {
+func (service assetService) GetById(ctx context.Context, input dtos.GetAssetByIdInput) (dtos.GetAssetByIdOutput, error) {
 	asset, err := service.repository.GetById(ctx, input)
 	if err != nil {
-		return domain.GetAssetByIdOutput{}, err
+		return dtos.GetAssetByIdOutput{}, err
 	}
 
-	return domain.GetAssetByIdOutput(asset), nil
+	return dtos.GetAssetByIdOutput(asset), nil
 }
 
-func (service assetService) UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.UpdateAssetByIdOutput, error) {
-	_, err := service.GetById(ctx, domain.GetAssetByIdInput{Id: input.Id})
+func (service assetService) UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (dtos.UpdateAssetByIdOutput, error) {
+	_, err := service.GetById(ctx, dtos.GetAssetByIdInput{Id: input.Id})
 	if err != nil {
-		return domain.UpdateAssetByIdOutput{}, err
+		return dtos.UpdateAssetByIdOutput{}, err
 	}
 
 	asset, err := service.repository.UpdateById(ctx, input)
 	if err != nil {
-		return domain.UpdateAssetByIdOutput{}, err
+		return dtos.UpdateAssetByIdOutput{}, err
 	}
 
-	return domain.UpdateAssetByIdOutput{Id: asset.Id}, nil
+	return dtos.UpdateAssetByIdOutput{Id: asset.Id}, nil
 }

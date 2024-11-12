@@ -3,17 +3,18 @@ package ports
 import (
 	"context"
 
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/entities"
 )
 
 type AssetService interface {
-	Create(ctx context.Context, input domain.CreateAssetInput) (domain.CreateAssetOutput, error)
-	GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.GetAssetByIdOutput, error)
-	UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.UpdateAssetByIdOutput, error)
+	Create(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error)
+	GetById(ctx context.Context, input dtos.GetAssetByIdInput) (dtos.GetAssetByIdOutput, error)
+	UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (dtos.UpdateAssetByIdOutput, error)
 }
 
 type AssetRepository interface {
-	Create(ctx context.Context, input domain.CreateAssetInput) (domain.Asset, error)
-	GetById(ctx context.Context, input domain.GetAssetByIdInput) (domain.Asset, error)
-	UpdateById(ctx context.Context, input domain.UpdateAssetByIdInput) (domain.Asset, error)
+	Create(ctx context.Context, input dtos.CreateAssetInput) (entities.Asset, error)
+	GetById(ctx context.Context, input dtos.GetAssetByIdInput) (entities.Asset, error)
+	UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (entities.Asset, error)
 }

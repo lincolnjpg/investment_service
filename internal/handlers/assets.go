@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
@@ -18,7 +18,7 @@ func CreateAssetHandler(assetsService ports.AssetService) func(http.ResponseWrit
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.CreateAssetInput
+		var body dtos.CreateAssetInput
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			render.JSON(w, http.StatusUnprocessableEntity,
@@ -66,7 +66,7 @@ func GetAssetByIdHandler(assetsService ports.AssetService) func(http.ResponseWri
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.GetAssetByIdInput{
+		body := dtos.GetAssetByIdInput{
 			Id: chi.URLParam(r, "id"),
 		}
 
@@ -103,7 +103,7 @@ func UpdateAssetByIdHandler(assetsService ports.AssetService) func(http.Response
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.UpdateAssetByIdInput
+		var body dtos.UpdateAssetByIdInput
 		json.NewDecoder(r.Body).Decode(&body)
 		body.Id = chi.URLParam(r, "id")
 

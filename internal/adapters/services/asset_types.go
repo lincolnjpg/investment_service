@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
@@ -15,40 +15,40 @@ func NewAssetTypeService(repository ports.AssetTypeRepository) assetTypeService 
 	return assetTypeService{repository: repository}
 }
 
-func (service assetTypeService) Create(ctx context.Context, input domain.CreateAssetTypeInput) (domain.CreateAssetTypeOutput, error) {
+func (service assetTypeService) Create(ctx context.Context, input dtos.CreateAssetTypeInput) (dtos.CreateAssetTypeOutput, error) {
 	assetType, err := service.repository.Create(ctx, input)
 	if err != nil {
-		return domain.CreateAssetTypeOutput{}, err
+		return dtos.CreateAssetTypeOutput{}, err
 	}
 
-	return domain.CreateAssetTypeOutput{Id: assetType.Id}, nil
+	return dtos.CreateAssetTypeOutput{Id: assetType.Id}, nil
 }
 
-func (service assetTypeService) GetById(ctx context.Context, input domain.GetAssetTypeByIDInput) (domain.GetAssetTypeByIDOutput, error) {
+func (service assetTypeService) GetById(ctx context.Context, input dtos.GetAssetTypeByIDInput) (dtos.GetAssetTypeByIDOutput, error) {
 	assetType, err := service.repository.GetById(ctx, input)
 	if err != nil {
-		return domain.GetAssetTypeByIDOutput{}, err
+		return dtos.GetAssetTypeByIDOutput{}, err
 	}
 
-	return domain.GetAssetTypeByIDOutput(assetType), nil
+	return dtos.GetAssetTypeByIDOutput(assetType), nil
 }
 
-func (service assetTypeService) UpdateById(ctx context.Context, input domain.UpdateAssetTypeByIdInput) (domain.UpdateAssetTypeByIdOutput, error) {
-	_, err := service.GetById(ctx, domain.GetAssetTypeByIDInput{Id: input.Id})
+func (service assetTypeService) UpdateById(ctx context.Context, input dtos.UpdateAssetTypeByIdInput) (dtos.UpdateAssetTypeByIdOutput, error) {
+	_, err := service.GetById(ctx, dtos.GetAssetTypeByIDInput{Id: input.Id})
 	if err != nil {
-		return domain.UpdateAssetTypeByIdOutput{}, err
+		return dtos.UpdateAssetTypeByIdOutput{}, err
 	}
 
 	assetType, err := service.repository.UpdateById(ctx, input)
 	if err != nil {
-		return domain.UpdateAssetTypeByIdOutput{}, err
+		return dtos.UpdateAssetTypeByIdOutput{}, err
 	}
 
-	return domain.UpdateAssetTypeByIdOutput{Id: assetType.Id}, nil
+	return dtos.UpdateAssetTypeByIdOutput{Id: assetType.Id}, nil
 }
 
-func (service assetTypeService) DeleteById(ctx context.Context, input domain.DeleteAssetTypeByIdInput) error {
-	_, err := service.GetById(ctx, domain.GetAssetTypeByIDInput(input))
+func (service assetTypeService) DeleteById(ctx context.Context, input dtos.DeleteAssetTypeByIdInput) error {
+	_, err := service.GetById(ctx, dtos.GetAssetTypeByIDInput(input))
 	if err != nil {
 		return err
 	}

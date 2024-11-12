@@ -1,13 +1,14 @@
-package domain
+package dtos
 
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
 type CreateUserInput struct {
-	Name            string              `json:"name,omitempty"`
-	InvestorProfile InvestorProfileEnum `json:"investor_profile,omitempty"`
+	Name            string                   `json:"name,omitempty"`
+	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }
 
 func (i CreateUserInput) Validate() error {
@@ -38,9 +39,9 @@ func (i GetUserByIDInput) Validate() error {
 }
 
 type UpdateUserInput struct {
-	Id              string              `json:"id,omitempty"`
-	Name            string              `json:"name,omitempty"`
-	InvestorProfile InvestorProfileEnum `json:"investor_profile,omitempty"`
+	Id              string                   `json:"id,omitempty"`
+	Name            string                   `json:"name,omitempty"`
+	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }
 
 func (i UpdateUserInput) Validate() error {
@@ -79,7 +80,7 @@ type UpdateUserOutput struct {
 }
 
 type GetUserByIdOutput struct {
-	Id              string              `json:"id,omitempty"`
-	Name            string              `json:"name,omitempty"`
-	InvestorProfile InvestorProfileEnum `json:"investor_profile,omitempty"`
+	Id              string                   `json:"id,omitempty"`
+	Name            string                   `json:"name,omitempty"`
+	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }

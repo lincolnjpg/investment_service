@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
-	"github.com/lincolnjpg/investment_service/internal/domain"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
@@ -18,7 +18,7 @@ func CreateUserHandler(userService ports.UserService) func(http.ResponseWriter, 
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.CreateUserInput
+		var body dtos.CreateUserInput
 		json.NewDecoder(r.Body).Decode(&body)
 
 		err := body.Validate()
@@ -54,7 +54,7 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.GetUserByIDInput{
+		body := dtos.GetUserByIDInput{
 			Id: chi.URLParam(r, "id"),
 		}
 
@@ -91,7 +91,7 @@ func UpateUserByIdHandler(userService ports.UserService) func(http.ResponseWrite
 		ctx := r.Context()
 		render := render.New()
 
-		var body domain.UpdateUserInput
+		var body dtos.UpdateUserInput
 		json.NewDecoder(r.Body).Decode(&body)
 		body.Id = chi.URLParam(r, "id")
 
@@ -128,7 +128,7 @@ func DeleteUserByIDHandler(userService ports.UserService) func(http.ResponseWrit
 		ctx := r.Context()
 		render := render.New()
 
-		body := domain.DeleteUserByIDInput{
+		body := dtos.DeleteUserByIDInput{
 			Id: chi.URLParam(r, "id"),
 		}
 

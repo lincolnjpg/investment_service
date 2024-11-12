@@ -1,8 +1,6 @@
-package domain
+package enum
 
-import (
-	validation "github.com/go-ozzo/ozzo-validation/v4"
-)
+import validation "github.com/go-ozzo/ozzo-validation/v4"
 
 const (
 	CONSERVATIVE = "conservative"
@@ -18,10 +16,4 @@ func (t InvestorProfileEnum) Validate() error {
 		validation.Required,
 		validation.In(CONSERVATIVE, MODERATE, AGGRESSIVE),
 	)
-}
-
-type User struct {
-	Id              string
-	Name            string
-	InvestorProfile InvestorProfileEnum
 }
