@@ -101,3 +101,22 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 
 	return asset, nil
 }
+
+func (repository assetRepository) DeleteById(ctx context.Context, input dtos.DeleteAssetByIdInput) error {
+	_, err := repository.db.Exec(
+		ctx,
+		`
+			DELETE FROM assets
+			WHERE id = $1;
+		`,
+		input.Id,
+	)
+
+	if err != nil {
+		err := infra.NewAPIError(fmt.Sprintf("could not delete asset: %s", err.Error()), http.StatusInternalServerError)
+
+		return err
+	}
+
+	return nil
+}

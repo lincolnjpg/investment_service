@@ -142,6 +142,7 @@ func main() {
 	assetsRouter.Post("/", handlers.CreateAssetHandler(assetsService))
 	assetsRouter.Get("/{id}", handlers.GetAssetByIdHandler(assetsService))
 	assetsRouter.Put("/{id}", handlers.UpdateAssetByIdHandler(assetsService))
+	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(assetsService))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/types", assetTypesRouter)

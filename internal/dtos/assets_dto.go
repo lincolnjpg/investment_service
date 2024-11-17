@@ -142,3 +142,18 @@ func (dto UpdateAssetByIdInput) Validate() error {
 type UpdateAssetByIdOutput struct {
 	Id string `json:"id,omitempty"`
 }
+
+type DeleteAssetByIdInput struct {
+	Id string `json:"id,omitempty"`
+}
+
+func (i DeleteAssetByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&i,
+		validation.Field(
+			&i.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}

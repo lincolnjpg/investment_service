@@ -71,3 +71,17 @@ func (service assetService) UpdateById(ctx context.Context, input dtos.UpdateAss
 
 	return dtos.UpdateAssetByIdOutput{Id: asset.Id}, nil
 }
+
+func (service assetService) DeleteById(ctx context.Context, input dtos.DeleteAssetByIdInput) error {
+	_, err := service.GetById(ctx, dtos.GetAssetByIdInput(input))
+	if err != nil {
+		return err
+	}
+
+	err = service.repository.DeleteById(ctx, input)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
