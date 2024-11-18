@@ -32,13 +32,15 @@ func (service assetService) Create(ctx context.Context, input dtos.CreateAssetIn
 		return dtos.CreateAssetOutput{}, err
 	}
 
-	assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: *input.AssetIndexId})
-	if err != nil {
-		return dtos.CreateAssetOutput{}, err
-	}
+	if input.AssetIndexId != nil {
+		assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: *input.AssetIndexId})
+		if err != nil {
+			return dtos.CreateAssetOutput{}, err
+		}
 
-	if assetIndex.Acronym == enum.CDI_ACRONYM && input.Rentability > MAX_CDI_RENTABILITY {
-		return dtos.CreateAssetOutput{}, infra.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
+		if assetIndex.Acronym == enum.CDI_ACRONYM && input.Rentability > MAX_CDI_RENTABILITY {
+			return dtos.CreateAssetOutput{}, infra.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
+		}
 	}
 
 	asset, err := service.repository.Create(ctx, input)
