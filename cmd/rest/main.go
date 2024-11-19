@@ -1,4 +1,4 @@
-package main
+package rest
 
 import (
 	"context"
@@ -13,9 +13,10 @@ import (
 	chimiddlewares "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/httplog/v2"
 	"github.com/joho/godotenv"
+
+	"github.com/lincolnjpg/investment_service/cmd/rest/handlers"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/adapters/services"
-	"github.com/lincolnjpg/investment_service/internal/handlers"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 )
 
