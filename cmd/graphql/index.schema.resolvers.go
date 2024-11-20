@@ -9,17 +9,10 @@ import (
 	"fmt"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input NewTodo) (*Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
+func (r *queryResolver) GetAssetIndexByID(ctx context.Context) (*User, error) {
+	panic(fmt.Errorf("not implemented: GetAssetIndexByID - getAssetIndexById"))
 }
-
-func (r *queryResolver) Todos(ctx context.Context) ([]*Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
-}
-
-func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

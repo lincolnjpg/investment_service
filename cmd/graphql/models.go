@@ -2,25 +2,148 @@
 
 package graphql
 
-type Mutation struct {
-}
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type AssetIndex struct {
+	ID      string                `json:"id"`
+	Name    AssetIndexNameEnum    `json:"name"`
+	Acronym AssetIndexAcronymEnum `json:"acronym"`
 }
 
 type Query struct {
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type User struct {
+	ID              string          `json:"id"`
+	Name            string          `json:"name"`
+	InvestorProfile InvestorProfile `json:"investorProfile"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type AssetIndexAcronymEnum string
+
+const (
+	AssetIndexAcronymEnumCdi  AssetIndexAcronymEnum = "CDI"
+	AssetIndexAcronymEnumIpca AssetIndexAcronymEnum = "IPCA"
+)
+
+var AllAssetIndexAcronymEnum = []AssetIndexAcronymEnum{
+	AssetIndexAcronymEnumCdi,
+	AssetIndexAcronymEnumIpca,
+}
+
+func (e AssetIndexAcronymEnum) IsValid() bool {
+	switch e {
+	case AssetIndexAcronymEnumCdi, AssetIndexAcronymEnumIpca:
+		return true
+	}
+	return false
+}
+
+func (e AssetIndexAcronymEnum) String() string {
+	return string(e)
+}
+
+func (e *AssetIndexAcronymEnum) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AssetIndexAcronymEnum(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AssetIndexAcronymEnum", str)
+	}
+	return nil
+}
+
+func (e AssetIndexAcronymEnum) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type AssetIndexNameEnum string
+
+const (
+	AssetIndexNameEnumCertificadoDeDepositoInterbancario      AssetIndexNameEnum = "CERTIFICADO_DE_DEPOSITO_INTERBANCARIO"
+	AssetIndexNameEnumIndiceNacionalDePrecosAoConsumidorAmplo AssetIndexNameEnum = "INDICE_NACIONAL_DE_PRECOS_AO_CONSUMIDOR_AMPLO"
+)
+
+var AllAssetIndexNameEnum = []AssetIndexNameEnum{
+	AssetIndexNameEnumCertificadoDeDepositoInterbancario,
+	AssetIndexNameEnumIndiceNacionalDePrecosAoConsumidorAmplo,
+}
+
+func (e AssetIndexNameEnum) IsValid() bool {
+	switch e {
+	case AssetIndexNameEnumCertificadoDeDepositoInterbancario, AssetIndexNameEnumIndiceNacionalDePrecosAoConsumidorAmplo:
+		return true
+	}
+	return false
+}
+
+func (e AssetIndexNameEnum) String() string {
+	return string(e)
+}
+
+func (e *AssetIndexNameEnum) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AssetIndexNameEnum(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AssetIndexNameEnum", str)
+	}
+	return nil
+}
+
+func (e AssetIndexNameEnum) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type InvestorProfile string
+
+const (
+	InvestorProfileConservative InvestorProfile = "conservative"
+	InvestorProfileModerate     InvestorProfile = "moderate"
+	InvestorProfileAggressive   InvestorProfile = "aggressive"
+)
+
+var AllInvestorProfile = []InvestorProfile{
+	InvestorProfileConservative,
+	InvestorProfileModerate,
+	InvestorProfileAggressive,
+}
+
+func (e InvestorProfile) IsValid() bool {
+	switch e {
+	case InvestorProfileConservative, InvestorProfileModerate, InvestorProfileAggressive:
+		return true
+	}
+	return false
+}
+
+func (e InvestorProfile) String() string {
+	return string(e)
+}
+
+func (e *InvestorProfile) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InvestorProfile(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InvestorProfile", str)
+	}
+	return nil
+}
+
+func (e InvestorProfile) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

@@ -1,0 +1,15 @@
+extend type Query {
+  getUserById: User!
+}
+
+type User {
+  id: ID!
+  name: String!
+  investorProfile: InvestorProfile!
+}
+
+enum InvestorProfile {
+  conservative
+  moderate
+  aggressive
+}

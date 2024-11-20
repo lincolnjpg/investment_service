@@ -1,0 +1,19 @@
+extend type Query {
+  getAssetIndexById: User!
+}
+
+type AssetIndex {
+  id: String!
+  name: AssetIndexNameEnum!
+  acronym: AssetIndexAcronymEnum!
+}
+
+enum AssetIndexNameEnum {
+  CERTIFICADO_DE_DEPOSITO_INTERBANCARIO
+  INDICE_NACIONAL_DE_PRECOS_AO_CONSUMIDOR_AMPLO
+}
+
+enum AssetIndexAcronymEnum {
+  CDI
+  IPCA
+}
