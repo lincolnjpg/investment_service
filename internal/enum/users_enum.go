@@ -1,8 +1,6 @@
 package enum
 
 import (
-	"fmt"
-
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
@@ -25,7 +23,6 @@ func (e InvestorProfileEnum) Name() string {
 }
 
 func (e InvestorProfileEnum) Validate() error {
-	fmt.Println(e)
 	return validation.Validate(
 		e.Name(),
 		validation.Required,
