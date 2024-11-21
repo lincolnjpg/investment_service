@@ -2,38 +2,62 @@ package enum
 
 import validation "github.com/go-ozzo/ozzo-validation/v4"
 
-const (
-	CDB            = "CDB"
-	LCI            = "LCI"
-	LCA            = "LCA"
-	CRI            = "CRI"
-	CRA            = "CRA"
-	TESOURO_DIRETO = "TESOURO DIRETO"
-	ACAO           = "AÇÃO"
-	FII            = "FII"
-)
-
-type InvestmentTypeEnum string
+type InvestmentTypeEnum uint8
 
 const (
-	FIXED_INCOME    = "FIXED_INCOME"
-	VARIABLE_INCOME = "VARIABLE_INCOME"
+	Cdb InvestmentTypeEnum = iota + 1
+	Lci
+	Lca
+	Cri
+	Cra
+	TesouroDireto
+	Acao
+	Fii
 )
 
-type AssetClassEnum string
+var investmentTypeNames = map[InvestmentTypeEnum]string{
+	Cdb:           "CDB",
+	Lci:           "LCI",
+	Lca:           "LCA",
+	Cri:           "CRI",
+	Cra:           "CRA",
+	TesouroDireto: "Tesouro Direto",
+	Acao:          "Ação",
+	Fii:           "FII",
+}
 
-func (t InvestmentTypeEnum) Validate() error {
+func (e InvestmentTypeEnum) Name() string {
+	return investmentTypeNames[e]
+}
+
+func (e InvestmentTypeEnum) Validate() error {
 	return validation.Validate(
-		string(t),
+		e.Name(),
 		validation.Required,
-		validation.In(CDB, LCI, LCA, CRI, CRA, TESOURO_DIRETO, ACAO, FII),
+		validation.In(Cdb.Name(), Lci.Name(), Lca.Name(), Cri.Name(), Cra.Name(), TesouroDireto.Name(), Acao.Name(), Fii.Name()),
 	)
 }
 
-func (t AssetClassEnum) Validate() error {
+type AssetClassEnum uint8
+
+const (
+	FixedIncome AssetClassEnum = iota + 1
+	VariableIncome
+)
+
+var assetClassNames = map[AssetClassEnum]string{
+	FixedIncome:    "Fixed Income",
+	VariableIncome: "Variable Income",
+}
+
+func (e AssetClassEnum) Name() string {
+	return assetClassNames[e]
+}
+
+func (e AssetClassEnum) Validate() error {
 	return validation.Validate(
-		string(t),
+		e.Name(),
 		validation.Required,
-		validation.In(FIXED_INCOME, VARIABLE_INCOME),
+		validation.In(FixedIncome.Name(), VariableIncome.Name()),
 	)
 }

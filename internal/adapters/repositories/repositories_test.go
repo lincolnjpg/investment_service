@@ -8,6 +8,7 @@ import (
 
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
 var _ = Describe("user creation", func() {
@@ -18,7 +19,7 @@ var _ = Describe("user creation", func() {
 			context.Background(),
 			dtos.CreateUserInput{
 				Name:            "user_1",
-				InvestorProfile: "moderate",
+				InvestorProfile: enum.Moderate,
 			},
 		)
 
@@ -41,7 +42,7 @@ var _ = Describe("user creation", func() {
 			context.Background(),
 			dtos.CreateUserInput{
 				Name:            "user_1",
-				InvestorProfile: "moderate",
+				InvestorProfile: enum.Moderate,
 			},
 		)
 
@@ -56,7 +57,7 @@ var _ = Describe("user creation", func() {
 			context.Background(),
 			dtos.CreateUserInput{
 				Name:            "user_1",
-				InvestorProfile: "moderate",
+				InvestorProfile: enum.Moderate,
 			},
 		)
 
