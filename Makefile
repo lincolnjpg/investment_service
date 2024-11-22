@@ -17,3 +17,6 @@ migrations_test_up:
 
 migrations_test_status:
 	goose -dir migrations postgres "host=localhost port=5433 user=postgres password=example database=postgres sslmode=disable" status
+
+migrations_dev_create:
+	goose -dir migrations create $(name) sql
