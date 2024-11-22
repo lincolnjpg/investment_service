@@ -12,16 +12,16 @@ type CreateAssetTypeInput struct {
 	Class       enum.AssetClassEnum     `json:"class,omitempty"`
 }
 
-func (i CreateAssetTypeInput) Validate() error {
+func (dto CreateAssetTypeInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
-		validation.Field(&i.Name),
+		&dto,
+		validation.Field(&dto.Name),
 		validation.Field(
-			&i.Description,
+			&dto.Description,
 			validation.Required,
 			validation.Length(1, 100),
 		),
-		validation.Field(&i.Class),
+		validation.Field(&dto.Class),
 	)
 }
 
@@ -40,11 +40,11 @@ type GetAssetTypeByIDOutput struct {
 	Class       enum.AssetClassEnum     `json:"class,omitempty"`
 }
 
-func (i GetAssetTypeByIDInput) Validate() error {
+func (dto GetAssetTypeByIDInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Id,
+			&dto.Id,
 			validation.Required,
 			is.UUIDv4,
 		),
@@ -84,11 +84,11 @@ type DeleteAssetTypeByIdInput struct {
 	Id string `json:"id,omitempty"`
 }
 
-func (i DeleteAssetTypeByIdInput) Validate() error {
+func (dto DeleteAssetTypeByIdInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Id,
+			&dto.Id,
 			validation.Required,
 			is.UUIDv4,
 		),

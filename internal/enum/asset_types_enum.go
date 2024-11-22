@@ -1,6 +1,10 @@
 package enum
 
-import validation "github.com/go-ozzo/ozzo-validation/v4"
+import (
+	"errors"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+)
 
 type InvestmentTypeEnum uint8
 
@@ -10,6 +14,7 @@ const (
 	Lca
 	Cri
 	Cra
+	Debenture
 	TesouroDireto
 	Acao
 	Fii
@@ -21,20 +26,51 @@ var investmentTypeNames = map[InvestmentTypeEnum]string{
 	Lca:           "LCA",
 	Cri:           "CRI",
 	Cra:           "CRA",
+	Debenture:     "Debênture",
 	TesouroDireto: "Tesouro Direto",
 	Acao:          "Ação",
 	Fii:           "FII",
 }
 
-func (e InvestmentTypeEnum) Name() string {
+var investmentTypeLabels = map[string]InvestmentTypeEnum{
+	"CDB":            Cdb,
+	"LCI":            Lci,
+	"LCA":            Lca,
+	"CRI":            Cri,
+	"CRA":            Cra,
+	"Debênture":      Debenture,
+	"Tesouro Direto": TesouroDireto,
+	"Ação":           Acao,
+	"FII":            Fii,
+}
+
+func (e InvestmentTypeEnum) String() string {
 	return investmentTypeNames[e]
+}
+
+func (e *InvestmentTypeEnum) Scan(value interface{}) error {
+	if v, ok := value.(string); ok {
+		*e = investmentTypeLabels[v]
+		return nil
+	}
+
+	return errors.New("could not scan investment type")
 }
 
 func (e InvestmentTypeEnum) Validate() error {
 	return validation.Validate(
-		e.Name(),
+		e.String(),
 		validation.Required,
-		validation.In(Cdb.Name(), Lci.Name(), Lca.Name(), Cri.Name(), Cra.Name(), TesouroDireto.Name(), Acao.Name(), Fii.Name()),
+		validation.In(
+			Cdb.String(),
+			Lci.String(),
+			Lca.String(),
+			Cri.String(),
+			Cra.String(),
+			TesouroDireto.String(),
+			Acao.String(),
+			Fii.String(),
+		),
 	)
 }
 
@@ -46,18 +82,32 @@ const (
 )
 
 var assetClassNames = map[AssetClassEnum]string{
-	FixedIncome:    "Fixed Income",
-	VariableIncome: "Variable Income",
+	FixedIncome:    "Renda Fixa",
+	VariableIncome: "Renda Variável",
 }
 
-func (e AssetClassEnum) Name() string {
+var assetClassLabels = map[string]AssetClassEnum{
+	"Renda Fixa":     FixedIncome,
+	"Renda Variável": VariableIncome,
+}
+
+func (e AssetClassEnum) String() string {
 	return assetClassNames[e]
+}
+
+func (e *AssetClassEnum) Scan(value interface{}) error {
+	if v, ok := value.(string); ok {
+		*e = assetClassLabels[v]
+		return nil
+	}
+
+	return errors.New("could not scan investment type")
 }
 
 func (e AssetClassEnum) Validate() error {
 	return validation.Validate(
-		e.Name(),
+		e.String(),
 		validation.Required,
-		validation.In(FixedIncome.Name(), VariableIncome.Name()),
+		validation.In(FixedIncome.String(), VariableIncome.String()),
 	)
 }

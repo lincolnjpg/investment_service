@@ -147,11 +147,11 @@ type DeleteAssetByIdInput struct {
 	Id string `json:"id,omitempty"`
 }
 
-func (i DeleteAssetByIdInput) Validate() error {
+func (dto DeleteAssetByIdInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Id,
+			&dto.Id,
 			validation.Required,
 			is.UUIDv4,
 		),

@@ -11,15 +11,15 @@ type CreateUserInput struct {
 	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }
 
-func (i CreateUserInput) Validate() error {
+func (dto CreateUserInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Name,
+			&dto.Name,
 			validation.Required,
 			validation.Length(1, 50),
 		),
-		validation.Field(&i.InvestorProfile),
+		validation.Field(&dto.InvestorProfile),
 	)
 }
 
@@ -27,11 +27,11 @@ type GetUserByIDInput struct {
 	Id string `json:"id,omitempty"`
 }
 
-func (i GetUserByIDInput) Validate() error {
+func (dto GetUserByIDInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Id,
+			&dto.Id,
 			validation.Required,
 			is.UUIDv4,
 		),
@@ -44,15 +44,15 @@ type UpdateUserInput struct {
 	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }
 
-func (i UpdateUserInput) Validate() error {
+func (dto UpdateUserInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Name,
+			&dto.Name,
 			validation.Required,
 			validation.Length(1, 100),
 		),
-		validation.Field(&i.InvestorProfile),
+		validation.Field(&dto.InvestorProfile),
 	)
 }
 
@@ -60,11 +60,11 @@ type DeleteUserByIDInput struct {
 	Id string `json:"id,omitempty"`
 }
 
-func (i DeleteUserByIDInput) Validate() error {
+func (dto DeleteUserByIDInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
+		&dto,
 		validation.Field(
-			&i.Id,
+			&dto.Id,
 			validation.Required,
 			is.UUIDv4,
 		),

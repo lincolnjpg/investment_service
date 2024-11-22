@@ -13,19 +13,19 @@ const (
 )
 
 var investorProfileNames = map[InvestorProfileEnum]string{
-	Conservative: "conservative",
-	Moderate:     "moderate",
-	Aggressive:   "aggressive",
+	Conservative: "Conservador",
+	Moderate:     "Moderado",
+	Aggressive:   "Arrojado",
 }
 
-func (e InvestorProfileEnum) Name() string {
+func (e InvestorProfileEnum) String() string {
 	return investorProfileNames[e]
 }
 
 func (e InvestorProfileEnum) Validate() error {
 	return validation.Validate(
-		e.Name(),
+		e.String(),
 		validation.Required,
-		validation.In(Conservative.Name(), Moderate.Name(), Aggressive.Name()),
+		validation.In(Conservative.String(), Moderate.String(), Aggressive.String()),
 	)
 }

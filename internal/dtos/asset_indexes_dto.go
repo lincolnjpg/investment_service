@@ -3,19 +3,24 @@ package dtos
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
-	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
 type CreateAssetIndexInput struct {
-	Name    enum.AssetIndexNameEnum    `json:"name,omitempty"`
-	Acronym enum.AssetIndexAcronymEnum `json:"acronym,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Acronym string `json:"acronym,omitempty"`
 }
 
-func (i CreateAssetIndexInput) Validate() error {
+func (dto CreateAssetIndexInput) Validate() error {
 	return validation.ValidateStruct(
-		&i,
-		validation.Field(&i.Name),
-		validation.Field(&i.Acronym),
+		&dto,
+		validation.Field(
+			&dto.Name,
+			validation.Required,
+		),
+		validation.Field(
+			&dto.Acronym,
+			validation.Required,
+		),
 	)
 }
 
@@ -39,22 +44,28 @@ func (dto GetAssetIndexByIdInput) Validate() error {
 }
 
 type GetAssetIndexByIdOutput struct {
-	Id      string                     `json:"id,omitempty"`
-	Name    enum.AssetIndexNameEnum    `json:"name,omitempty"`
-	Acronym enum.AssetIndexAcronymEnum `json:"acronym,omitempty"`
+	Id      string `json:"id,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Acronym string `json:"acronym,omitempty"`
 }
 
 type UpdateAssetIndexByIdInput struct {
-	Id      string                     `json:"id,omitempty"`
-	Name    enum.AssetIndexNameEnum    `json:"name,omitempty"`
-	Acronym enum.AssetIndexAcronymEnum `json:"acronym,omitempty"`
+	Id      string `json:"id,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Acronym string `json:"acronym,omitempty"`
 }
 
 func (dto UpdateAssetIndexByIdInput) Validate() error {
 	return validation.ValidateStruct(
 		&dto,
-		validation.Field(&dto.Name),
-		validation.Field(&dto.Acronym),
+		validation.Field(
+			&dto.Name,
+			validation.Required,
+		),
+		validation.Field(
+			&dto.Acronym,
+			validation.Required,
+		),
 	)
 }
 
