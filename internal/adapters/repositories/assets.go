@@ -81,7 +81,7 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 			UPDATE assets
 			SET name = $2, unit_price = $3, rentability = $4, due_date = $5, ticker = $6, type = $7, asset_index_id = $8
 			WHERE id = $1
-			RETURNING id, name, unit_price, rentability, due_date, ticker, asset_type_id, asset_index_id;
+			RETURNING id, name, unit_price, rentability, due_date, ticker, type, asset_index_id;
 		`,
 		input.Id,
 		input.Name,
