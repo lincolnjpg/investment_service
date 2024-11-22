@@ -25,19 +25,19 @@ func (repository assetRepository) Create(ctx context.Context, input dtos.CreateA
 	row := repository.db.QueryRow(
 		ctx,
 		`
-			INSERT INTO assets(name, unit_price, rentability, due_date, ticker, asset_type_id, asset_index_id)
+			INSERT INTO assets(name, unit_price, rentability, due_date, ticker, type, asset_index_id)
 			VALUES($1, $2, $3, $4, $5, $6, $7)
-			RETURNING id, name, unit_price, rentability, due_date, ticker, asset_type_id, asset_index_id;
+			RETURNING id, name, unit_price, rentability, due_date, ticker, type, asset_index_id;
 		`,
 		input.Name,
 		input.UnitPrice,
 		input.Rentability,
 		input.DueDate,
 		input.Ticker,
-		input.AssetTypeId,
+		input.Type,
 		input.AssetIndexId,
 	)
-	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.AssetTypeId, &asset.AssetIndexId); err != nil {
+	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.Type, &asset.AssetIndexId); err != nil {
 		return asset, infra.NewAPIError(fmt.Sprintf("could not create a new asset: %s", err.Error()), http.StatusInternalServerError)
 	}
 
@@ -51,7 +51,7 @@ func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAss
 		ctx,
 		`
 			SELECT
-				id, name, unit_price, rentability, due_date, ticker, asset_type_id, asset_index_id
+				id, name, unit_price, rentability, due_date, ticker, type, asset_index_id
 			FROM
 				assets
 			WHERE
@@ -59,7 +59,7 @@ func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAss
 		`,
 		input.Id,
 	)
-	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.AssetTypeId, &asset.AssetIndexId); err != nil {
+	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.Type, &asset.AssetIndexId); err != nil {
 		if err == pgx.ErrNoRows {
 			return asset, infra.NewAPIError(fmt.Sprintf("asset not found: %s", err.Error()), http.StatusNotFound)
 		}
@@ -79,7 +79,7 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 		ctx,
 		`
 			UPDATE assets
-			SET name = $2, unit_price = $3, rentability = $4, due_date = $5, ticker = $6, asset_type_id = $7, asset_index_id = $8
+			SET name = $2, unit_price = $3, rentability = $4, due_date = $5, ticker = $6, type = $7, asset_index_id = $8
 			WHERE id = $1
 			RETURNING id, name, unit_price, rentability, due_date, ticker, asset_type_id, asset_index_id;
 		`,
@@ -89,11 +89,11 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 		input.Rentability,
 		input.DueDate,
 		input.Ticker,
-		input.AssetTypeId,
+		input.Type,
 		input.AssetIndexId,
 	)
 
-	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &input.DueDate, &asset.Ticker, &asset.AssetTypeId, &asset.AssetIndexId); err != nil {
+	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &input.DueDate, &asset.Ticker, &asset.Type, &asset.AssetIndexId); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not update asset: %s", err.Error()), http.StatusInternalServerError)
 
 		return asset, err

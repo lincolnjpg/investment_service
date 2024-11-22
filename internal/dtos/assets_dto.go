@@ -13,7 +13,7 @@ type CreateAssetInput struct {
 	Rentability  float64    `json:"rentability,omitempty"`
 	DueDate      *time.Time `json:"due_date,omitempty"`
 	Ticker       *string    `json:"ticker,omitempty"`
-	AssetTypeId  string     `json:"asset_type_id,omitempty"`
+	Type         string     `json:"asset_type_id,omitempty"`
 	AssetIndexId *string    `json:"asset_index_id,omitempty"`
 }
 
@@ -44,9 +44,9 @@ func (dto CreateAssetInput) Validate() error {
 			is.UpperCase,
 		),
 		validation.Field(
-			&dto.AssetTypeId,
+			&dto.Type,
 			validation.Required,
-			is.UUIDv4,
+			validation.Length(1, 15),
 		),
 		validation.Field(
 			&dto.AssetIndexId,
@@ -81,7 +81,7 @@ type GetAssetByIdOutput struct {
 	Rentability  float64    `json:"rentability,omitempty"`
 	DueDate      *time.Time `json:"due_date,omitempty"`
 	Ticker       *string    `json:"ticker,omitempty"`
-	AssetTypeId  string     `json:"asset_type_id,omitempty"`
+	Type         string     `json:"asset_type_id,omitempty"`
 	AssetIndexId *string    `json:"asset_index_id,omitempty"`
 }
 
@@ -92,7 +92,7 @@ type UpdateAssetByIdInput struct {
 	Rentability  float64    `json:"rentability,omitempty"`
 	DueDate      *time.Time `json:"due_date,omitempty"`
 	Ticker       *string    `json:"ticker,omitempty"`
-	AssetTypeId  string     `json:"asset_type_id,omitempty"`
+	Type         string     `json:"asset_type_id,omitempty"`
 	AssetIndexId *string    `json:"asset_index_id,omitempty"`
 }
 
@@ -128,9 +128,9 @@ func (dto UpdateAssetByIdInput) Validate() error {
 			is.UpperCase,
 		),
 		validation.Field(
-			&dto.AssetTypeId,
+			&dto.Type,
 			validation.Required,
-			is.UUIDv4,
+			validation.Length(1, 15),
 		),
 		validation.Field(
 			&dto.AssetIndexId,

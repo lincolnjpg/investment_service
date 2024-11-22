@@ -14,24 +14,17 @@ const maxCdiRentability float64 = 150.0
 
 type assetService struct {
 	repository          ports.AssetRepository
-	assetTypesService   ports.AssetTypeService
 	assetIndexesService ports.AssetIndexService
 }
 
-func NewAssetService(repository ports.AssetRepository, assetTypesService ports.AssetTypeService, assetIndexesService ports.AssetIndexService) assetService {
+func NewAssetService(repository ports.AssetRepository, assetIndexesService ports.AssetIndexService) assetService {
 	return assetService{
 		repository:          repository,
-		assetTypesService:   assetTypesService,
 		assetIndexesService: assetIndexesService,
 	}
 }
 
 func (service assetService) Create(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error) {
-	_, err := service.assetTypesService.GetById(ctx, dtos.GetAssetTypeByIDInput{Id: input.AssetTypeId})
-	if err != nil {
-		return dtos.CreateAssetOutput{}, err
-	}
-
 	if input.AssetIndexId != nil {
 		assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: *input.AssetIndexId})
 		if err != nil {

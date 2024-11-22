@@ -9,6 +9,6 @@ type Asset struct {
 	Rentability  float64    `json:"rentability,omitempty"`
 	DueDate      *time.Time `json:"due_date,omitempty"`
 	Ticker       *string    `json:"ticker,omitempty"`
-	AssetTypeId  string     `json:"asset_type_id,omitempty"`
+	Type         string     `json:"type,omitempty"`
 	AssetIndexId *string    `json:"asset_index_id,omitempty"`
 }

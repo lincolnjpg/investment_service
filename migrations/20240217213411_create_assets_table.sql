@@ -2,7 +2,7 @@
 CREATE TABLE assets (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	name VARCHAR(100) NOT NULL,
-	asset_type_id UUID NOT NULL,
+	type investment_types NOT NULL,
 	asset_index_id UUID NULL,
 	unit_price NUMERIC NOT NULL,
 	rentability NUMERIC NOT NULL,

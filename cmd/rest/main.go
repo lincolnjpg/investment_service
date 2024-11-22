@@ -108,14 +108,11 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
-	assetTypesRepository := repositories.NewAssetTypeRepository(db)
-	assetTypeService := services.NewAssetTypeService(assetTypesRepository)
-
 	assetIndexesRepository := repositories.NewAssetIndexRepository(db)
 	assetIndexesService := services.NewAssetIndexService(assetIndexesRepository)
 
 	assetsRepository := repositories.NewAssetRepository(db)
-	assetsService := services.NewAssetService(assetsRepository, assetTypeService, assetIndexesService)
+	assetsService := services.NewAssetService(assetsRepository, assetIndexesService)
 
 	router := chi.NewRouter()
 	router.Use(httplog.RequestLogger(logger))
@@ -126,12 +123,6 @@ func main() {
 	usersRouter.Get("/{id}", handlers.GetUserByIDHandler(userService))
 	usersRouter.Put("/{id}", handlers.UpateUserByIdHandler(userService))
 	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(userService))
-
-	assetTypesRouter := chi.NewRouter()
-	assetTypesRouter.Post("/", handlers.CreateAssetTypeHandler(assetTypeService))
-	assetTypesRouter.Get("/{id}", handlers.GetAssetTypeByIDHandler(assetTypeService))
-	assetTypesRouter.Put("/{id}", handlers.UpdateAssetTypeByIdHandler(assetTypeService))
-	assetTypesRouter.Delete("/{id}", handlers.DeleteAssetTypeByIDHandler(assetTypeService))
 
 	assetIndexesRouter := chi.NewRouter()
 	assetIndexesRouter.Post("/", handlers.CreateAssetIndexHandler(assetIndexesService))
@@ -146,7 +137,6 @@ func main() {
 	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(assetsService))
 
 	router.Mount("/users", usersRouter)
-	router.Mount("/types", assetTypesRouter)
 	router.Mount("/indexes", assetIndexesRouter)
 	router.Mount("/assets", assetsRouter)
 	router.Mount("/debug", chimiddlewares.Profiler())
