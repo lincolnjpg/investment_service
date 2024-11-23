@@ -1,6 +1,8 @@
 package enum
 
 import (
+	"errors"
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
@@ -18,14 +20,29 @@ var investorProfileNames = map[InvestorProfileEnum]string{
 	Aggressive:   "Arrojado",
 }
 
+var investorProfileLabels = map[string]InvestorProfileEnum{
+	"Conservador": Conservative,
+	"Moderado":    Moderate,
+	"Arrojado":    Aggressive,
+}
+
 func (e InvestorProfileEnum) String() string {
 	return investorProfileNames[e]
 }
 
+func (e *InvestorProfileEnum) Scan(value interface{}) error {
+	if v, ok := value.(string); ok {
+		*e = investorProfileLabels[v]
+		return nil
+	}
+
+	return errors.New("could not scan investment type")
+}
+
 func (e InvestorProfileEnum) Validate() error {
 	return validation.Validate(
-		e.String(),
+		uint8(e),
 		validation.Required,
-		validation.In(Conservative.String(), Moderate.String(), Aggressive.String()),
+		validation.In(uint8(Conservative), uint8(Moderate), uint8(Aggressive)),
 	)
 }
