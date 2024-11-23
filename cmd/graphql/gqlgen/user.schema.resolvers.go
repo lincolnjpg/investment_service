@@ -1,4 +1,4 @@
-package graphql
+package gqlgen
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -9,10 +9,6 @@ import (
 	"fmt"
 )
 
-func (r *queryResolver) GetAssetIndexByID(ctx context.Context) (*User, error) {
-	panic(fmt.Errorf("not implemented: GetAssetIndexByID - getAssetIndexById"))
+func (r *queryResolver) GetUserByID(ctx context.Context) (*User, error) {
+	panic(fmt.Errorf("not implemented: GetUserByID - getUserById"))
 }
-
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
-
-type queryResolver struct{ *Resolver }
