@@ -54,7 +54,7 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 		ctx := r.Context()
 		render := render.New()
 
-		body := dtos.GetUserByIDInput{
+		body := dtos.GetUserByIdInput{
 			Id: chi.URLParam(r, "id"),
 		}
 

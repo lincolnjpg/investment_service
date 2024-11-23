@@ -57,7 +57,7 @@ func (repository assetIndexRepository) GetById(ctx context.Context, input dtos.G
 			return assetIndex, infra.NewAPIError(fmt.Sprintf("asset index not found: %s", err.Error()), http.StatusNotFound)
 		}
 
-		err := infra.NewAPIError(fmt.Sprintf("could not get user from database: %s", err.Error()), http.StatusInternalServerError)
+		err := infra.NewAPIError(fmt.Sprintf("could not get asset index from database: %s", err.Error()), http.StatusInternalServerError)
 
 		return assetIndex, err
 	}

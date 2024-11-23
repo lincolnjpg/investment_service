@@ -95,3 +95,20 @@ models:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
+  InvestorProfile:
+    model: ./internal/enum.InvestorProfileEnum
+    enum_values:
+      Conservative:
+        value: ./internal/enum.Conservative
+      Moderate:
+        value: ./internal/enum.Moderate
+      Aggressive:
+        value: ./internal/enum.Aggressive
+  CreateUserInput:
+    model: ./internal/dtos.CreateUserInput
+  CreateUserOutput:
+    model: ./internal/dtos.CreateUserOutput
+  GetUserByIdInput:
+    model: ./internal/dtos.GetUserByIdInput
+  GetUserByIdOutput:
+    model: ./internal/dtos.GetUserByIdOutput

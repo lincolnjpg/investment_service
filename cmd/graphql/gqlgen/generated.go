@@ -14,6 +14,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -52,28 +54,32 @@ type ComplexityRoot struct {
 		Name    func(childComplexity int) int
 	}
 
+	CreateUserOutput struct {
+		Id func(childComplexity int) int
+	}
+
+	GetUserByIdOutput struct {
+		Id              func(childComplexity int) int
+		InvestorProfile func(childComplexity int) int
+		Name            func(childComplexity int) int
+	}
+
 	Mutation struct {
-		CreateUser func(childComplexity int, input CreateUserInput) int
+		CreateUser func(childComplexity int, input dtos.CreateUserInput) int
 	}
 
 	Query struct {
 		GetAssetIndexByID func(childComplexity int) int
-		GetUserByID       func(childComplexity int, id string) int
-	}
-
-	User struct {
-		ID              func(childComplexity int) int
-		InvestorProfile func(childComplexity int) int
-		Name            func(childComplexity int) int
+		GetUserByID       func(childComplexity int, input dtos.GetUserByIdInput) int
 	}
 }
 
 type MutationResolver interface {
-	CreateUser(ctx context.Context, input CreateUserInput) (string, error)
+	CreateUser(ctx context.Context, input dtos.CreateUserInput) (*dtos.CreateUserOutput, error)
 }
 type QueryResolver interface {
 	GetAssetIndexByID(ctx context.Context) (*AssetIndex, error)
-	GetUserByID(ctx context.Context, id string) (*User, error)
+	GetUserByID(ctx context.Context, input dtos.GetUserByIdInput) (*dtos.GetUserByIdOutput, error)
 }
 
 type executableSchema struct {
@@ -116,6 +122,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.AssetIndex.Name(childComplexity), true
 
+	case "CreateUserOutput.id":
+		if e.complexity.CreateUserOutput.Id == nil {
+			break
+		}
+
+		return e.complexity.CreateUserOutput.Id(childComplexity), true
+
+	case "GetUserByIdOutput.id":
+		if e.complexity.GetUserByIdOutput.Id == nil {
+			break
+		}
+
+		return e.complexity.GetUserByIdOutput.Id(childComplexity), true
+
+	case "GetUserByIdOutput.investorProfile":
+		if e.complexity.GetUserByIdOutput.InvestorProfile == nil {
+			break
+		}
+
+		return e.complexity.GetUserByIdOutput.InvestorProfile(childComplexity), true
+
+	case "GetUserByIdOutput.name":
+		if e.complexity.GetUserByIdOutput.Name == nil {
+			break
+		}
+
+		return e.complexity.GetUserByIdOutput.Name(childComplexity), true
+
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
 			break
@@ -126,7 +160,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(CreateUserInput)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(dtos.CreateUserInput)), true
 
 	case "Query.getAssetIndexById":
 		if e.complexity.Query.GetAssetIndexByID == nil {
@@ -145,28 +179,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.GetUserByID(childComplexity, args["id"].(string)), true
-
-	case "User.id":
-		if e.complexity.User.ID == nil {
-			break
-		}
-
-		return e.complexity.User.ID(childComplexity), true
-
-	case "User.investorProfile":
-		if e.complexity.User.InvestorProfile == nil {
-			break
-		}
-
-		return e.complexity.User.InvestorProfile(childComplexity), true
-
-	case "User.name":
-		if e.complexity.User.Name == nil {
-			break
-		}
-
-		return e.complexity.User.Name(childComplexity), true
+		return e.complexity.Query.GetUserByID(childComplexity, args["input"].(dtos.GetUserByIdInput)), true
 
 	}
 	return 0, false
@@ -177,6 +190,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputCreateUserInput,
+		ec.unmarshalInputGetUserByIdInput,
 	)
 	first := true
 
@@ -307,13 +321,13 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createUser_argsInput(
 	ctx context.Context,
 	rawArgs map[string]interface{},
-) (CreateUserInput, error) {
+) (dtos.CreateUserInput, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNCreateUserInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋcmdᚋgraphqlᚋgqlgenᚐCreateUserInput(ctx, tmp)
+		return ec.unmarshalNCreateUserInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐCreateUserInput(ctx, tmp)
 	}
 
-	var zeroVal CreateUserInput
+	var zeroVal dtos.CreateUserInput
 	return zeroVal, nil
 }
 
@@ -343,23 +357,23 @@ func (ec *executionContext) field_Query___type_argsName(
 func (ec *executionContext) field_Query_getUserById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	arg0, err := ec.field_Query_getUserById_argsID(ctx, rawArgs)
+	arg0, err := ec.field_Query_getUserById_argsInput(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["id"] = arg0
+	args["input"] = arg0
 	return args, nil
 }
-func (ec *executionContext) field_Query_getUserById_argsID(
+func (ec *executionContext) field_Query_getUserById_argsInput(
 	ctx context.Context,
 	rawArgs map[string]interface{},
-) (string, error) {
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
-	if tmp, ok := rawArgs["id"]; ok {
-		return ec.unmarshalNID2string(ctx, tmp)
+) (dtos.GetUserByIdInput, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNGetUserByIdInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐGetUserByIdInput(ctx, tmp)
 	}
 
-	var zeroVal string
+	var zeroVal dtos.GetUserByIdInput
 	return zeroVal, nil
 }
 
@@ -549,6 +563,182 @@ func (ec *executionContext) fieldContext_AssetIndex_acronym(_ context.Context, f
 	return fc, nil
 }
 
+func (ec *executionContext) _CreateUserOutput_id(ctx context.Context, field graphql.CollectedField, obj *dtos.CreateUserOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_CreateUserOutput_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Id, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_CreateUserOutput_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "CreateUserOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GetUserByIdOutput_id(ctx context.Context, field graphql.CollectedField, obj *dtos.GetUserByIdOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GetUserByIdOutput_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Id, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GetUserByIdOutput_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GetUserByIdOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GetUserByIdOutput_name(ctx context.Context, field graphql.CollectedField, obj *dtos.GetUserByIdOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GetUserByIdOutput_name(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GetUserByIdOutput_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GetUserByIdOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _GetUserByIdOutput_investorProfile(ctx context.Context, field graphql.CollectedField, obj *dtos.GetUserByIdOutput) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_GetUserByIdOutput_investorProfile(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InvestorProfile, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(enum.InvestorProfileEnum)
+	fc.Result = res
+	return ec.marshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_GetUserByIdOutput_investorProfile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "GetUserByIdOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type InvestorProfile does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_createUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_createUser(ctx, field)
 	if err != nil {
@@ -563,7 +753,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(CreateUserInput))
+		return ec.resolvers.Mutation().CreateUser(rctx, fc.Args["input"].(dtos.CreateUserInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -575,9 +765,9 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*dtos.CreateUserOutput)
 	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
+	return ec.marshalNCreateUserOutput2ᚖgithubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐCreateUserOutput(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -587,7 +777,11 @@ func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_CreateUserOutput_id(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type CreateUserOutput", field.Name)
 		},
 	}
 	defer func() {
@@ -670,7 +864,7 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().GetUserByID(rctx, fc.Args["id"].(string))
+		return ec.resolvers.Query().GetUserByID(rctx, fc.Args["input"].(dtos.GetUserByIdInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -682,9 +876,9 @@ func (ec *executionContext) _Query_getUserById(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*User)
+	res := resTmp.(*dtos.GetUserByIdOutput)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋcmdᚋgraphqlᚋgqlgenᚐUser(ctx, field.Selections, res)
+	return ec.marshalNGetUserByIdOutput2ᚖgithubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐGetUserByIdOutput(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -696,13 +890,13 @@ func (ec *executionContext) fieldContext_Query_getUserById(ctx context.Context, 
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
 			case "id":
-				return ec.fieldContext_User_id(ctx, field)
+				return ec.fieldContext_GetUserByIdOutput_id(ctx, field)
 			case "name":
-				return ec.fieldContext_User_name(ctx, field)
+				return ec.fieldContext_GetUserByIdOutput_name(ctx, field)
 			case "investorProfile":
-				return ec.fieldContext_User_investorProfile(ctx, field)
+				return ec.fieldContext_GetUserByIdOutput_investorProfile(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type GetUserByIdOutput", field.Name)
 		},
 	}
 	defer func() {
@@ -843,138 +1037,6 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 				return ec.fieldContext___Schema_directives(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type __Schema", field.Name)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_id(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNID2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "User",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type ID does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_name(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Name, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_User_name(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "User",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _User_investorProfile(ctx context.Context, field graphql.CollectedField, obj *User) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_User_investorProfile(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.InvestorProfile, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(int)
-	fc.Result = res
-	return ec.marshalNInt2int(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_User_investorProfile(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "User",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -2753,8 +2815,8 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(_ context.Context
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, obj interface{}) (CreateUserInput, error) {
-	var it CreateUserInput
+func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, obj interface{}) (dtos.CreateUserInput, error) {
+	var it dtos.CreateUserInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -2776,11 +2838,38 @@ func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, o
 			it.Name = data
 		case "investorProfile":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("investorProfile"))
-			data, err := ec.unmarshalNInt2int(ctx, v)
+			data, err := ec.unmarshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.InvestorProfile = data
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputGetUserByIdInput(ctx context.Context, obj interface{}) (dtos.GetUserByIdInput, error) {
+	var it dtos.GetUserByIdInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Id = data
 		}
 	}
 
@@ -2818,6 +2907,94 @@ func (ec *executionContext) _AssetIndex(ctx context.Context, sel ast.SelectionSe
 			}
 		case "acronym":
 			out.Values[i] = ec._AssetIndex_acronym(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var createUserOutputImplementors = []string{"CreateUserOutput"}
+
+func (ec *executionContext) _CreateUserOutput(ctx context.Context, sel ast.SelectionSet, obj *dtos.CreateUserOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, createUserOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CreateUserOutput")
+		case "id":
+			out.Values[i] = ec._CreateUserOutput_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var getUserByIdOutputImplementors = []string{"GetUserByIdOutput"}
+
+func (ec *executionContext) _GetUserByIdOutput(ctx context.Context, sel ast.SelectionSet, obj *dtos.GetUserByIdOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, getUserByIdOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("GetUserByIdOutput")
+		case "id":
+			out.Values[i] = ec._GetUserByIdOutput_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "name":
+			out.Values[i] = ec._GetUserByIdOutput_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "investorProfile":
+			out.Values[i] = ec._GetUserByIdOutput_investorProfile(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -2964,55 +3141,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___schema(ctx, field)
 			})
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
-var userImplementors = []string{"User"}
-
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *User) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("User")
-		case "id":
-			out.Values[i] = ec._User_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "name":
-			out.Values[i] = ec._User_name(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "investorProfile":
-			out.Values[i] = ec._User_investorProfile(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3411,18 +3539,52 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋcmdᚋgraphqlᚋgqlgenᚐCreateUserInput(ctx context.Context, v interface{}) (CreateUserInput, error) {
+func (ec *executionContext) unmarshalNCreateUserInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐCreateUserInput(ctx context.Context, v interface{}) (dtos.CreateUserInput, error) {
 	res, err := ec.unmarshalInputCreateUserInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalID(v)
+func (ec *executionContext) marshalNCreateUserOutput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐCreateUserOutput(ctx context.Context, sel ast.SelectionSet, v dtos.CreateUserOutput) graphql.Marshaler {
+	return ec._CreateUserOutput(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNCreateUserOutput2ᚖgithubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐCreateUserOutput(ctx context.Context, sel ast.SelectionSet, v *dtos.CreateUserOutput) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._CreateUserOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNGetUserByIdInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐGetUserByIdInput(ctx context.Context, v interface{}) (dtos.GetUserByIdInput, error) {
+	res, err := ec.unmarshalInputGetUserByIdInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalID(v)
+func (ec *executionContext) marshalNGetUserByIdOutput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐGetUserByIdOutput(ctx context.Context, sel ast.SelectionSet, v dtos.GetUserByIdOutput) graphql.Marshaler {
+	return ec._GetUserByIdOutput(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNGetUserByIdOutput2ᚖgithubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐGetUserByIdOutput(ctx context.Context, sel ast.SelectionSet, v *dtos.GetUserByIdOutput) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._GetUserByIdOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum(ctx context.Context, v interface{}) (enum.InvestorProfileEnum, error) {
+	tmp, err := graphql.UnmarshalString(v)
+	res := unmarshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum[tmp]
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum(ctx context.Context, sel ast.SelectionSet, v enum.InvestorProfileEnum) graphql.Marshaler {
+	res := graphql.MarshalString(marshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum[v])
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3431,20 +3593,18 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
-	res, err := graphql.UnmarshalInt(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
-	res := graphql.MarshalInt(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
+var (
+	unmarshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum = map[string]enum.InvestorProfileEnum{
+		"Conservative": enum.Conservative,
+		"Moderate":     enum.Moderate,
+		"Aggressive":   enum.Aggressive,
 	}
-	return res
-}
+	marshalNInvestorProfile2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋenumᚐInvestorProfileEnum = map[enum.InvestorProfileEnum]string{
+		enum.Conservative: "Conservative",
+		enum.Moderate:     "Moderate",
+		enum.Aggressive:   "Aggressive",
+	}
+)
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
@@ -3459,20 +3619,6 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) marshalNUser2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋcmdᚋgraphqlᚋgqlgenᚐUser(ctx context.Context, sel ast.SelectionSet, v User) graphql.Marshaler {
-	return ec._User(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋcmdᚋgraphqlᚋgqlgenᚐUser(ctx context.Context, sel ast.SelectionSet, v *User) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._User(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

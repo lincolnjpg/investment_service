@@ -23,11 +23,11 @@ func (dto CreateUserInput) Validate() error {
 	)
 }
 
-type GetUserByIDInput struct {
+type GetUserByIdInput struct {
 	Id string `json:"id,omitempty"`
 }
 
-func (dto GetUserByIDInput) Validate() error {
+func (dto GetUserByIdInput) Validate() error {
 	return validation.ValidateStruct(
 		&dto,
 		validation.Field(

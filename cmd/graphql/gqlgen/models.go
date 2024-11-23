@@ -14,21 +14,10 @@ type AssetIndex struct {
 	Acronym AssetIndexAcronymEnum `json:"acronym"`
 }
 
-type CreateUserInput struct {
-	Name            string `json:"name"`
-	InvestorProfile int    `json:"investorProfile"`
-}
-
 type Mutation struct {
 }
 
 type Query struct {
-}
-
-type User struct {
-	ID              string `json:"id"`
-	Name            string `json:"name"`
-	InvestorProfile int    `json:"investorProfile"`
 }
 
 type AssetIndexAcronymEnum string

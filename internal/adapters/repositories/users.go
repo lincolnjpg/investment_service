@@ -85,7 +85,7 @@ func (repository userRepository) UpdateById(ctx context.Context, input dtos.Upda
 	return user, nil
 }
 
-func (repository userRepository) GetById(ctx context.Context, input dtos.GetUserByIDInput) (entities.User, error) {
+func (repository userRepository) GetById(ctx context.Context, input dtos.GetUserByIdInput) (entities.User, error) {
 	var user entities.User
 
 	row := repository.db.QueryRow(

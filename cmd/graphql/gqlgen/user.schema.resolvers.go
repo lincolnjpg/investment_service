@@ -8,25 +8,24 @@ import (
 	"context"
 
 	"github.com/lincolnjpg/investment_service/internal/dtos"
-	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
-func (r *mutationResolver) CreateUser(ctx context.Context, input CreateUserInput) (string, error) {
-	user, err := r.Resolver.UserService.Create(ctx, dtos.CreateUserInput{Name: input.Name, InvestorProfile: enum.InvestorProfileEnum(input.InvestorProfile)})
+func (r *mutationResolver) CreateUser(ctx context.Context, input dtos.CreateUserInput) (*dtos.CreateUserOutput, error) {
+	user, err := r.Resolver.UserService.Create(ctx, dtos.CreateUserInput{Name: input.Name, InvestorProfile: input.InvestorProfile})
 	if err != nil {
-		return "", err
+		return &dtos.CreateUserOutput{}, err
 	}
 
-	return user.Id, nil
+	return &user, nil
 }
 
-func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*User, error) {
-	u, err := r.Resolver.UserService.GetById(context.Background(), dtos.GetUserByIDInput{Id: id})
+func (r *queryResolver) GetUserByID(ctx context.Context, input dtos.GetUserByIdInput) (*dtos.GetUserByIdOutput, error) {
+	user, err := r.Resolver.UserService.GetById(context.Background(), input)
 	if err != nil {
 		return nil, err
 	}
 
-	return &User{ID: u.Id, Name: u.Name, InvestorProfile: int(u.InvestorProfile)}, nil
+	return &user, nil
 }
 
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
