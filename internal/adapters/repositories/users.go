@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
@@ -22,7 +23,18 @@ func NewUserRepository(db *pgx.Conn) userRepository {
 func (repository userRepository) Create(ctx context.Context, input dtos.CreateUserInput) (entities.User, error) {
 	var user entities.User
 
-	row := repository.db.QueryRow(
+	tx, err := repository.db.Begin(ctx)
+	if err != nil {
+		return user, err
+	}
+	defer func() {
+		err := tx.Rollback(ctx)
+		if err != nil {
+			log.Println("could not rollback transaction:", err)
+		}
+	}()
+
+	row := tx.QueryRow(
 		ctx,
 		`
 			INSERT INTO users(name, investor_profile)
@@ -34,6 +46,13 @@ func (repository userRepository) Create(ctx context.Context, input dtos.CreateUs
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		err := infra.NewAPIError(fmt.Sprintf("could not create a new user: %s", err.Error()), http.StatusInternalServerError)
+
+		return user, err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		err := infra.NewAPIError("could not commit transaction", http.StatusInternalServerError)
 
 		return user, err
 	}
