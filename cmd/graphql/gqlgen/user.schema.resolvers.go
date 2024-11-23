@@ -6,9 +6,29 @@ package gqlgen
 
 import (
 	"context"
-	"fmt"
+
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
-func (r *queryResolver) GetUserByID(ctx context.Context) (*User, error) {
-	panic(fmt.Errorf("not implemented: GetUserByID - getUserById"))
+func (r *mutationResolver) CreateUser(ctx context.Context, input CreateUserInput) (string, error) {
+	user, err := r.Resolver.UserService.Create(ctx, dtos.CreateUserInput{Name: input.Name, InvestorProfile: enum.InvestorProfileEnum(input.InvestorProfile)})
+	if err != nil {
+		return "", err
+	}
+
+	return user.Id, nil
 }
+
+func (r *queryResolver) GetUserByID(ctx context.Context, id string) (*User, error) {
+	u, err := r.Resolver.UserService.GetById(context.Background(), dtos.GetUserByIDInput{Id: id})
+	if err != nil {
+		return nil, err
+	}
+
+	return &User{ID: u.Id, Name: u.Name, InvestorProfile: int(u.InvestorProfile)}, nil
+}
+
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
+
+type mutationResolver struct{ *Resolver }

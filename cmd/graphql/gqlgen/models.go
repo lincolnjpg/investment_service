@@ -14,13 +14,21 @@ type AssetIndex struct {
 	Acronym AssetIndexAcronymEnum `json:"acronym"`
 }
 
+type CreateUserInput struct {
+	Name            string `json:"name"`
+	InvestorProfile int    `json:"investorProfile"`
+}
+
+type Mutation struct {
+}
+
 type Query struct {
 }
 
 type User struct {
-	ID              string          `json:"id"`
-	Name            string          `json:"name"`
-	InvestorProfile InvestorProfile `json:"investorProfile"`
+	ID              string `json:"id"`
+	Name            string `json:"name"`
+	InvestorProfile int    `json:"investorProfile"`
 }
 
 type AssetIndexAcronymEnum string
@@ -102,48 +110,5 @@ func (e *AssetIndexNameEnum) UnmarshalGQL(v interface{}) error {
 }
 
 func (e AssetIndexNameEnum) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
-}
-
-type InvestorProfile string
-
-const (
-	InvestorProfileConservative InvestorProfile = "conservative"
-	InvestorProfileModerate     InvestorProfile = "moderate"
-	InvestorProfileAggressive   InvestorProfile = "aggressive"
-)
-
-var AllInvestorProfile = []InvestorProfile{
-	InvestorProfileConservative,
-	InvestorProfileModerate,
-	InvestorProfileAggressive,
-}
-
-func (e InvestorProfile) IsValid() bool {
-	switch e {
-	case InvestorProfileConservative, InvestorProfileModerate, InvestorProfileAggressive:
-		return true
-	}
-	return false
-}
-
-func (e InvestorProfile) String() string {
-	return string(e)
-}
-
-func (e *InvestorProfile) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = InvestorProfile(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid InvestorProfile", str)
-	}
-	return nil
-}
-
-func (e InvestorProfile) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

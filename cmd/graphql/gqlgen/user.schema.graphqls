@@ -1,15 +1,18 @@
 extend type Query {
-  getUserById: User!
+  getUserById(id: ID!): User!
+}
+
+extend type Mutation {
+  createUser(input: CreateUserInput!): ID!
 }
 
 type User {
   id: ID!
   name: String!
-  investorProfile: InvestorProfile!
+  investorProfile: Int!
 }
 
-enum InvestorProfile {
-  conservative
-  moderate
-  aggressive
+input CreateUserInput {
+  name: String!
+  investorProfile: Int!
 }

@@ -9,7 +9,7 @@ import (
 	"fmt"
 )
 
-func (r *queryResolver) GetAssetIndexByID(ctx context.Context) (*User, error) {
+func (r *queryResolver) GetAssetIndexByID(ctx context.Context) (*AssetIndex, error) {
 	panic(fmt.Errorf("not implemented: GetAssetIndexByID - getAssetIndexById"))
 }
 
