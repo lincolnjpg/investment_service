@@ -3,8 +3,14 @@ setup:
 	go install github.com/onsi/ginkgo/v2/ginkgo
 	go get github.com/onsi/gomega/...
 
-run:
-	go run ./cmd/main.go
+graphql_generate:
+	go run github.com/99designs/gqlgen generate
+
+run_rest:
+	go run ./cmd/rest/main.go
+
+run_graphql:
+	go run ./cmd/graphql/main.go
 
 migrations_dev_up:
 	goose -dir migrations postgres "host=localhost port=5432 user=postgres password=example database=postgres sslmode=disable" up
