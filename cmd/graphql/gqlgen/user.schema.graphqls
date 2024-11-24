@@ -18,15 +18,17 @@ input CreateUserInput {
 }
 
 type CreateUserOutput {
-  id: String!
+  id: UUID!
 }
 
 input GetUserByIdInput {
-  id: String!
+  id: UUID!
 }
 
 type GetUserByIdOutput {
-  id: String!
+  id: UUID!
   name: String!
   investorProfile: InvestorProfile!
 }
+
+scalar UUID

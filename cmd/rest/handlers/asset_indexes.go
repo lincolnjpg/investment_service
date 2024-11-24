@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
+	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	customerror "github.com/lincolnjpg/investment_service/internal/error"
 	"github.com/lincolnjpg/investment_service/internal/ports"
@@ -54,8 +55,9 @@ func GetAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) func(
 		ctx := r.Context()
 		render := render.New()
 
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
 		body := dtos.GetAssetIndexByIdInput{
-			Id: chi.URLParam(r, "id"),
+			Id: id,
 		}
 
 		err := body.Validate()
@@ -93,7 +95,8 @@ func UpdateAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) fu
 
 		var body dtos.UpdateAssetIndexByIdInput
 		json.NewDecoder(r.Body).Decode(&body)
-		body.Id = chi.URLParam(r, "id")
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
+		body.Id = id
 
 		err := body.Validate()
 		if err != nil {
@@ -128,8 +131,9 @@ func DeleteAssetIndexByIDHandler(assetIndexesService ports.AssetIndexService) fu
 		ctx := r.Context()
 		render := render.New()
 
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
 		body := dtos.DeleteAssetIndexByIdInput{
-			Id: chi.URLParam(r, "id"),
+			Id: id,
 		}
 
 		err := body.Validate()

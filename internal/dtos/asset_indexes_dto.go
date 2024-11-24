@@ -3,6 +3,7 @@ package dtos
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/google/uuid"
 )
 
 type CreateAssetIndexInput struct {
@@ -25,11 +26,11 @@ func (dto CreateAssetIndexInput) Validate() error {
 }
 
 type CreateAssetIndexOutput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type GetAssetIndexByIdInput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 func (dto GetAssetIndexByIdInput) Validate() error {
@@ -44,15 +45,15 @@ func (dto GetAssetIndexByIdInput) Validate() error {
 }
 
 type GetAssetIndexByIdOutput struct {
-	Id      string `json:"id,omitempty"`
-	Name    string `json:"name,omitempty"`
-	Acronym string `json:"acronym,omitempty"`
+	Id      uuid.UUID `json:"id,omitempty"`
+	Name    string    `json:"name,omitempty"`
+	Acronym string    `json:"acronym,omitempty"`
 }
 
 type UpdateAssetIndexByIdInput struct {
-	Id      string `json:"id,omitempty"`
-	Name    string `json:"name,omitempty"`
-	Acronym string `json:"acronym,omitempty"`
+	Id      uuid.UUID `json:"id,omitempty"`
+	Name    string    `json:"name,omitempty"`
+	Acronym string    `json:"acronym,omitempty"`
 }
 
 func (dto UpdateAssetIndexByIdInput) Validate() error {
@@ -70,11 +71,11 @@ func (dto UpdateAssetIndexByIdInput) Validate() error {
 }
 
 type UpdateAssetIndexByIdOutput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type DeleteAssetIndexByIdInput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 func (i DeleteAssetIndexByIdInput) Validate() error {

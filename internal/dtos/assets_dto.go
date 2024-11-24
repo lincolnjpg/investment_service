@@ -5,6 +5,7 @@ import (
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/google/uuid"
 )
 
 type CreateAssetInput struct {
@@ -14,7 +15,7 @@ type CreateAssetInput struct {
 	DueDate      *time.Time `json:"due_date,omitempty"`
 	Ticker       *string    `json:"ticker,omitempty"`
 	Type         string     `json:"type,omitempty"`
-	AssetIndexId *string    `json:"asset_index_id,omitempty"`
+	AssetIndexId uuid.UUID  `json:"asset_index_id,omitempty"`
 }
 
 func (dto CreateAssetInput) Validate() error {
@@ -56,11 +57,11 @@ func (dto CreateAssetInput) Validate() error {
 }
 
 type CreateAssetOutput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type GetAssetByIdInput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 func (dto GetAssetByIdInput) Validate() error {
@@ -75,7 +76,7 @@ func (dto GetAssetByIdInput) Validate() error {
 }
 
 type GetAssetByIdOutput struct {
-	Id           string     `json:"id,omitempty"`
+	Id           uuid.UUID  `json:"id,omitempty"`
 	Name         string     `json:"name,omitempty"`
 	UnitPrice    float64    `json:"unit_price,omitempty"`
 	Rentability  float64    `json:"rentability,omitempty"`
@@ -86,7 +87,7 @@ type GetAssetByIdOutput struct {
 }
 
 type UpdateAssetByIdInput struct {
-	Id           string     `json:"id,omitempty"`
+	Id           uuid.UUID  `json:"id,omitempty"`
 	Name         string     `json:"name,omitempty"`
 	UnitPrice    float64    `json:"unit_price,omitempty"`
 	Rentability  float64    `json:"rentability,omitempty"`
@@ -140,11 +141,11 @@ func (dto UpdateAssetByIdInput) Validate() error {
 }
 
 type UpdateAssetByIdOutput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type DeleteAssetByIdInput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 func (dto DeleteAssetByIdInput) Validate() error {

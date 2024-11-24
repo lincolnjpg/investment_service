@@ -3,6 +3,7 @@ package dtos
 import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
@@ -24,7 +25,7 @@ func (dto CreateUserInput) Validate() error {
 }
 
 type GetUserByIdInput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 func (dto GetUserByIdInput) Validate() error {
@@ -39,7 +40,7 @@ func (dto GetUserByIdInput) Validate() error {
 }
 
 type UpdateUserInput struct {
-	Id              string                   `json:"id,omitempty"`
+	Id              uuid.UUID                `json:"id,omitempty"`
 	Name            string                   `json:"name,omitempty"`
 	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }
@@ -57,7 +58,7 @@ func (dto UpdateUserInput) Validate() error {
 }
 
 type DeleteUserByIDInput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 func (dto DeleteUserByIDInput) Validate() error {
@@ -72,15 +73,15 @@ func (dto DeleteUserByIDInput) Validate() error {
 }
 
 type CreateUserOutput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type UpdateUserOutput struct {
-	Id string `json:"id,omitempty"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 type GetUserByIdOutput struct {
-	Id              string                   `json:"id,omitempty"`
+	Id              uuid.UUID                `json:"id,omitempty"`
 	Name            string                   `json:"name,omitempty"`
 	InvestorProfile enum.InvestorProfileEnum `json:"investor_profile,omitempty"`
 }

@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
+	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	customerror "github.com/lincolnjpg/investment_service/internal/error"
 	"github.com/lincolnjpg/investment_service/internal/ports"
@@ -54,8 +55,9 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 		ctx := r.Context()
 		render := render.New()
 
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
 		body := dtos.GetUserByIdInput{
-			Id: chi.URLParam(r, "id"),
+			Id: id,
 		}
 
 		err := body.Validate()
@@ -93,7 +95,8 @@ func UpateUserByIdHandler(userService ports.UserService) func(http.ResponseWrite
 
 		var body dtos.UpdateUserInput
 		json.NewDecoder(r.Body).Decode(&body)
-		body.Id = chi.URLParam(r, "id")
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
+		body.Id = id
 
 		err := body.Validate()
 		if err != nil {
@@ -128,8 +131,9 @@ func DeleteUserByIDHandler(userService ports.UserService) func(http.ResponseWrit
 		ctx := r.Context()
 		render := render.New()
 
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
 		body := dtos.DeleteUserByIDInput{
-			Id: chi.URLParam(r, "id"),
+			Id: id,
 		}
 
 		err := body.Validate()

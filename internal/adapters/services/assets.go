@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/enum"
 	customerror "github.com/lincolnjpg/investment_service/internal/error"
@@ -25,8 +26,8 @@ func NewAssetService(repository ports.AssetRepository, assetIndexesService ports
 }
 
 func (service assetService) Create(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error) {
-	if input.AssetIndexId != nil {
-		assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: *input.AssetIndexId})
+	if input.AssetIndexId != uuid.Nil {
+		assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: input.AssetIndexId})
 		if err != nil {
 			return dtos.CreateAssetOutput{}, err
 		}

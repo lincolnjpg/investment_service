@@ -1,9 +1,12 @@
 package entities
 
-import "github.com/lincolnjpg/investment_service/internal/enum"
+import (
+	"github.com/google/uuid"
+	"github.com/lincolnjpg/investment_service/internal/enum"
+)
 
 type User struct {
-	Id              string
+	Id              uuid.UUID
 	Name            string
 	InvestorProfile enum.InvestorProfileEnum
 }

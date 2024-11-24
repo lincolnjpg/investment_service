@@ -1,9 +1,13 @@
 package entities
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Asset struct {
-	Id           string     `json:"id,omitempty"`
+	Id           uuid.UUID  `json:"id,omitempty"`
 	Name         string     `json:"name,omitempty"`
 	UnitPrice    float64    `json:"unit_price,omitempty"`
 	Rentability  float64    `json:"rentability,omitempty"`
