@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
-	"github.com/lincolnjpg/investment_service/internal/infra"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
 )
@@ -51,8 +51,8 @@ func CreateAssetHandler(assetsService ports.AssetService) func(http.ResponseWrit
 
 		assetType, err := assetsService.Create(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}
@@ -88,8 +88,8 @@ func GetAssetByIdHandler(assetsService ports.AssetService) func(http.ResponseWri
 
 		user, err := assetsService.GetById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}
@@ -125,8 +125,8 @@ func UpdateAssetByIdHandler(assetsService ports.AssetService) func(http.Response
 
 		assetType, err := assetsService.UpdateById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}
@@ -162,8 +162,8 @@ func DeleteAssetByIdHandler(assetsService ports.AssetService) func(http.Response
 
 		err = assetsService.DeleteById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}

@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
-	"github.com/lincolnjpg/investment_service/internal/infra"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
 )
@@ -39,7 +39,7 @@ func CreateAssetIndexHandler(assetIndexesService ports.AssetIndexService) func(h
 
 		assetType, err := assetIndexesService.Create(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
+			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
 
 			return
@@ -76,7 +76,7 @@ func GetAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) func(
 
 		assetType, err := assetIndexesService.GetById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
+			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
 
 			return
@@ -113,7 +113,7 @@ func UpdateAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) fu
 
 		assetType, err := assetIndexesService.UpdateById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
+			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
 
 			return
@@ -150,7 +150,7 @@ func DeleteAssetIndexByIDHandler(assetIndexesService ports.AssetIndexService) fu
 
 		err = assetIndexesService.DeleteById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
+			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
 
 			return

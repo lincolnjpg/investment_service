@@ -6,7 +6,7 @@ import (
 
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/enum"
-	"github.com/lincolnjpg/investment_service/internal/infra"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
@@ -32,7 +32,7 @@ func (service assetService) Create(ctx context.Context, input dtos.CreateAssetIn
 		}
 
 		if assetIndex.Acronym == enum.CdiAcronym && input.Rentability > maxCdiRentability {
-			return dtos.CreateAssetOutput{}, infra.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
+			return dtos.CreateAssetOutput{}, customerror.NewAPIError("rentability of an investment indexed by CDI can not be greater than 150%", http.StatusBadRequest)
 		}
 	}
 

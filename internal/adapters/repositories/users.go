@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/entities"
-	"github.com/lincolnjpg/investment_service/internal/infra"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 )
 
 type userRepository struct {
@@ -45,14 +45,14 @@ func (repository userRepository) Create(ctx context.Context, input dtos.CreateUs
 		input.InvestorProfile,
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
-		err := infra.NewAPIError(fmt.Sprintf("could not create a new user: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not create a new user: %s", err.Error()), http.StatusInternalServerError)
 
 		return user, err
 	}
 
 	err = tx.Commit(ctx)
 	if err != nil {
-		err := infra.NewAPIError("could not commit transaction", http.StatusInternalServerError)
+		err := customerror.NewAPIError("could not commit transaction", http.StatusInternalServerError)
 
 		return user, err
 	}
@@ -77,7 +77,7 @@ func (repository userRepository) UpdateById(ctx context.Context, input dtos.Upda
 	)
 
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
-		err := infra.NewAPIError(fmt.Sprintf("could not update user: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not update user: %s", err.Error()), http.StatusInternalServerError)
 
 		return user, err
 	}
@@ -98,10 +98,10 @@ func (repository userRepository) GetById(ctx context.Context, input dtos.GetUser
 	)
 	if err := row.Scan(&user.Id, &user.Name, &user.InvestorProfile); err != nil {
 		if err == pgx.ErrNoRows {
-			return user, infra.NewAPIError(fmt.Sprintf("user not found: %s", err.Error()), http.StatusNotFound)
+			return user, customerror.NewAPIError(fmt.Sprintf("user not found: %s", err.Error()), http.StatusNotFound)
 		}
 
-		err := infra.NewAPIError(fmt.Sprintf("could not get user from database: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not get user from database: %s", err.Error()), http.StatusInternalServerError)
 
 		return user, err
 	}
@@ -120,7 +120,7 @@ func (repository userRepository) DeleteById(ctx context.Context, input dtos.Dele
 	)
 
 	if err != nil {
-		err := infra.NewAPIError(fmt.Sprintf("could not delete user: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not delete user: %s", err.Error()), http.StatusInternalServerError)
 
 		return err
 	}

@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/entities"
-	"github.com/lincolnjpg/investment_service/internal/infra"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 )
 
 type assetRepository struct {
@@ -38,7 +38,7 @@ func (repository assetRepository) Create(ctx context.Context, input dtos.CreateA
 		input.AssetIndexId,
 	)
 	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.Type, &asset.AssetIndexId); err != nil {
-		return asset, infra.NewAPIError(fmt.Sprintf("could not create a new asset: %s", err.Error()), http.StatusInternalServerError)
+		return asset, customerror.NewAPIError(fmt.Sprintf("could not create a new asset: %s", err.Error()), http.StatusInternalServerError)
 	}
 
 	return asset, nil
@@ -61,10 +61,10 @@ func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAss
 	)
 	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &asset.DueDate, &asset.Ticker, &asset.Type, &asset.AssetIndexId); err != nil {
 		if err == pgx.ErrNoRows {
-			return asset, infra.NewAPIError(fmt.Sprintf("asset not found: %s", err.Error()), http.StatusNotFound)
+			return asset, customerror.NewAPIError(fmt.Sprintf("asset not found: %s", err.Error()), http.StatusNotFound)
 		}
 
-		err := infra.NewAPIError(fmt.Sprintf("could not get asset from database: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not get asset from database: %s", err.Error()), http.StatusInternalServerError)
 
 		return asset, err
 	}
@@ -94,7 +94,7 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 	)
 
 	if err := row.Scan(&asset.Id, &asset.Name, &asset.UnitPrice, &asset.Rentability, &input.DueDate, &asset.Ticker, &asset.Type, &asset.AssetIndexId); err != nil {
-		err := infra.NewAPIError(fmt.Sprintf("could not update asset: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not update asset: %s", err.Error()), http.StatusInternalServerError)
 
 		return asset, err
 	}
@@ -113,7 +113,7 @@ func (repository assetRepository) DeleteById(ctx context.Context, input dtos.Del
 	)
 
 	if err != nil {
-		err := infra.NewAPIError(fmt.Sprintf("could not delete asset: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not delete asset: %s", err.Error()), http.StatusInternalServerError)
 
 		return err
 	}

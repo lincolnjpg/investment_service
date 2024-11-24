@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httplog/v2"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
-	"github.com/lincolnjpg/investment_service/internal/infra"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/unrolled/render"
 )
@@ -39,8 +39,8 @@ func CreateUserHandler(userService ports.UserService) func(http.ResponseWriter, 
 
 		user, err := userService.Create(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}
@@ -76,8 +76,8 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 
 		user, err := userService.GetById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}
@@ -113,8 +113,8 @@ func UpateUserByIdHandler(userService ports.UserService) func(http.ResponseWrite
 
 		user, err := userService.UpdateById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}
@@ -150,8 +150,8 @@ func DeleteUserByIDHandler(userService ports.UserService) func(http.ResponseWrit
 
 		err = userService.DeleteById(ctx, body)
 		if err != nil {
-			apiError := err.(infra.APIError)
-			render.JSON(w, apiError.StatusCode, apiError.ToMap())
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
 
 			return
 		}

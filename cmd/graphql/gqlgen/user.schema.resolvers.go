@@ -8,12 +8,14 @@ import (
 	"context"
 
 	"github.com/lincolnjpg/investment_service/internal/dtos"
+	customerror "github.com/lincolnjpg/investment_service/internal/error"
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input dtos.CreateUserInput) (*dtos.CreateUserOutput, error) {
 	user, err := r.Resolver.UserService.Create(ctx, dtos.CreateUserInput{Name: input.Name, InvestorProfile: input.InvestorProfile})
 	if err != nil {
-		return &dtos.CreateUserOutput{}, err
+		err, _ := err.(customerror.APIError)
+		return &dtos.CreateUserOutput{}, err.Err
 	}
 
 	return &user, nil
@@ -22,7 +24,8 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input dtos.CreateUser
 func (r *queryResolver) GetUserByID(ctx context.Context, input dtos.GetUserByIdInput) (*dtos.GetUserByIdOutput, error) {
 	user, err := r.Resolver.UserService.GetById(context.Background(), input)
 	if err != nil {
-		return nil, err
+		err, _ := err.(customerror.APIError)
+		return nil, err.Err
 	}
 
 	return &user, nil
