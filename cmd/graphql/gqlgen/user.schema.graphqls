@@ -4,6 +4,7 @@ extend type Query {
 
 extend type Mutation {
   createUser(input: CreateUserInput!): CreateUserOutput!
+  updateUserById(input: UpdateUserInput!): UpdateUserOutput!
 }
 
 enum InvestorProfile {
@@ -29,6 +30,16 @@ type GetUserByIdOutput {
   id: UUID!
   name: String!
   investorProfile: InvestorProfile!
+}
+
+input UpdateUserInput {
+  id: UUID!
+  name: String!
+  investorProfile: InvestorProfile!
+}
+
+type UpdateUserOutput {
+  id: UUID!
 }
 
 scalar UUID

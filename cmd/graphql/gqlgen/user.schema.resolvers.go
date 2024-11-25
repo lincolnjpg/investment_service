@@ -21,6 +21,16 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input dtos.CreateUser
 	return &user, nil
 }
 
+func (r *mutationResolver) UpdateUserByID(ctx context.Context, input dtos.UpdateUserInput) (*dtos.UpdateUserOutput, error) {
+	user, err := r.Resolver.UserService.UpdateById(ctx, dtos.UpdateUserInput{Id: input.Id, Name: input.Name, InvestorProfile: input.InvestorProfile})
+	if err != nil {
+		err, _ := err.(customerror.APIError)
+		return &dtos.UpdateUserOutput{}, err.Err
+	}
+
+	return &user, nil
+}
+
 func (r *queryResolver) GetUserByID(ctx context.Context, input dtos.GetUserByIdInput) (*dtos.GetUserByIdOutput, error) {
 	user, err := r.Resolver.UserService.GetById(context.Background(), input)
 	if err != nil {

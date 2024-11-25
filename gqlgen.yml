@@ -103,3 +103,7 @@ models:
     model: ./internal/dtos.GetUserByIdInput
   GetUserByIdOutput:
     model: ./internal/dtos.GetUserByIdOutput
+  UpdateUserInput:
+    model: ./internal/dtos.UpdateUserInput
+  UpdateUserOutput:
+    model: ./internal/dtos.UpdateUserOutput
