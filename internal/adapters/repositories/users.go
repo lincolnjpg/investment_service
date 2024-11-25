@@ -66,10 +66,18 @@ func (repository userRepository) UpdateById(ctx context.Context, input dtos.Upda
 	row := repository.db.QueryRow(
 		ctx,
 		`
-			UPDATE users
-			SET name = $2, investor_profile = $3
-			WHERE id = $1
-			RETURNING id, name, investor_profile;
+			UPDATE
+				users
+			SET
+				name = $2,
+				investor_profile = $3,
+				updated_at = NOW()
+			WHERE
+				id = $1
+			RETURNING
+				id,
+				name,
+				investor_profile;
 		`,
 		input.Id,
 		input.Name,
@@ -91,8 +99,14 @@ func (repository userRepository) GetById(ctx context.Context, input dtos.GetUser
 	row := repository.db.QueryRow(
 		ctx,
 		`
-			SELECT * FROM users
-			WHERE id = $1;
+			SELECT 
+				id,
+				name,
+				investor_profile
+			FROM
+				users
+			WHERE
+				id = $1;
 		`,
 		input.Id,
 	)
@@ -113,8 +127,10 @@ func (repository userRepository) DeleteById(ctx context.Context, input dtos.Dele
 	_, err := repository.db.Exec(
 		ctx,
 		`
-			DELETE FROM users
-			WHERE id = $1;
+			DELETE FROM
+				users
+			WHERE
+				id = $1;
 		`,
 		input.Id,
 	)

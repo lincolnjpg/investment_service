@@ -47,8 +47,14 @@ func (repository assetIndexRepository) GetById(ctx context.Context, input dtos.G
 	row := repository.db.QueryRow(
 		ctx,
 		`
-			SELECT * FROM asset_indexes
-			WHERE id = $1;
+			SELECT
+				id,
+				name,
+				acronym	
+			FROM
+				asset_indexes
+			WHERE
+				id = $1;
 		`,
 		input.Id,
 	)
@@ -71,10 +77,18 @@ func (repository assetIndexRepository) UpdateById(ctx context.Context, input dto
 	row := repository.db.QueryRow(
 		ctx,
 		`
-			UPDATE asset_indexes
-			SET name = $2, acronym = $3
-			WHERE id = $1
-			RETURNING id, name, acronym;
+			UPDATE
+				asset_indexes
+			SET
+				name = $2,
+				acronym = $3,
+				updated_at = NOW()
+			WHERE
+				id = $1
+			RETURNING
+				id,
+				name,
+				acronym;
 		`,
 		input.Id,
 		input.Name,
@@ -94,8 +108,10 @@ func (repository assetIndexRepository) DeleteById(ctx context.Context, input dto
 	_, err := repository.db.Exec(
 		ctx,
 		`
-			DELETE FROM asset_indexes
-			WHERE id = $1;
+			DELETE FROM
+				asset_indexes
+			WHERE
+				id = $1;
 		`,
 		input.Id,
 	)

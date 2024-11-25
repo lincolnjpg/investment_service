@@ -8,6 +8,8 @@ CREATE TABLE assets (
 	rentability NUMERIC NOT NULL,
 	ticker VARCHAR(10),
 	due_date DATE,
+	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+	updated_at TIMESTAMP WITH TIME ZONE NULL,
 	PRIMARY KEY (id)
 );
 

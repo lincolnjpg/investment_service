@@ -51,7 +51,14 @@ func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAss
 		ctx,
 		`
 			SELECT
-				id, name, unit_price, rentability, due_date, ticker, type, asset_index_id
+				id,
+				name,
+				unit_price,
+				rentability,
+				due_date,
+				ticker,
+				type,
+				asset_index_id
 			FROM
 				assets
 			WHERE
@@ -78,10 +85,28 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 	row := repository.db.QueryRow(
 		ctx,
 		`
-			UPDATE assets
-			SET name = $2, unit_price = $3, rentability = $4, due_date = $5, ticker = $6, type = $7, asset_index_id = $8
-			WHERE id = $1
-			RETURNING id, name, unit_price, rentability, due_date, ticker, type, asset_index_id;
+			UPDATE
+				assets
+			SET
+				name = $2,
+				unit_price = $3,
+				rentability = $4,
+				due_date = $5,
+				ticker = $6,
+				type = $7,
+				asset_index_id = $8,
+				updated_at = NOW()
+			WHERE
+				id = $1
+			RETURNING
+				id,
+				name,
+				unit_price,
+				rentability,
+				due_date,
+				ticker,
+				type,
+				asset_index_id;
 		`,
 		input.Id,
 		input.Name,
@@ -106,8 +131,10 @@ func (repository assetRepository) DeleteById(ctx context.Context, input dtos.Del
 	_, err := repository.db.Exec(
 		ctx,
 		`
-			DELETE FROM assets
-			WHERE id = $1;
+			DELETE FROM
+				assets
+			WHERE
+				id = $1;
 		`,
 		input.Id,
 	)

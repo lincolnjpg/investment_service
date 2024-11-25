@@ -5,6 +5,8 @@ CREATE TABLE users_assets (
 	asset_id UUID NOT NULL,
 	quantity SMALLINT NOT NULL,
 	purchase_date DATE NOT NULL,
+	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+	updated_at TIMESTAMP WITH TIME ZONE NULL,
 	PRIMARY KEY (id)
 );
 
