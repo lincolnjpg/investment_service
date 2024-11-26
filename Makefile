@@ -3,7 +3,7 @@ setup:
 	go install github.com/onsi/ginkgo/v2/ginkgo
 	go get github.com/onsi/gomega/...
 
-graphql_generate:
+graphql:
 	go run github.com/99designs/gqlgen generate
 
 run_rest:
