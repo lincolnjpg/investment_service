@@ -49,7 +49,7 @@ func (service userService) GetById(ctx context.Context, input dtos.GetUserByIdIn
 	return dtos.GetUserByIdOutput(user), nil
 }
 
-func (service userService) DeleteById(ctx context.Context, input dtos.DeleteUserByIDInput) error {
+func (service userService) DeleteById(ctx context.Context, input dtos.DeleteUserByIdInput) error {
 	_, err := service.GetById(ctx, dtos.GetUserByIdInput(input))
 	if err != nil {
 		return err

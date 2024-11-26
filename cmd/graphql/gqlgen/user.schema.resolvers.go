@@ -7,6 +7,7 @@ package gqlgen
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	customerror "github.com/lincolnjpg/investment_service/internal/error"
 )
@@ -29,6 +30,16 @@ func (r *mutationResolver) UpdateUserByID(ctx context.Context, input dtos.Update
 	}
 
 	return &user, nil
+}
+
+func (r *mutationResolver) DeleteUserByID(ctx context.Context, input dtos.DeleteUserByIdInput) (uuid.UUID, error) {
+	err := r.Resolver.UserService.DeleteById(ctx, dtos.DeleteUserByIdInput{Id: input.Id})
+	if err != nil {
+		err, _ := err.(customerror.APIError)
+		return uuid.Nil, err.Err
+	}
+
+	return input.Id, nil
 }
 
 func (r *queryResolver) GetUserByID(ctx context.Context, input dtos.GetUserByIdInput) (*dtos.GetUserByIdOutput, error) {

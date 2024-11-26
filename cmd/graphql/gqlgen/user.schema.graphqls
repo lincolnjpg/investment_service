@@ -5,6 +5,7 @@ extend type Query {
 extend type Mutation {
   createUser(input: CreateUserInput!): CreateUserOutput!
   updateUserById(input: UpdateUserInput!): UpdateUserOutput!
+  deleteUserById(input: DeleteUserByIdInput!): UUID!
 }
 
 enum InvestorProfile {
@@ -39,6 +40,10 @@ input UpdateUserInput {
 }
 
 type UpdateUserOutput {
+  id: UUID!
+}
+
+input DeleteUserByIdInput {
   id: UUID!
 }
 

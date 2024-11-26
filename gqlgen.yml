@@ -107,3 +107,5 @@ models:
     model: ./internal/dtos.UpdateUserInput
   UpdateUserOutput:
     model: ./internal/dtos.UpdateUserOutput
+  DeleteUserByIdInput:
+    model: ./internal/dtos.DeleteUserByIdInput

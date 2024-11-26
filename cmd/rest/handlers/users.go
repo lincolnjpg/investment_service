@@ -132,7 +132,7 @@ func DeleteUserByIDHandler(userService ports.UserService) func(http.ResponseWrit
 		render := render.New()
 
 		id, _ := uuid.Parse(chi.URLParam(r, "id"))
-		body := dtos.DeleteUserByIDInput{
+		body := dtos.DeleteUserByIdInput{
 			Id: id,
 		}
 

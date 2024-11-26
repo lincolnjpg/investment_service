@@ -67,6 +67,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		CreateUser     func(childComplexity int, input dtos.CreateUserInput) int
+		DeleteUserByID func(childComplexity int, input dtos.DeleteUserByIdInput) int
 		UpdateUserByID func(childComplexity int, input dtos.UpdateUserInput) int
 	}
 
@@ -83,6 +84,7 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	CreateUser(ctx context.Context, input dtos.CreateUserInput) (*dtos.CreateUserOutput, error)
 	UpdateUserByID(ctx context.Context, input dtos.UpdateUserInput) (*dtos.UpdateUserOutput, error)
+	DeleteUserByID(ctx context.Context, input dtos.DeleteUserByIdInput) (uuid.UUID, error)
 }
 type QueryResolver interface {
 	GetAssetIndexByID(ctx context.Context) (*AssetIndex, error)
@@ -169,6 +171,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CreateUser(childComplexity, args["input"].(dtos.CreateUserInput)), true
 
+	case "Mutation.deleteUserById":
+		if e.complexity.Mutation.DeleteUserByID == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteUserById_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteUserByID(childComplexity, args["input"].(dtos.DeleteUserByIdInput)), true
+
 	case "Mutation.updateUserById":
 		if e.complexity.Mutation.UpdateUserByID == nil {
 			break
@@ -216,6 +230,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputCreateUserInput,
+		ec.unmarshalInputDeleteUserByIdInput,
 		ec.unmarshalInputGetUserByIdInput,
 		ec.unmarshalInputUpdateUserInput,
 	)
@@ -355,6 +370,29 @@ func (ec *executionContext) field_Mutation_createUser_argsInput(
 	}
 
 	var zeroVal dtos.CreateUserInput
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteUserById_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	arg0, err := ec.field_Mutation_deleteUserById_argsInput(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+func (ec *executionContext) field_Mutation_deleteUserById_argsInput(
+	ctx context.Context,
+	rawArgs map[string]interface{},
+) (dtos.DeleteUserByIdInput, error) {
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
+	if tmp, ok := rawArgs["input"]; ok {
+		return ec.unmarshalNDeleteUserByIdInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐDeleteUserByIdInput(ctx, tmp)
+	}
+
+	var zeroVal dtos.DeleteUserByIdInput
 	return zeroVal, nil
 }
 
@@ -901,6 +939,61 @@ func (ec *executionContext) fieldContext_Mutation_updateUserById(ctx context.Con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateUserById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteUserById(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_deleteUserById(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteUserByID(rctx, fc.Args["input"].(dtos.DeleteUserByIdInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(uuid.UUID)
+	fc.Result = res
+	return ec.marshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_deleteUserById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type UUID does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteUserById_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3002,6 +3095,33 @@ func (ec *executionContext) unmarshalInputCreateUserInput(ctx context.Context, o
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputDeleteUserByIdInput(ctx context.Context, obj interface{}) (dtos.DeleteUserByIdInput, error) {
+	var it dtos.DeleteUserByIdInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2githubᚗcomᚋgoogleᚋuuidᚐUUID(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Id = data
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputGetUserByIdInput(ctx context.Context, obj interface{}) (dtos.GetUserByIdInput, error) {
 	var it dtos.GetUserByIdInput
 	asMap := map[string]interface{}{}
@@ -3244,6 +3364,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateUserById":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateUserById(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteUserById":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteUserById(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -3796,6 +3923,11 @@ func (ec *executionContext) marshalNCreateUserOutput2ᚖgithubᚗcomᚋlincolnjp
 		return graphql.Null
 	}
 	return ec._CreateUserOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNDeleteUserByIdInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐDeleteUserByIdInput(ctx context.Context, v interface{}) (dtos.DeleteUserByIdInput, error) {
+	res, err := ec.unmarshalInputDeleteUserByIdInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNGetUserByIdInput2githubᚗcomᚋlincolnjpgᚋinvestment_serviceᚋinternalᚋdtosᚐGetUserByIdInput(ctx context.Context, v interface{}) (dtos.GetUserByIdInput, error) {

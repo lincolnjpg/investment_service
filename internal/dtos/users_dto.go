@@ -57,11 +57,11 @@ func (dto UpdateUserInput) Validate() error {
 	)
 }
 
-type DeleteUserByIDInput struct {
+type DeleteUserByIdInput struct {
 	Id uuid.UUID `json:"id,omitempty"`
 }
 
-func (dto DeleteUserByIDInput) Validate() error {
+func (dto DeleteUserByIdInput) Validate() error {
 	return validation.ValidateStruct(
 		&dto,
 		validation.Field(

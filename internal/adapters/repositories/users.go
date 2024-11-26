@@ -123,7 +123,7 @@ func (repository userRepository) GetById(ctx context.Context, input dtos.GetUser
 	return user, nil
 }
 
-func (repository userRepository) DeleteById(ctx context.Context, input dtos.DeleteUserByIDInput) error {
+func (repository userRepository) DeleteById(ctx context.Context, input dtos.DeleteUserByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`
