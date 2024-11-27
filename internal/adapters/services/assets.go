@@ -25,9 +25,9 @@ func NewAssetService(repository ports.AssetRepository, assetIndexesService ports
 	}
 }
 
-func (service assetService) Create(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error) {
+func (service assetService) CreateAsset(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error) {
 	if input.AssetIndexId != uuid.Nil {
-		assetIndex, err := service.assetIndexesService.GetById(ctx, dtos.GetAssetIndexByIdInput{Id: input.AssetIndexId})
+		assetIndex, err := service.assetIndexesService.GetAssetIndexById(ctx, dtos.GetAssetIndexByIdInput{Id: input.AssetIndexId})
 		if err != nil {
 			return dtos.CreateAssetOutput{}, err
 		}
@@ -37,7 +37,7 @@ func (service assetService) Create(ctx context.Context, input dtos.CreateAssetIn
 		}
 	}
 
-	asset, err := service.repository.Create(ctx, input)
+	asset, err := service.repository.CreateAsset(ctx, input)
 	if err != nil {
 		return dtos.CreateAssetOutput{}, err
 	}
@@ -45,8 +45,8 @@ func (service assetService) Create(ctx context.Context, input dtos.CreateAssetIn
 	return dtos.CreateAssetOutput{Id: asset.Id}, nil
 }
 
-func (service assetService) GetById(ctx context.Context, input dtos.GetAssetByIdInput) (dtos.GetAssetByIdOutput, error) {
-	asset, err := service.repository.GetById(ctx, input)
+func (service assetService) GetAssetById(ctx context.Context, input dtos.GetAssetByIdInput) (dtos.GetAssetByIdOutput, error) {
+	asset, err := service.repository.GetAssetById(ctx, input)
 	if err != nil {
 		return dtos.GetAssetByIdOutput{}, err
 	}
@@ -54,13 +54,13 @@ func (service assetService) GetById(ctx context.Context, input dtos.GetAssetById
 	return dtos.GetAssetByIdOutput(asset), nil
 }
 
-func (service assetService) UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (dtos.UpdateAssetByIdOutput, error) {
-	_, err := service.GetById(ctx, dtos.GetAssetByIdInput{Id: input.Id})
+func (service assetService) UpdateAssetById(ctx context.Context, input dtos.UpdateAssetByIdInput) (dtos.UpdateAssetByIdOutput, error) {
+	_, err := service.GetAssetById(ctx, dtos.GetAssetByIdInput{Id: input.Id})
 	if err != nil {
 		return dtos.UpdateAssetByIdOutput{}, err
 	}
 
-	asset, err := service.repository.UpdateById(ctx, input)
+	asset, err := service.repository.UpdateAssetById(ctx, input)
 	if err != nil {
 		return dtos.UpdateAssetByIdOutput{}, err
 	}
@@ -68,13 +68,13 @@ func (service assetService) UpdateById(ctx context.Context, input dtos.UpdateAss
 	return dtos.UpdateAssetByIdOutput{Id: asset.Id}, nil
 }
 
-func (service assetService) DeleteById(ctx context.Context, input dtos.DeleteAssetByIdInput) error {
-	_, err := service.GetById(ctx, dtos.GetAssetByIdInput(input))
+func (service assetService) DeleteAssetById(ctx context.Context, input dtos.DeleteAssetByIdInput) error {
+	_, err := service.GetAssetById(ctx, dtos.GetAssetByIdInput(input))
 	if err != nil {
 		return err
 	}
 
-	err = service.repository.DeleteById(ctx, input)
+	err = service.repository.DeleteAssetById(ctx, input)
 	if err != nil {
 		return err
 	}

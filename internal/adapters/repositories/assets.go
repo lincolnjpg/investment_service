@@ -19,7 +19,7 @@ func NewAssetRepository(db *pgx.Conn) assetRepository {
 	return assetRepository{db: db}
 }
 
-func (repository assetRepository) Create(ctx context.Context, input dtos.CreateAssetInput) (entities.Asset, error) {
+func (repository assetRepository) CreateAsset(ctx context.Context, input dtos.CreateAssetInput) (entities.Asset, error) {
 	var asset entities.Asset
 
 	row := repository.db.QueryRow(
@@ -44,7 +44,7 @@ func (repository assetRepository) Create(ctx context.Context, input dtos.CreateA
 	return asset, nil
 }
 
-func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAssetByIdInput) (entities.Asset, error) {
+func (repository assetRepository) GetAssetById(ctx context.Context, input dtos.GetAssetByIdInput) (entities.Asset, error) {
 	var asset entities.Asset
 
 	row := repository.db.QueryRow(
@@ -79,7 +79,7 @@ func (repository assetRepository) GetById(ctx context.Context, input dtos.GetAss
 	return asset, nil
 }
 
-func (repository assetRepository) UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (entities.Asset, error) {
+func (repository assetRepository) UpdateAssetById(ctx context.Context, input dtos.UpdateAssetByIdInput) (entities.Asset, error) {
 	var asset entities.Asset
 
 	row := repository.db.QueryRow(
@@ -127,7 +127,7 @@ func (repository assetRepository) UpdateById(ctx context.Context, input dtos.Upd
 	return asset, nil
 }
 
-func (repository assetRepository) DeleteById(ctx context.Context, input dtos.DeleteAssetByIdInput) error {
+func (repository assetRepository) DeleteAssetById(ctx context.Context, input dtos.DeleteAssetByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

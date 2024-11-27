@@ -38,7 +38,7 @@ func CreateUserHandler(userService ports.UserService) func(http.ResponseWriter, 
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := userService.Create(ctx, body)
+		user, err := userService.CreateUser(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
@@ -76,7 +76,7 @@ func GetUserByIDHandler(userService ports.UserService) func(http.ResponseWriter,
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := userService.GetById(ctx, body)
+		user, err := userService.GetUserById(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
@@ -114,7 +114,7 @@ func UpateUserByIdHandler(userService ports.UserService) func(http.ResponseWrite
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := userService.UpdateById(ctx, body)
+		user, err := userService.UpdateUserById(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
@@ -152,7 +152,7 @@ func DeleteUserByIDHandler(userService ports.UserService) func(http.ResponseWrit
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		err = userService.DeleteById(ctx, body)
+		err = userService.DeleteUserById(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())

@@ -13,7 +13,7 @@ import (
 )
 
 func (r *mutationResolver) CreateUser(ctx context.Context, input dtos.CreateUserInput) (*dtos.CreateUserOutput, error) {
-	user, err := r.Resolver.UserService.Create(ctx, dtos.CreateUserInput{Name: input.Name, InvestorProfile: input.InvestorProfile})
+	user, err := r.Resolver.UserService.CreateUser(ctx, dtos.CreateUserInput{Name: input.Name, InvestorProfile: input.InvestorProfile})
 	if err != nil {
 		err, _ := err.(customerror.APIError)
 		return &dtos.CreateUserOutput{}, err.Err
@@ -23,7 +23,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input dtos.CreateUser
 }
 
 func (r *mutationResolver) UpdateUserByID(ctx context.Context, input dtos.UpdateUserInput) (*dtos.UpdateUserOutput, error) {
-	user, err := r.Resolver.UserService.UpdateById(ctx, dtos.UpdateUserInput{Id: input.Id, Name: input.Name, InvestorProfile: input.InvestorProfile})
+	user, err := r.Resolver.UserService.UpdateUserById(ctx, dtos.UpdateUserInput{Id: input.Id, Name: input.Name, InvestorProfile: input.InvestorProfile})
 	if err != nil {
 		err, _ := err.(customerror.APIError)
 		return &dtos.UpdateUserOutput{}, err.Err
@@ -33,7 +33,7 @@ func (r *mutationResolver) UpdateUserByID(ctx context.Context, input dtos.Update
 }
 
 func (r *mutationResolver) DeleteUserByID(ctx context.Context, input dtos.DeleteUserByIdInput) (uuid.UUID, error) {
-	err := r.Resolver.UserService.DeleteById(ctx, dtos.DeleteUserByIdInput{Id: input.Id})
+	err := r.Resolver.UserService.DeleteUserById(ctx, dtos.DeleteUserByIdInput{Id: input.Id})
 	if err != nil {
 		err, _ := err.(customerror.APIError)
 		return uuid.Nil, err.Err
@@ -43,7 +43,7 @@ func (r *mutationResolver) DeleteUserByID(ctx context.Context, input dtos.Delete
 }
 
 func (r *queryResolver) GetUserByID(ctx context.Context, input dtos.GetUserByIdInput) (*dtos.GetUserByIdOutput, error) {
-	user, err := r.Resolver.UserService.GetById(context.Background(), input)
+	user, err := r.Resolver.UserService.GetUserById(context.Background(), input)
 	if err != nil {
 		err, _ := err.(customerror.APIError)
 		return nil, err.Err

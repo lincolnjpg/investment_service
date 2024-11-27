@@ -20,7 +20,7 @@ func NewUserRepository(db *pgx.Conn) userRepository {
 	return userRepository{db: db}
 }
 
-func (repository userRepository) Create(ctx context.Context, input dtos.CreateUserInput) (entities.User, error) {
+func (repository userRepository) CreateUser(ctx context.Context, input dtos.CreateUserInput) (entities.User, error) {
 	var user entities.User
 
 	tx, err := repository.db.Begin(ctx)
@@ -60,7 +60,7 @@ func (repository userRepository) Create(ctx context.Context, input dtos.CreateUs
 	return user, nil
 }
 
-func (repository userRepository) UpdateById(ctx context.Context, input dtos.UpdateUserInput) (entities.User, error) {
+func (repository userRepository) UpdateUserById(ctx context.Context, input dtos.UpdateUserInput) (entities.User, error) {
 	var user entities.User
 
 	row := repository.db.QueryRow(
@@ -93,7 +93,7 @@ func (repository userRepository) UpdateById(ctx context.Context, input dtos.Upda
 	return user, nil
 }
 
-func (repository userRepository) GetById(ctx context.Context, input dtos.GetUserByIdInput) (entities.User, error) {
+func (repository userRepository) GetUserById(ctx context.Context, input dtos.GetUserByIdInput) (entities.User, error) {
 	var user entities.User
 
 	row := repository.db.QueryRow(
@@ -123,7 +123,7 @@ func (repository userRepository) GetById(ctx context.Context, input dtos.GetUser
 	return user, nil
 }
 
-func (repository userRepository) DeleteById(ctx context.Context, input dtos.DeleteUserByIdInput) error {
+func (repository userRepository) DeleteUserById(ctx context.Context, input dtos.DeleteUserByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

@@ -19,7 +19,7 @@ func NewAssetIndexRepository(db *pgx.Conn) assetIndexRepository {
 	return assetIndexRepository{db: db}
 }
 
-func (repository assetIndexRepository) Create(ctx context.Context, input dtos.CreateAssetIndexInput) (entities.AssetIndex, error) {
+func (repository assetIndexRepository) CreateAssetIndex(ctx context.Context, input dtos.CreateAssetIndexInput) (entities.AssetIndex, error) {
 	var assetIndex entities.AssetIndex
 
 	row := repository.db.QueryRow(
@@ -41,7 +41,7 @@ func (repository assetIndexRepository) Create(ctx context.Context, input dtos.Cr
 	return assetIndex, nil
 }
 
-func (repository assetIndexRepository) GetById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (entities.AssetIndex, error) {
+func (repository assetIndexRepository) GetAssetIndexById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (entities.AssetIndex, error) {
 	var assetIndex entities.AssetIndex
 
 	row := repository.db.QueryRow(
@@ -71,7 +71,7 @@ func (repository assetIndexRepository) GetById(ctx context.Context, input dtos.G
 	return assetIndex, nil
 }
 
-func (repository assetIndexRepository) UpdateById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (entities.AssetIndex, error) {
+func (repository assetIndexRepository) UpdateAssetIndexById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (entities.AssetIndex, error) {
 	var assetIndex entities.AssetIndex
 
 	row := repository.db.QueryRow(
@@ -104,7 +104,7 @@ func (repository assetIndexRepository) UpdateById(ctx context.Context, input dto
 	return assetIndex, nil
 }
 
-func (repository assetIndexRepository) DeleteById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error {
+func (repository assetIndexRepository) DeleteAssetIndexById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error {
 	_, err := repository.db.Exec(
 		ctx,
 		`

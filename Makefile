@@ -7,10 +7,10 @@ graphql:
 	go run github.com/99designs/gqlgen generate
 
 run_rest:
-	go run ./cmd/rest/main.go
+	go run ./cmd/rest/
 
 run_graphql:
-	go run ./cmd/graphql/main.go
+	go run ./cmd/graphql/
 
 migrations_dev_up:
 	goose -dir migrations postgres "host=localhost port=5432 user=postgres password=example database=postgres sslmode=disable" up

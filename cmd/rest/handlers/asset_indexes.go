@@ -38,7 +38,7 @@ func CreateAssetIndexHandler(assetIndexesService ports.AssetIndexService) func(h
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		assetType, err := assetIndexesService.Create(ctx, body)
+		assetType, err := assetIndexesService.CreateAssetIndex(ctx, body)
 		if err != nil {
 			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
@@ -76,7 +76,7 @@ func GetAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) func(
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		assetType, err := assetIndexesService.GetById(ctx, body)
+		assetType, err := assetIndexesService.GetAssetIndexById(ctx, body)
 		if err != nil {
 			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
@@ -114,7 +114,7 @@ func UpdateAssetIndexByIdHandler(assetIndexesService ports.AssetIndexService) fu
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		assetType, err := assetIndexesService.UpdateById(ctx, body)
+		assetType, err := assetIndexesService.UpdateAssetIndexById(ctx, body)
 		if err != nil {
 			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())
@@ -152,7 +152,7 @@ func DeleteAssetIndexByIDHandler(assetIndexesService ports.AssetIndexService) fu
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		err = assetIndexesService.DeleteById(ctx, body)
+		err = assetIndexesService.DeleteAssetIndexById(ctx, body)
 		if err != nil {
 			apiError := err.(customerror.APIError)
 			render.JSON(w, apiError.StatusCode, apiError.ToMap())

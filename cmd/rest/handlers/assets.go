@@ -50,7 +50,7 @@ func CreateAssetHandler(assetsService ports.AssetService) func(http.ResponseWrit
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		assetType, err := assetsService.Create(ctx, body)
+		assetType, err := assetsService.CreateAsset(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
@@ -88,7 +88,7 @@ func GetAssetByIdHandler(assetsService ports.AssetService) func(http.ResponseWri
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := assetsService.GetById(ctx, body)
+		user, err := assetsService.GetAssetById(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
@@ -126,7 +126,7 @@ func UpdateAssetByIdHandler(assetsService ports.AssetService) func(http.Response
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		assetType, err := assetsService.UpdateById(ctx, body)
+		assetType, err := assetsService.UpdateAssetById(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
@@ -164,7 +164,7 @@ func DeleteAssetByIdHandler(assetsService ports.AssetService) func(http.Response
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		err = assetsService.DeleteById(ctx, body)
+		err = assetsService.DeleteAssetById(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())

@@ -13,9 +13,15 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
+type Application struct {
+	ports.UserService
+	ports.AssetIndexService
+	ports.AssetService
+}
+
 type restApi struct {
 	app  ports.Application
-	port int
+	port string
 }
 
 func (r restApi) Run() {
@@ -36,32 +42,32 @@ func (r restApi) Run() {
 	router.Use(chimiddlewares.Heartbeat("/ping"))
 
 	usersRouter := chi.NewRouter()
-	usersRouter.Post("/", handlers.CreateUserHandler(r.app.UserService))
-	usersRouter.Get("/{id}", handlers.GetUserByIDHandler(r.app.UserService))
-	usersRouter.Put("/{id}", handlers.UpateUserByIdHandler(r.app.UserService))
-	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(r.app.UserService))
+	usersRouter.Post("/", handlers.CreateUserHandler(r.app))
+	usersRouter.Get("/{id}", handlers.GetUserByIDHandler(r.app))
+	usersRouter.Put("/{id}", handlers.UpateUserByIdHandler(r.app))
+	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(r.app))
 
 	assetIndexesRouter := chi.NewRouter()
-	assetIndexesRouter.Post("/", handlers.CreateAssetIndexHandler(r.app.AssetIndexService))
-	assetIndexesRouter.Get("/{id}", handlers.GetAssetIndexByIdHandler(r.app.AssetIndexService))
-	assetIndexesRouter.Put("/{id}", handlers.UpdateAssetIndexByIdHandler(r.app.AssetIndexService))
-	assetIndexesRouter.Delete("/{id}", handlers.DeleteAssetIndexByIDHandler(r.app.AssetIndexService))
+	assetIndexesRouter.Post("/", handlers.CreateAssetIndexHandler(r.app))
+	assetIndexesRouter.Get("/{id}", handlers.GetAssetIndexByIdHandler(r.app))
+	assetIndexesRouter.Put("/{id}", handlers.UpdateAssetIndexByIdHandler(r.app))
+	assetIndexesRouter.Delete("/{id}", handlers.DeleteAssetIndexByIDHandler(r.app))
 
 	assetsRouter := chi.NewRouter()
-	assetsRouter.Post("/", handlers.CreateAssetHandler(r.app.AssetService))
-	assetsRouter.Get("/{id}", handlers.GetAssetByIdHandler(r.app.AssetService))
-	assetsRouter.Put("/{id}", handlers.UpdateAssetByIdHandler(r.app.AssetService))
-	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(r.app.AssetService))
+	assetsRouter.Post("/", handlers.CreateAssetHandler(r.app))
+	assetsRouter.Get("/{id}", handlers.GetAssetByIdHandler(r.app))
+	assetsRouter.Put("/{id}", handlers.UpdateAssetByIdHandler(r.app))
+	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(r.app))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/indexes", assetIndexesRouter)
 	router.Mount("/assets", assetsRouter)
 	router.Mount("/debug", chimiddlewares.Profiler())
 
-	http.ListenAndServe(fmt.Sprintf(":%d", r.port), router)
+	http.ListenAndServe(fmt.Sprintf(":%s", r.port), router)
 }
 
-func NewRestApi(app ports.Application, port int) *restApi {
+func NewRestApi(app ports.Application, port string) *restApi {
 	return &restApi{
 		app:  app,
 		port: port,

@@ -8,15 +8,15 @@ import (
 )
 
 type AssetIndexService interface {
-	Create(ctx context.Context, input dtos.CreateAssetIndexInput) (dtos.CreateAssetIndexOutput, error)
-	GetById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (dtos.GetAssetIndexByIdOutput, error)
-	UpdateById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (dtos.UpdateAssetIndexByIdOutput, error)
-	DeleteById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error
+	CreateAssetIndex(ctx context.Context, input dtos.CreateAssetIndexInput) (dtos.CreateAssetIndexOutput, error)
+	GetAssetIndexById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (dtos.GetAssetIndexByIdOutput, error)
+	UpdateAssetIndexById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (dtos.UpdateAssetIndexByIdOutput, error)
+	DeleteAssetIndexById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error
 }
 
 type AssetIndexRepository interface {
-	Create(ctx context.Context, input dtos.CreateAssetIndexInput) (entities.AssetIndex, error)
-	GetById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (entities.AssetIndex, error)
-	UpdateById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (entities.AssetIndex, error)
-	DeleteById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error
+	CreateAssetIndex(ctx context.Context, input dtos.CreateAssetIndexInput) (entities.AssetIndex, error)
+	GetAssetIndexById(ctx context.Context, input dtos.GetAssetIndexByIdInput) (entities.AssetIndex, error)
+	UpdateAssetIndexById(ctx context.Context, input dtos.UpdateAssetIndexByIdInput) (entities.AssetIndex, error)
+	DeleteAssetIndexById(ctx context.Context, input dtos.DeleteAssetIndexByIdInput) error
 }

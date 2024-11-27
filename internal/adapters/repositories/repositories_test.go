@@ -15,7 +15,7 @@ var _ = Describe("user creation", func() {
 	It("creates a single in PostgreSQL", func() {
 		var count int
 		repo := repositories.NewUserRepository(db)
-		_, err := repo.Create(
+		_, err := repo.CreateUser(
 			context.Background(),
 			dtos.CreateUserInput{
 				Name:            "user_1",
@@ -38,7 +38,7 @@ var _ = Describe("user creation", func() {
 
 	It("creates a user and returns a non empty Id that represents the created user", func() {
 		repo := repositories.NewUserRepository(db)
-		user, err := repo.Create(
+		user, err := repo.CreateUser(
 			context.Background(),
 			dtos.CreateUserInput{
 				Name:            "user_1",
@@ -53,7 +53,7 @@ var _ = Describe("user creation", func() {
 	It("creates a user and returns it to the caller", func() {
 		var id, name, investor_profile string
 		repo := repositories.NewUserRepository(db)
-		user, err := repo.Create(
+		user, err := repo.CreateUser(
 			context.Background(),
 			dtos.CreateUserInput{
 				Name:            "user_1",

@@ -8,15 +8,15 @@ import (
 )
 
 type AssetService interface {
-	Create(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error)
-	GetById(ctx context.Context, input dtos.GetAssetByIdInput) (dtos.GetAssetByIdOutput, error)
-	UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (dtos.UpdateAssetByIdOutput, error)
-	DeleteById(ctx context.Context, input dtos.DeleteAssetByIdInput) error
+	CreateAsset(ctx context.Context, input dtos.CreateAssetInput) (dtos.CreateAssetOutput, error)
+	GetAssetById(ctx context.Context, input dtos.GetAssetByIdInput) (dtos.GetAssetByIdOutput, error)
+	UpdateAssetById(ctx context.Context, input dtos.UpdateAssetByIdInput) (dtos.UpdateAssetByIdOutput, error)
+	DeleteAssetById(ctx context.Context, input dtos.DeleteAssetByIdInput) error
 }
 
 type AssetRepository interface {
-	Create(ctx context.Context, input dtos.CreateAssetInput) (entities.Asset, error)
-	GetById(ctx context.Context, input dtos.GetAssetByIdInput) (entities.Asset, error)
-	UpdateById(ctx context.Context, input dtos.UpdateAssetByIdInput) (entities.Asset, error)
-	DeleteById(ctx context.Context, input dtos.DeleteAssetByIdInput) error
+	CreateAsset(ctx context.Context, input dtos.CreateAssetInput) (entities.Asset, error)
+	GetAssetById(ctx context.Context, input dtos.GetAssetByIdInput) (entities.Asset, error)
+	UpdateAssetById(ctx context.Context, input dtos.UpdateAssetByIdInput) (entities.Asset, error)
+	DeleteAssetById(ctx context.Context, input dtos.DeleteAssetByIdInput) error
 }

@@ -8,15 +8,15 @@ import (
 )
 
 type UserService interface {
-	Create(ctx context.Context, input dtos.CreateUserInput) (dtos.CreateUserOutput, error)
-	UpdateById(ctx context.Context, input dtos.UpdateUserInput) (dtos.UpdateUserOutput, error)
-	GetById(ctx context.Context, input dtos.GetUserByIdInput) (dtos.GetUserByIdOutput, error)
-	DeleteById(ctx context.Context, input dtos.DeleteUserByIdInput) error
+	CreateUser(ctx context.Context, input dtos.CreateUserInput) (dtos.CreateUserOutput, error)
+	UpdateUserById(ctx context.Context, input dtos.UpdateUserInput) (dtos.UpdateUserOutput, error)
+	GetUserById(ctx context.Context, input dtos.GetUserByIdInput) (dtos.GetUserByIdOutput, error)
+	DeleteUserById(ctx context.Context, input dtos.DeleteUserByIdInput) error
 }
 
 type UserRepository interface {
-	Create(ctx context.Context, input dtos.CreateUserInput) (entities.User, error)
-	UpdateById(ctx context.Context, input dtos.UpdateUserInput) (entities.User, error)
-	GetById(ctx context.Context, input dtos.GetUserByIdInput) (entities.User, error)
-	DeleteById(ctx context.Context, input dtos.DeleteUserByIdInput) error
+	CreateUser(ctx context.Context, input dtos.CreateUserInput) (entities.User, error)
+	UpdateUserById(ctx context.Context, input dtos.UpdateUserInput) (entities.User, error)
+	GetUserById(ctx context.Context, input dtos.GetUserByIdInput) (entities.User, error)
+	DeleteUserById(ctx context.Context, input dtos.DeleteUserByIdInput) error
 }

@@ -17,8 +17,8 @@ func NewUserService(repository ports.UserRepository) userService {
 	}
 }
 
-func (service userService) Create(ctx context.Context, input dtos.CreateUserInput) (dtos.CreateUserOutput, error) {
-	user, err := service.repository.Create(ctx, input)
+func (service userService) CreateUser(ctx context.Context, input dtos.CreateUserInput) (dtos.CreateUserOutput, error) {
+	user, err := service.repository.CreateUser(ctx, input)
 	if err != nil {
 		return dtos.CreateUserOutput{}, err
 	}
@@ -26,13 +26,13 @@ func (service userService) Create(ctx context.Context, input dtos.CreateUserInpu
 	return dtos.CreateUserOutput{Id: user.Id}, nil
 }
 
-func (service userService) UpdateById(ctx context.Context, input dtos.UpdateUserInput) (dtos.UpdateUserOutput, error) {
-	_, err := service.GetById(ctx, dtos.GetUserByIdInput{Id: input.Id})
+func (service userService) UpdateUserById(ctx context.Context, input dtos.UpdateUserInput) (dtos.UpdateUserOutput, error) {
+	_, err := service.GetUserById(ctx, dtos.GetUserByIdInput{Id: input.Id})
 	if err != nil {
 		return dtos.UpdateUserOutput{}, err
 	}
 
-	user, err := service.repository.UpdateById(ctx, input)
+	user, err := service.repository.UpdateUserById(ctx, input)
 	if err != nil {
 		return dtos.UpdateUserOutput{}, err
 	}
@@ -40,8 +40,8 @@ func (service userService) UpdateById(ctx context.Context, input dtos.UpdateUser
 	return dtos.UpdateUserOutput{Id: user.Id}, nil
 }
 
-func (service userService) GetById(ctx context.Context, input dtos.GetUserByIdInput) (dtos.GetUserByIdOutput, error) {
-	user, err := service.repository.GetById(ctx, input)
+func (service userService) GetUserById(ctx context.Context, input dtos.GetUserByIdInput) (dtos.GetUserByIdOutput, error) {
+	user, err := service.repository.GetUserById(ctx, input)
 	if err != nil {
 		return dtos.GetUserByIdOutput{}, err
 	}
@@ -49,13 +49,13 @@ func (service userService) GetById(ctx context.Context, input dtos.GetUserByIdIn
 	return dtos.GetUserByIdOutput(user), nil
 }
 
-func (service userService) DeleteById(ctx context.Context, input dtos.DeleteUserByIdInput) error {
-	_, err := service.GetById(ctx, dtos.GetUserByIdInput(input))
+func (service userService) DeleteUserById(ctx context.Context, input dtos.DeleteUserByIdInput) error {
+	_, err := service.GetUserById(ctx, dtos.GetUserByIdInput(input))
 	if err != nil {
 		return err
 	}
 
-	err = service.repository.DeleteById(ctx, input)
+	err = service.repository.DeleteUserById(ctx, input)
 	if err != nil {
 		return err
 	}
