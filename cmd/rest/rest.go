@@ -13,12 +13,6 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
-type Application struct {
-	ports.UserService
-	ports.AssetIndexService
-	ports.AssetService
-}
-
 type restApi struct {
 	app  ports.Application
 	port string
