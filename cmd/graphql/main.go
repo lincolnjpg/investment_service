@@ -2,11 +2,7 @@ package main
 
 import (
 	"context"
-	"log"
-	"net/http"
 
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/joho/godotenv"
 	"github.com/lincolnjpg/investment_service/cmd/graphql/gqlgen"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
@@ -39,11 +35,9 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
-	srv := handler.NewDefaultServer(gqlgen.NewExecutableSchema(gqlgen.Config{Resolvers: &gqlgen.Resolver{UserService: userService}}))
-
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
-
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", envs.GraphQlPort)
-	log.Fatal(http.ListenAndServe(":"+envs.GraphQlPort, nil))
+	resolver := gqlgen.Resolver{
+		UserService: userService,
+	}
+	graphQl := NewGraphQl(resolver, "8080")
+	graphQl.Run()
 }

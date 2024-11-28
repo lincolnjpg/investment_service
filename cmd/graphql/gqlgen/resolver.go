@@ -7,5 +7,5 @@ import "github.com/lincolnjpg/investment_service/internal/ports"
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	UserService ports.UserService
+	ports.UserService
 }
