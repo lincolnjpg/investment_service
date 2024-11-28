@@ -53,9 +53,13 @@ func (r restApi) Run() {
 	assetsRouter.Put("/{id}", handlers.UpdateAssetByIdHandler(r.app))
 	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(r.app))
 
+	userAssetRouter := chi.NewRouter()
+	userAssetRouter.Post("/", handlers.CreateUserAssetHandler(r.app))
+
 	router.Mount("/users", usersRouter)
 	router.Mount("/indexes", assetIndexesRouter)
 	router.Mount("/assets", assetsRouter)
+	router.Mount("/user-assets", userAssetRouter)
 	router.Mount("/debug", chimiddlewares.Profiler())
 
 	http.ListenAndServe(fmt.Sprintf(":%s", r.port), router)
