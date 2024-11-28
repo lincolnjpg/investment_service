@@ -30,6 +30,15 @@ services:
   #   volumes:
   #     - /home/lincolnjpg/.config/gcloud/application_default_credentials.json:/config/application_default_credentials.json
 
+  rabbitmq:
+    image: "rabbitmq:4.0.4-management-alpine"
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq-data/:/var/lib/rabbitmq/
+
 volumes:
   dev_db_data:
   test_db_data:
