@@ -8,4 +8,6 @@ import "github.com/lincolnjpg/investment_service/internal/ports"
 
 type Resolver struct {
 	ports.UserService
+	ports.AssetIndexService
+	ports.AssetService
 }

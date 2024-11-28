@@ -41,7 +41,7 @@ func (r restApi) Run() {
 	usersRouter.Put("/{id}", handlers.UpateUserByIdHandler(r.app))
 	usersRouter.Delete("/{id}", handlers.DeleteUserByIDHandler(r.app))
 
-	/* assetIndexesRouter := chi.NewRouter()
+	assetIndexesRouter := chi.NewRouter()
 	assetIndexesRouter.Post("/", handlers.CreateAssetIndexHandler(r.app))
 	assetIndexesRouter.Get("/{id}", handlers.GetAssetIndexByIdHandler(r.app))
 	assetIndexesRouter.Put("/{id}", handlers.UpdateAssetIndexByIdHandler(r.app))
@@ -51,11 +51,11 @@ func (r restApi) Run() {
 	assetsRouter.Post("/", handlers.CreateAssetHandler(r.app))
 	assetsRouter.Get("/{id}", handlers.GetAssetByIdHandler(r.app))
 	assetsRouter.Put("/{id}", handlers.UpdateAssetByIdHandler(r.app))
-	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(r.app)) */
+	assetsRouter.Delete("/{id}", handlers.DeleteAssetByIdHandler(r.app))
 
 	router.Mount("/users", usersRouter)
-	/* router.Mount("/indexes", assetIndexesRouter)
-	router.Mount("/assets", assetsRouter) */
+	router.Mount("/indexes", assetIndexesRouter)
+	router.Mount("/assets", assetsRouter)
 	router.Mount("/debug", chimiddlewares.Profiler())
 
 	http.ListenAndServe(fmt.Sprintf(":%s", r.port), router)
