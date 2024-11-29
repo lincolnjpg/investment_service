@@ -14,17 +14,13 @@ type RabbitMq struct{}
 func (r RabbitMq) Publish(message string) error {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672")
 	if err != nil {
-		if err != nil {
-			return fmt.Errorf("failed to connect to RabbitMQ: %w", err)
-		}
+		return fmt.Errorf("failed to connect to RabbitMQ: %w", err)
 	}
 	defer conn.Close()
 
 	ch, err := conn.Channel()
 	if err != nil {
-		if err != nil {
-			return fmt.Errorf("failed to connect to channel: %w", err)
-		}
+		return fmt.Errorf("failed to connect to channel: %w", err)
 	}
 	defer ch.Close()
 
@@ -37,9 +33,7 @@ func (r RabbitMq) Publish(message string) error {
 		nil,
 	)
 	if err != nil {
-		if err != nil {
-			return fmt.Errorf("failed to create queue: %w", err)
-		}
+		return fmt.Errorf("failed to create queue: %w", err)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
