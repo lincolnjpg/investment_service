@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
 type UserAsset struct {
@@ -12,4 +13,6 @@ type UserAsset struct {
 	AssetId     uuid.UUID
 	Quantity    int
 	PuchaseDate time.Time
+	Status      enum.AssetStatusEnum
+	Message     string
 }

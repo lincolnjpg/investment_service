@@ -45,7 +45,7 @@ func main() {
 
 	userAssetRepository := repositories.NewUserAssetRepository(db)
 	messageBrokerService := brokers.RabbitMq{}
-	userAssetService := services.NewUserAssetService(userAssetRepository, messageBrokerService)
+	userAssetService := services.NewUserAssetService(userAssetRepository, messageBrokerService, userService, assetsService)
 
 	services := struct {
 		ports.UserService

@@ -6,7 +6,7 @@ CREATE TABLE users_assets (
 	quantity SMALLINT NOT NULL,
 	purchase_date DATE NOT NULL,
 	status asset_status NOT NULL,
-	message TEXT NOT NULL,
+	message TEXT NULL,
 	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated_at TIMESTAMP WITH TIME ZONE NULL,
 	PRIMARY KEY (id)
