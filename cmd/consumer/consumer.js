@@ -7,7 +7,7 @@ async function consume() {
 
     const queueName = "hello";
     channel.assertQueue(queueName, {
-      durable: false,
+      durable: true,
     });
     channel.consume(
       queueName,
@@ -15,6 +15,7 @@ async function consume() {
         queueName,
         function (msg) {
           console.log(" [x] Received %s", msg.content.toString());
+          console.log(JSON.parse(`{"campo": 3, "coluna": "3trdrt"}`));
         },
         {
           noAck: true,
