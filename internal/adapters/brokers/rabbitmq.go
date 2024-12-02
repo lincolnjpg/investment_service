@@ -26,7 +26,7 @@ func (r RabbitMq) Publish(message string) error {
 
 	q, err := ch.QueueDeclare(
 		"hello",
-		false,
+		true,
 		false,
 		false,
 		false,
@@ -47,8 +47,9 @@ func (r RabbitMq) Publish(message string) error {
 		false,
 		false,
 		amqp.Publishing{
-			ContentType: "text/plain",
-			Body:        []byte(body),
+			ContentType:  "text/plain",
+			Body:         []byte(body),
+			DeliveryMode: amqp.Persistent,
 		},
 	)
 	if err != nil {

@@ -33,12 +33,15 @@ services:
   rabbitmq:
     image: "rabbitmq:4.0.4-management-alpine"
     restart: always
+    hostname: "localhost" # must be set if you want persistence to work
+    stop_signal: SIGTERM
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - ./rabbitmq-data/:/var/lib/rabbitmq/
+      - rabbitmq-data:/var/lib/rabbitmq
 
 volumes:
   dev_db_data:
   test_db_data:
+  rabbitmq-data:
