@@ -1,5 +1,9 @@
 package ports
 
-type MessageBroker interface {
-	Publish(message []byte) error
+type Producer interface {
+	Produce(message []byte) error
+}
+
+type Consumer interface {
+	Consume()
 }

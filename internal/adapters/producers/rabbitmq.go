@@ -1,4 +1,4 @@
-package brokers
+package producers
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-type RabbitMq struct{}
+type RabbitMqProducer struct{}
 
-func (r RabbitMq) Publish(message []byte) error {
+func (r RabbitMqProducer) Produce(message []byte) error {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672")
 	if err != nil {
 		return fmt.Errorf("failed to connect to RabbitMQ: %w", err)

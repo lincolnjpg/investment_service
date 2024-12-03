@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"log"
 
-	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
 
 type userAssetService struct {
-	repo                 ports.UserAssetRepository
-	messageBrokerService ports.MessageBroker
-	userService          ports.UserService
-	assetService         ports.AssetService
+	repo         ports.UserAssetRepository
+	producer     ports.Producer
+	userService  ports.UserService
+	assetService ports.AssetService
 }
 
 func (s userAssetService) CreateUserAsset(ctx context.Context, input dtos.CreateUserAssetInput) (dtos.CreateUserAssetOutput, error) {
@@ -33,19 +33,17 @@ func (s userAssetService) CreateUserAsset(ctx context.Context, input dtos.Create
 		return dtos.CreateUserAssetOutput{}, err
 	}
 
-	m := struct {
-		AssetId uuid.UUID `json:"asset_id,omitempty"`
-		Ticker  string    `json:"ticker,omitempty"`
-	}{
-		AssetId: userAsset.AssetId,
-		Ticker:  *asset.Ticker,
+	m := infra.Message{
+		UserAssetId: userAsset.Id,
+		Ticker:      *asset.Ticker,
 	}
+
 	message, err := json.Marshal(m)
 	if err != nil {
 		return dtos.CreateUserAssetOutput{}, err
 	}
 
-	err = s.messageBrokerService.Publish(message)
+	err = s.producer.Produce(message)
 	if err != nil {
 		log.Println(err)
 	}
@@ -53,11 +51,11 @@ func (s userAssetService) CreateUserAsset(ctx context.Context, input dtos.Create
 	return dtos.CreateUserAssetOutput{Id: userAsset.Id}, nil
 }
 
-func NewUserAssetService(repo ports.UserAssetRepository, messageBrokerService ports.MessageBroker, useuserService ports.UserService, assetsService ports.AssetService) *userAssetService {
+func NewUserAssetService(repo ports.UserAssetRepository, producer ports.Producer, useuserService ports.UserService, assetsService ports.AssetService) *userAssetService {
 	return &userAssetService{
-		repo:                 repo,
-		messageBrokerService: messageBrokerService,
-		userService:          useuserService,
-		assetService:         assetsService,
+		repo:         repo,
+		producer:     producer,
+		userService:  useuserService,
+		assetService: assetsService,
 	}
 }

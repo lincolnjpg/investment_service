@@ -5,7 +5,7 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/lincolnjpg/investment_service/internal/adapters/brokers"
+	"github.com/lincolnjpg/investment_service/internal/adapters/producers"
 	"github.com/lincolnjpg/investment_service/internal/adapters/repositories"
 	"github.com/lincolnjpg/investment_service/internal/adapters/services"
 	"github.com/lincolnjpg/investment_service/internal/config"
@@ -44,8 +44,8 @@ func main() {
 	assetsService := services.NewAssetService(assetsRepository, assetIndexesService)
 
 	userAssetRepository := repositories.NewUserAssetRepository(db)
-	messageBrokerService := brokers.RabbitMq{}
-	userAssetService := services.NewUserAssetService(userAssetRepository, messageBrokerService, userService, assetsService)
+	producer := producers.RabbitMqProducer{}
+	userAssetService := services.NewUserAssetService(userAssetRepository, producer, userService, assetsService)
 
 	services := struct {
 		ports.UserService

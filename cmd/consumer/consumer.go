@@ -8,11 +8,17 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/google/uuid"
+	"github.com/lincolnjpg/investment_service/internal/infra"
+	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/rabbitmq/amqp091-go"
 )
 
-func main() {
+type rabbitMqConsumer struct {
+	financeApiBaseUrl   string
+	userAssetRepository ports.UserAssetRepository
+}
+
+func (c rabbitMqConsumer) consume() {
 	conn, err := amqp091.Dial("amqp://guest:guest@localhost:5672")
 	if err != nil {
 		log.Println("could not connect to RabbitMQ:", err)
@@ -54,11 +60,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	var m infra.Message
+
 	var forever chan struct{}
-	m := struct {
-		AssetId uuid.UUID `json:"asset_id,omitempty"`
-		Ticker  string    `json:"ticker,omitempty"`
-	}{}
 
 	go func() {
 		for message := range messages {
@@ -68,12 +72,15 @@ func main() {
 				os.Exit(1)
 			}
 
-			r, err := http.Get(fmt.Sprintf("https://query1.finance.yahoo.com/v8/finance/chart/%s.SA", m.Ticker))
+			url := fmt.Sprintf("%s/%s.SA", c.financeApiBaseUrl, m.Ticker)
+
+			r, err := http.Get(url)
 			if err != nil {
 				log.Fatalln(err)
 			}
 
 			if r.StatusCode != http.StatusOK {
+				fmt.Println(r.StatusCode)
 				log.Fatalln("Ticker not found")
 			}
 
@@ -102,4 +109,11 @@ func main() {
 
 	log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
 	<-forever
+}
+
+func NewRabbitMqConsumer(financeApiBaseUrl string, userAssetRepository ports.UserAssetRepository) *rabbitMqConsumer {
+	return &rabbitMqConsumer{
+		financeApiBaseUrl:   financeApiBaseUrl,
+		userAssetRepository: userAssetRepository,
+	}
 }
