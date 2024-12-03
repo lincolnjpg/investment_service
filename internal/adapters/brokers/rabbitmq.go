@@ -11,7 +11,7 @@ import (
 
 type RabbitMq struct{}
 
-func (r RabbitMq) Publish(message string) error {
+func (r RabbitMq) Publish(message []byte) error {
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672")
 	if err != nil {
 		return fmt.Errorf("failed to connect to RabbitMQ: %w", err)
@@ -39,7 +39,6 @@ func (r RabbitMq) Publish(message string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	body := "Hello, World!"
 	err = ch.PublishWithContext(
 		ctx,
 		"",
@@ -48,7 +47,7 @@ func (r RabbitMq) Publish(message string) error {
 		false,
 		amqp.Publishing{
 			ContentType:  "text/plain",
-			Body:         []byte(body),
+			Body:         message,
 			DeliveryMode: amqp.Persistent,
 		},
 	)
@@ -56,7 +55,7 @@ func (r RabbitMq) Publish(message string) error {
 		return fmt.Errorf("failed to publish message: %w", err)
 	}
 
-	log.Printf(" [x] Sent %s\n", body)
+	log.Printf(" [x] Sent %s\n", message)
 
 	return nil
 }

@@ -1,5 +1,5 @@
 package ports
 
 type MessageBroker interface {
-	Publish(message string) error
+	Publish(message []byte) error
 }
