@@ -2,9 +2,10 @@ package services
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"log"
 
+	"github.com/google/uuid"
 	"github.com/lincolnjpg/investment_service/internal/dtos"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 )
@@ -22,7 +23,7 @@ func (s userAssetService) CreateUserAsset(ctx context.Context, input dtos.Create
 		return dtos.CreateUserAssetOutput{}, err
 	}
 
-	_, err = s.assetService.GetAssetById(ctx, dtos.GetAssetByIdInput{Id: input.AssetId})
+	asset, err := s.assetService.GetAssetById(ctx, dtos.GetAssetByIdInput{Id: input.AssetId})
 	if err != nil {
 		return dtos.CreateUserAssetOutput{}, err
 	}
@@ -32,7 +33,18 @@ func (s userAssetService) CreateUserAsset(ctx context.Context, input dtos.Create
 		return dtos.CreateUserAssetOutput{}, err
 	}
 
-	message := fmt.Sprintf("Message for user id %s and asset id %s\n", input.UserId.String(), input.AssetId.String())
+	m := struct {
+		AssetId uuid.UUID `json:"asset_id,omitempty"`
+		Ticker  string    `json:"ticker,omitempty"`
+	}{
+		AssetId: userAsset.AssetId,
+		Ticker:  *asset.Ticker,
+	}
+	message, err := json.Marshal(m)
+	if err != nil {
+		return dtos.CreateUserAssetOutput{}, err
+	}
+
 	err = s.messageBrokerService.Publish(message)
 	if err != nil {
 		log.Println(err)
