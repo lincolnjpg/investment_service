@@ -10,5 +10,5 @@ type Resolver struct {
 	ports.UserService
 	ports.AssetIndexService
 	ports.AssetService
-	ports.UserAssetService
+	ports.InvestmentService
 }

@@ -7,10 +7,10 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/entities"
 )
 
-type UserAssetService interface {
-	CreateUserAsset(ctx context.Context, input dtos.CreateUserAssetInput) (dtos.CreateUserAssetOutput, error)
+type InvestmentService interface {
+	CreateInvestment(ctx context.Context, input dtos.CreateInvestmentInput) (dtos.CreateInvestmentOutput, error)
 }
 
-type UserAssetRepository interface {
-	CreateUserAsset(ctx context.Context, input dtos.CreateUserAssetInput) (entities.UserAsset, error)
+type InvestmentRepository interface {
+	CreateInvestment(ctx context.Context, input dtos.CreateInvestmentInput) (entities.Investment, error)
 }

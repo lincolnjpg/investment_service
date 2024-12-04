@@ -14,16 +14,16 @@ import (
 	customerror "github.com/lincolnjpg/investment_service/internal/error"
 )
 
-type userAssetRepository struct {
+type investmentRepository struct {
 	db *pgx.Conn
 }
 
-func (r userAssetRepository) CreateUserAsset(ctx context.Context, input dtos.CreateUserAssetInput) (entities.UserAsset, error) {
-	var userAsset entities.UserAsset
+func (r investmentRepository) CreateInvestment(ctx context.Context, input dtos.CreateInvestmentInput) (entities.Investment, error) {
+	var investment entities.Investment
 
 	tx, err := r.db.Begin(ctx)
 	if err != nil {
-		return userAsset, err
+		return investment, err
 	}
 	defer func() {
 		err := tx.Rollback(ctx)
@@ -45,22 +45,22 @@ func (r userAssetRepository) CreateUserAsset(ctx context.Context, input dtos.Cre
 		time.Now(),
 		enum.Pending,
 	)
-	if err := row.Scan(&userAsset.Id, &userAsset.UserId, &userAsset.AssetId, &userAsset.Quantity, &userAsset.PuchaseDate, &userAsset.Status); err != nil {
+	if err := row.Scan(&investment.Id, &investment.UserId, &investment.AssetId, &investment.Quantity, &investment.PuchaseDate, &investment.Status); err != nil {
 		err := customerror.NewAPIError(fmt.Sprintf("could not create a new user asset: %s", err.Error()), http.StatusInternalServerError)
 
-		return userAsset, err
+		return investment, err
 	}
 
 	err = tx.Commit(ctx)
 	if err != nil {
 		err := customerror.NewAPIError("could not commit transaction", http.StatusInternalServerError)
 
-		return userAsset, err
+		return investment, err
 	}
 
-	return userAsset, nil
+	return investment, nil
 }
 
-func NewUserAssetRepository(db *pgx.Conn) userAssetRepository {
-	return userAssetRepository{db: db}
+func NewInvestmentRepository(db *pgx.Conn) investmentRepository {
+	return investmentRepository{db: db}
 }

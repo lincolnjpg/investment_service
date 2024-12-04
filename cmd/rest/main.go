@@ -43,20 +43,20 @@ func main() {
 	assetsRepository := repositories.NewAssetRepository(db)
 	assetsService := services.NewAssetService(assetsRepository, assetIndexesService)
 
-	userAssetRepository := repositories.NewUserAssetRepository(db)
+	investmentRepository := repositories.NewInvestmentRepository(db)
 	producer := producers.RabbitMqProducer{}
-	userAssetService := services.NewUserAssetService(userAssetRepository, producer, userService, assetsService)
+	investmentService := services.NewInvestmentService(investmentRepository, producer, userService, assetsService)
 
 	services := struct {
 		ports.UserService
 		ports.AssetIndexService
 		ports.AssetService
-		ports.UserAssetService
+		ports.InvestmentService
 	}{
 		UserService:       userService,
 		AssetIndexService: assetIndexesService,
 		AssetService:      assetsService,
-		UserAssetService:  userAssetService,
+		InvestmentService: investmentService,
 	}
 
 	restApi := NewRestApi(services, envs.RestApiPort)

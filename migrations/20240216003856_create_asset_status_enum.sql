@@ -1,5 +1,5 @@
 -- +goose Up
-CREATE TYPE asset_status AS ENUM ('Pending', 'Done', 'Canceled');
+CREATE TYPE investment_status AS ENUM ('Pending', 'Done', 'Canceled');
 
 -- +goose Down
-DROP TYPE asset_status;
+DROP TYPE investment_status;

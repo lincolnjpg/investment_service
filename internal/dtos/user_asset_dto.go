@@ -7,14 +7,14 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
-type CreateUserAssetInput struct {
+type CreateInvestmentInput struct {
 	UserId   uuid.UUID            `json:"user_id,omitempty"`
 	AssetId  uuid.UUID            `json:"asset_id,omitempty"`
 	Quantity int                  `json:"quantity,omitempty"`
 	Status   enum.AssetStatusEnum `json:"status,omitempty"`
 }
 
-func (dto CreateUserAssetInput) Validate() error {
+func (dto CreateInvestmentInput) Validate() error {
 	return validation.ValidateStruct(
 		&dto,
 		validation.Field(
@@ -36,6 +36,6 @@ func (dto CreateUserAssetInput) Validate() error {
 	)
 }
 
-type CreateUserAssetOutput struct {
+type CreateInvestmentOutput struct {
 	Id uuid.UUID `json:"id,omitempty"`
 }

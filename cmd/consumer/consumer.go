@@ -14,8 +14,8 @@ import (
 )
 
 type rabbitMqConsumer struct {
-	financeApiBaseUrl   string
-	userAssetRepository ports.UserAssetRepository
+	financeApiBaseUrl    string
+	investmentRepository ports.InvestmentRepository
 }
 
 func (c rabbitMqConsumer) consume() {
@@ -111,9 +111,9 @@ func (c rabbitMqConsumer) consume() {
 	<-forever
 }
 
-func NewRabbitMqConsumer(financeApiBaseUrl string, userAssetRepository ports.UserAssetRepository) *rabbitMqConsumer {
+func NewRabbitMqConsumer(financeApiBaseUrl string, investmentRepository ports.InvestmentRepository) *rabbitMqConsumer {
 	return &rabbitMqConsumer{
-		financeApiBaseUrl:   financeApiBaseUrl,
-		userAssetRepository: userAssetRepository,
+		financeApiBaseUrl:    financeApiBaseUrl,
+		investmentRepository: investmentRepository,
 	}
 }

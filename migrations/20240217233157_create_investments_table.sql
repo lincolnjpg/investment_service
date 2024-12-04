@@ -1,11 +1,11 @@
 -- +goose Up
-CREATE TABLE users_assets (
+CREATE TABLE investments (
 	id UUID NOT NULL DEFAULT gen_random_uuid(),
 	user_id UUID NOT NULL,
 	asset_id UUID NOT NULL,
 	quantity SMALLINT NOT NULL,
 	purchase_date DATE NOT NULL,
-	status asset_status NOT NULL,
+	status investment_status NOT NULL,
 	message TEXT NULL,
 	created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
 	updated_at TIMESTAMP WITH TIME ZONE NULL,
@@ -13,4 +13,4 @@ CREATE TABLE users_assets (
 );
 
 -- +goose Down
-DROP TABLE users_assets;
+DROP TABLE investments;

@@ -30,8 +30,8 @@ func main() {
 	}
 	defer db.Close(ctx)
 
-	userAssetRepository := repositories.NewUserAssetRepository(db)
+	investmentRepository := repositories.NewInvestmentRepository(db)
 
-	consumer := NewRabbitMqConsumer("https://query1.finance.yahoo.com/v8/finance/chart", userAssetRepository)
+	consumer := NewRabbitMqConsumer("https://query1.finance.yahoo.com/v8/finance/chart", investmentRepository)
 	consumer.consume()
 }

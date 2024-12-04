@@ -7,7 +7,7 @@ import (
 	"github.com/lincolnjpg/investment_service/internal/enum"
 )
 
-type UserAsset struct {
+type Investment struct {
 	Id          uuid.UUID
 	UserId      uuid.UUID
 	AssetId     uuid.UUID

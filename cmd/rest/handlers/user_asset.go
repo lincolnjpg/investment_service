@@ -13,12 +13,12 @@ import (
 	"github.com/unrolled/render"
 )
 
-func CreateUserAssetHandler(userAssetService ports.UserAssetService) func(http.ResponseWriter, *http.Request) {
+func CreateInvestmentHandler(investmentService ports.InvestmentService) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		render := render.New()
 
-		var body dtos.CreateUserAssetInput
+		var body dtos.CreateInvestmentInput
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			log.Println(err)
@@ -41,7 +41,7 @@ func CreateUserAssetHandler(userAssetService ports.UserAssetService) func(http.R
 
 		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
 
-		user, err := userAssetService.CreateUserAsset(ctx, body)
+		user, err := investmentService.CreateInvestment(ctx, body)
 		if err != nil {
 			customerror := err.(customerror.APIError)
 			render.JSON(w, customerror.StatusCode, customerror.ToMap())
