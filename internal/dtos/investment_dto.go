@@ -69,3 +69,25 @@ type GetInvestmentByIdOutput struct {
 	PurchaseDate time.Time                 `json:"purchase_date,omitempty"`
 	Message      *string                   `json:"message,omitempty"`
 }
+
+type UpdateInvestmentByIdInput struct {
+	Id      uuid.UUID
+	Status  enum.InvestmentStatusEnum
+	Message *string
+}
+
+func (dto UpdateInvestmentByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&dto,
+		validation.Field(
+			&dto.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+		validation.Field(&dto.Status),
+	)
+}
+
+type UpdateInvestmentByIdOutput struct {
+	Id uuid.UUID
+}

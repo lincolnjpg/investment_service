@@ -92,3 +92,41 @@ func GetInvestmentByIdHandler(investmentService ports.InvestmentService) func(ht
 		render.JSON(w, http.StatusOK, map[string]interface{}{"data": user})
 	}
 }
+
+func UpateInvestmentByIdHandler(investmentService ports.InvestmentService) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		render := render.New()
+
+		var body dtos.UpdateInvestmentByIdInput
+		json.NewDecoder(r.Body).Decode(&body)
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
+		body.Id = id
+
+		err := body.Validate()
+		if err != nil {
+			render.JSON(w, http.StatusUnprocessableEntity,
+				map[string]map[string]interface{}{
+					"error": {
+						"message": "input validation error",
+						"fields":  err,
+					},
+				},
+			)
+
+			return
+		}
+
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
+
+		investment, err := investmentService.UpdateInvestmentById(ctx, body)
+		if err != nil {
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
+
+			return
+		}
+
+		render.JSON(w, http.StatusOK, map[string]interface{}{"data": investment})
+	}
+}

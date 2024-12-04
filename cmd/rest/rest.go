@@ -56,6 +56,7 @@ func (r restApi) Run() {
 	investmentRouter := chi.NewRouter()
 	investmentRouter.Post("/", handlers.CreateInvestmentHandler(r.app))
 	investmentRouter.Get("/{id}", handlers.GetInvestmentByIdHandler(r.app))
+	investmentRouter.Put("/{id}", handlers.UpateInvestmentByIdHandler(r.app))
 
 	router.Mount("/users", usersRouter)
 	router.Mount("/indexes", assetIndexesRouter)
