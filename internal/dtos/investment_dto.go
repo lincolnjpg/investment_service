@@ -91,3 +91,18 @@ func (dto UpdateInvestmentByIdInput) Validate() error {
 type UpdateInvestmentByIdOutput struct {
 	Id uuid.UUID
 }
+
+type DeleteInvestmentByIdInput struct {
+	Id uuid.UUID `json:"id,omitempty"`
+}
+
+func (dto DeleteInvestmentByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&dto,
+		validation.Field(
+			&dto.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}

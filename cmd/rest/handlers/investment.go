@@ -130,3 +130,41 @@ func UpateInvestmentByIdHandler(investmentService ports.InvestmentService) func(
 		render.JSON(w, http.StatusOK, map[string]interface{}{"data": investment})
 	}
 }
+
+func DeleteInvestmentByIdHandler(investmentService ports.InvestmentService) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		render := render.New()
+
+		id, _ := uuid.Parse(chi.URLParam(r, "id"))
+		body := dtos.DeleteInvestmentByIdInput{
+			Id: id,
+		}
+
+		err := body.Validate()
+		if err != nil {
+			render.JSON(w, http.StatusUnprocessableEntity,
+				map[string]map[string]interface{}{
+					"error": {
+						"message": "input validation error",
+						"fields":  err,
+					},
+				},
+			)
+
+			return
+		}
+
+		httplog.LogEntrySetField(ctx, "requestInput", slog.AnyValue(body))
+
+		err = investmentService.DeleteInvestmentById(ctx, body)
+		if err != nil {
+			customerror := err.(customerror.APIError)
+			render.JSON(w, customerror.StatusCode, customerror.ToMap())
+
+			return
+		}
+
+		render.JSON(w, http.StatusNoContent, map[string]interface{}{})
+	}
+}

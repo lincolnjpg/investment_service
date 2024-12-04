@@ -134,6 +134,27 @@ func (r investmentRepository) UpdateInvestmentById(ctx context.Context, input dt
 	return investment, nil
 }
 
+func (r investmentRepository) DeleteInvestmentById(ctx context.Context, input dtos.DeleteInvestmentByIdInput) error {
+	_, err := r.db.Exec(
+		ctx,
+		`
+			DELETE FROM
+				investments
+			WHERE
+				id = $1;
+		`,
+		input.Id,
+	)
+
+	if err != nil {
+		err := customerror.NewAPIError(fmt.Sprintf("could not delete investment: %s", err.Error()), http.StatusInternalServerError)
+
+		return err
+	}
+
+	return nil
+}
+
 func NewInvestmentRepository(db *pgx.Conn) investmentRepository {
 	return investmentRepository{db: db}
 }

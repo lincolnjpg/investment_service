@@ -74,6 +74,20 @@ func (s investmentService) UpdateInvestmentById(ctx context.Context, input dtos.
 	return dtos.UpdateInvestmentByIdOutput{Id: user.Id}, nil
 }
 
+func (s investmentService) DeleteInvestmentById(ctx context.Context, input dtos.DeleteInvestmentByIdInput) error {
+	_, err := s.GetInvestmentById(ctx, dtos.GetInvestmentByIdInput(input))
+	if err != nil {
+		return err
+	}
+
+	err = s.repo.DeleteInvestmentById(ctx, input)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func NewInvestmentService(repo ports.InvestmentRepository, producer ports.Producer, useuserService ports.UserService, assetsService ports.AssetService) *investmentService {
 	return &investmentService{
 		repo:         repo,
