@@ -4,6 +4,7 @@ CREATE TABLE investments (
 	user_id UUID NOT NULL,
 	asset_id UUID NOT NULL,
 	quantity SMALLINT NOT NULL,
+	type investment_types NOT NULL,
 	purchase_date DATE NOT NULL,
 	status investment_status NOT NULL,
 	message TEXT NULL,
