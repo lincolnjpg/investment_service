@@ -13,6 +13,6 @@ type Investment struct {
 	AssetId     uuid.UUID
 	Quantity    int
 	PuchaseDate time.Time
-	Status      enum.AssetStatusEnum
+	Status      enum.InvestmentStatusEnum
 	Message     string
 }

@@ -35,7 +35,7 @@ func (r investmentRepository) CreateInvestment(ctx context.Context, input dtos.C
 	row := tx.QueryRow(
 		ctx,
 		`
-			INSERT INTO users_assets(user_id, asset_id, quantity, purchase_date, status)
+			INSERT INTO investments(user_id, asset_id, quantity, purchase_date, status)
 			VALUES($1, $2, $3, $4, $5)
 			RETURNING id, user_id, asset_id, quantity, purchase_date, status;
 		`,
@@ -46,7 +46,7 @@ func (r investmentRepository) CreateInvestment(ctx context.Context, input dtos.C
 		enum.Pending,
 	)
 	if err := row.Scan(&investment.Id, &investment.UserId, &investment.AssetId, &investment.Quantity, &investment.PuchaseDate, &investment.Status); err != nil {
-		err := customerror.NewAPIError(fmt.Sprintf("could not create a new user asset: %s", err.Error()), http.StatusInternalServerError)
+		err := customerror.NewAPIError(fmt.Sprintf("could not create a new investment: %s", err.Error()), http.StatusInternalServerError)
 
 		return investment, err
 	}

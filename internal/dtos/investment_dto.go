@@ -8,10 +8,10 @@ import (
 )
 
 type CreateInvestmentInput struct {
-	UserId   uuid.UUID            `json:"user_id,omitempty"`
-	AssetId  uuid.UUID            `json:"asset_id,omitempty"`
-	Quantity int                  `json:"quantity,omitempty"`
-	Status   enum.AssetStatusEnum `json:"status,omitempty"`
+	UserId   uuid.UUID                 `json:"user_id,omitempty"`
+	AssetId  uuid.UUID                 `json:"asset_id,omitempty"`
+	Quantity int                       `json:"quantity,omitempty"`
+	Status   enum.InvestmentStatusEnum `json:"status,omitempty"`
 }
 
 func (dto CreateInvestmentInput) Validate() error {
