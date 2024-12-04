@@ -8,12 +8,12 @@ import (
 )
 
 type Investment struct {
-	Id          uuid.UUID
-	UserId      uuid.UUID
-	AssetId     uuid.UUID
-	Quantity    int
-	PuchaseDate time.Time
-	Status      enum.InvestmentStatusEnum
-	Message     string
-	Type        enum.InvestmentTypeEnum
+	Id           uuid.UUID
+	UserId       uuid.UUID
+	AssetId      uuid.UUID
+	Quantity     int
+	Status       enum.InvestmentStatusEnum
+	Type         enum.InvestmentTypeEnum
+	PurchaseDate time.Time
+	Message      *string
 }

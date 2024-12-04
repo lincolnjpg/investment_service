@@ -51,6 +51,15 @@ func (s investmentService) CreateInvestment(ctx context.Context, input dtos.Crea
 	return dtos.CreateInvestmentOutput{Id: investment.Id}, nil
 }
 
+func (s investmentService) GetInvestmentById(ctx context.Context, input dtos.GetInvestmentByIdInput) (dtos.GetInvestmentByIdOutput, error) {
+	investment, err := s.repo.GetInvestmentById(ctx, input)
+	if err != nil {
+		return dtos.GetInvestmentByIdOutput{}, err
+	}
+
+	return dtos.GetInvestmentByIdOutput(investment), nil
+}
+
 func NewInvestmentService(repo ports.InvestmentRepository, producer ports.Producer, useuserService ports.UserService, assetsService ports.AssetService) *investmentService {
 	return &investmentService{
 		repo:         repo,

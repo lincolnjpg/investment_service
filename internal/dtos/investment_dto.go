@@ -1,6 +1,8 @@
 package dtos
 
 import (
+	"time"
+
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/google/uuid"
@@ -40,4 +42,30 @@ func (dto CreateInvestmentInput) Validate() error {
 
 type CreateInvestmentOutput struct {
 	Id uuid.UUID `json:"id,omitempty"`
+}
+
+type GetInvestmentByIdInput struct {
+	Id uuid.UUID `json:"id,omitempty"`
+}
+
+func (dto GetInvestmentByIdInput) Validate() error {
+	return validation.ValidateStruct(
+		&dto,
+		validation.Field(
+			&dto.Id,
+			validation.Required,
+			is.UUIDv4,
+		),
+	)
+}
+
+type GetInvestmentByIdOutput struct {
+	Id           uuid.UUID                 `json:"id,omitempty"`
+	UserId       uuid.UUID                 `json:"user_id,omitempty"`
+	AssetId      uuid.UUID                 `json:"asset_id,omitempty"`
+	Quantity     int                       `json:"quantity,omitempty"`
+	Status       enum.InvestmentStatusEnum `json:"status,omitempty"`
+	Type         enum.InvestmentTypeEnum   `json:"type,omitempty"`
+	PurchaseDate time.Time                 `json:"purchase_date,omitempty"`
+	Message      *string                   `json:"message,omitempty"`
 }

@@ -45,7 +45,7 @@ func (r investmentRepository) CreateInvestment(ctx context.Context, input dtos.C
 		time.Now(),
 		enum.Pending,
 	)
-	if err := row.Scan(&investment.Id, &investment.UserId, &investment.AssetId, &investment.Quantity, &investment.PuchaseDate, &investment.Status); err != nil {
+	if err := row.Scan(&investment.Id, &investment.UserId, &investment.AssetId, &investment.Quantity, &investment.PurchaseDate, &investment.Status); err != nil {
 		err := customerror.NewAPIError(fmt.Sprintf("could not create a new investment: %s", err.Error()), http.StatusInternalServerError)
 
 		return investment, err
@@ -54,6 +54,40 @@ func (r investmentRepository) CreateInvestment(ctx context.Context, input dtos.C
 	err = tx.Commit(ctx)
 	if err != nil {
 		err := customerror.NewAPIError("could not commit transaction", http.StatusInternalServerError)
+
+		return investment, err
+	}
+
+	return investment, nil
+}
+
+func (r investmentRepository) GetInvestmentById(ctx context.Context, input dtos.GetInvestmentByIdInput) (entities.Investment, error) {
+	var investment entities.Investment
+
+	row := r.db.QueryRow(
+		ctx,
+		`
+			SELECT 
+				id,
+				user_id,
+				asset_id,
+				quantity,
+				purchase_date,
+				status,
+				message
+			FROM
+				investments
+			WHERE
+				id = $1;
+		`,
+		input.Id,
+	)
+	if err := row.Scan(&investment.Id, &investment.UserId, &investment.AssetId, &investment.Quantity, &investment.PurchaseDate, &investment.Status, &investment.Message); err != nil {
+		if err == pgx.ErrNoRows {
+			return investment, customerror.NewAPIError(fmt.Sprintf("investment not found: %s", err.Error()), http.StatusNotFound)
+		}
+
+		err := customerror.NewAPIError(fmt.Sprintf("could not get investment from database: %s", err.Error()), http.StatusInternalServerError)
 
 		return investment, err
 	}
