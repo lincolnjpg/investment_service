@@ -18,7 +18,7 @@ migrations_dev_up:
 migrations_dev_status:
 	goose -dir migrations postgres "host=localhost port=5432 user=postgres password=example database=postgres sslmode=disable" status
 
-migrations_dev_reset:
+migrations_dev_down:
 	goose -dir migrations postgres "host=localhost port=5432 user=postgres password=example database=postgres sslmode=disable" reset
 
 migrations_test_up:
@@ -27,7 +27,7 @@ migrations_test_up:
 migrations_test_status:
 	goose -dir migrations postgres "host=localhost port=5433 user=postgres password=example database=postgres sslmode=disable" status
 
-migrations_test_reset:
+migrations_test_down:
 	goose -dir migrations postgres "host=localhost port=5433 user=postgres password=example database=postgres sslmode=disable" reset
 
 migrations_dev_create:
