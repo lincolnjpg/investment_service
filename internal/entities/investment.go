@@ -15,4 +15,5 @@ type Investment struct {
 	PuchaseDate time.Time
 	Status      enum.InvestmentStatusEnum
 	Message     string
+	Type        enum.InvestmentTypeEnum
 }

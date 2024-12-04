@@ -45,3 +45,41 @@ func (e InvestmentStatusEnum) Validate() error {
 		validation.In(uint8(Pending), uint8(Done), uint8(Canceled)),
 	)
 }
+
+type InvestmentTypeEnum uint8
+
+const (
+	Buy InvestmentTypeEnum = iota + 1
+	Sell
+)
+
+var investmentTypesNames = map[InvestmentTypeEnum]string{
+	Buy:  "Buy",
+	Sell: "Sell",
+}
+
+var investmentTypesLabels = map[string]InvestmentTypeEnum{
+	"Buy":  Buy,
+	"Sell": Sell,
+}
+
+func (e InvestmentTypeEnum) String() string {
+	return investmentTypesNames[e]
+}
+
+func (e *InvestmentTypeEnum) Scan(value interface{}) error {
+	if v, ok := value.(string); ok {
+		*e = investmentTypesLabels[v]
+		return nil
+	}
+
+	return errors.New("could not scan investment type")
+}
+
+func (e InvestmentTypeEnum) Validate() error {
+	return validation.Validate(
+		uint8(e),
+		validation.Required,
+		validation.In(uint8(Buy), uint8(Sell)),
+	)
+}

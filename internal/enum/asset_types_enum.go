@@ -6,10 +6,10 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
-type InvestmentTypeEnum uint8
+type AssetTypeEnum uint8
 
 const (
-	Cdb InvestmentTypeEnum = iota + 1
+	Cdb AssetTypeEnum = iota + 1
 	Lci
 	Lca
 	Cri
@@ -20,7 +20,7 @@ const (
 	Fii
 )
 
-var investmentTypeNames = map[InvestmentTypeEnum]string{
+var investmentTypeNames = map[AssetTypeEnum]string{
 	Cdb:           "CDB",
 	Lci:           "LCI",
 	Lca:           "LCA",
@@ -32,7 +32,7 @@ var investmentTypeNames = map[InvestmentTypeEnum]string{
 	Fii:           "FII",
 }
 
-var investmentTypeLabels = map[string]InvestmentTypeEnum{
+var investmentTypeLabels = map[string]AssetTypeEnum{
 	"CDB":            Cdb,
 	"LCI":            Lci,
 	"LCA":            Lca,
@@ -44,11 +44,11 @@ var investmentTypeLabels = map[string]InvestmentTypeEnum{
 	"FII":            Fii,
 }
 
-func (e InvestmentTypeEnum) String() string {
+func (e AssetTypeEnum) String() string {
 	return investmentTypeNames[e]
 }
 
-func (e *InvestmentTypeEnum) Scan(value interface{}) error {
+func (e *AssetTypeEnum) Scan(value interface{}) error {
 	if v, ok := value.(string); ok {
 		*e = investmentTypeLabels[v]
 		return nil
@@ -57,7 +57,7 @@ func (e *InvestmentTypeEnum) Scan(value interface{}) error {
 	return errors.New("could not scan investment type")
 }
 
-func (e InvestmentTypeEnum) Validate() error {
+func (e AssetTypeEnum) Validate() error {
 	return validation.Validate(
 		e.String(),
 		validation.Required,

@@ -12,6 +12,7 @@ type CreateInvestmentInput struct {
 	AssetId  uuid.UUID                 `json:"asset_id,omitempty"`
 	Quantity int                       `json:"quantity,omitempty"`
 	Status   enum.InvestmentStatusEnum `json:"status,omitempty"`
+	Type     enum.InvestmentTypeEnum   `json:"type,omitempty"`
 }
 
 func (dto CreateInvestmentInput) Validate() error {
@@ -33,6 +34,7 @@ func (dto CreateInvestmentInput) Validate() error {
 			validation.Min(1),
 		),
 		validation.Field(&dto.Status),
+		validation.Field(&dto.Type),
 	)
 }
 
