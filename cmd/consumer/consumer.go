@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -8,6 +9,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+	"github.com/lincolnjpg/investment_service/internal/enum"
 	"github.com/lincolnjpg/investment_service/internal/infra"
 	"github.com/lincolnjpg/investment_service/internal/ports"
 	"github.com/rabbitmq/amqp091-go"
@@ -15,6 +18,7 @@ import (
 
 type rabbitMqConsumer struct {
 	financeApiBaseUrl    string
+	assetRepository      ports.AssetRepository
 	investmentRepository ports.InvestmentRepository
 }
 
@@ -72,36 +76,7 @@ func (c rabbitMqConsumer) consume() {
 				os.Exit(1)
 			}
 
-			url := fmt.Sprintf("%s/%s.SA", c.financeApiBaseUrl, m.Ticker)
-
-			r, err := http.Get(url)
-			if err != nil {
-				log.Fatalln(err)
-			}
-
-			if r.StatusCode != http.StatusOK {
-				fmt.Println(r.StatusCode)
-				log.Fatalln("Ticker not found")
-			}
-
-			body, err := io.ReadAll(r.Body)
-			if err != nil {
-				log.Fatalln(err)
-			}
-
-			var m map[string]any
-
-			err = json.Unmarshal(body, &m)
-			if err != nil {
-				log.Fatalln(err)
-			}
-
-			chart, _ := m["chart"].(map[string]any)
-			result, _ := chart["result"].([]any)
-			resultZero, _ := result[0].(map[string]any)
-			meta, _ := resultZero["meta"].(map[string]any)
-
-			fmt.Println(meta["regularMarketPrice"])
+			go c.processMessage(m)
 
 			message.Ack(false)
 		}
@@ -111,9 +86,67 @@ func (c rabbitMqConsumer) consume() {
 	<-forever
 }
 
-func NewRabbitMqConsumer(financeApiBaseUrl string, investmentRepository ports.InvestmentRepository) *rabbitMqConsumer {
+func (c rabbitMqConsumer) processMessage(message infra.Message) {
+	url := fmt.Sprintf("%s/%s.SA", c.financeApiBaseUrl, message.Ticker)
+
+	r, err := http.Get(url)
+	if err != nil {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
+		log.Fatalln(err)
+	}
+
+	if r.StatusCode != http.StatusOK {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
+		log.Fatalln("Ticker not found")
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
+		log.Fatalln(err)
+	}
+
+	var response map[string]any
+
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
+		log.Fatalln(err)
+	}
+
+	chart, _ := response["chart"].(map[string]any)
+	result, _ := chart["result"].([]any)
+	resultZero, _ := result[0].(map[string]any)
+	meta, _ := resultZero["meta"].(map[string]any)
+	tickerPrice, _ := meta["regularMarketPrice"].(float64)
+
+	fmt.Println(tickerPrice)
+
+	_, err = c.assetRepository.UpdateAssetById(context.Background(), dtos.UpdateAssetByIdInput{
+		Id:          message.Asset.Id,
+		Name:        message.Asset.Name,
+		UnitPrice:   tickerPrice,
+		Rentability: message.Asset.Rentability,
+		DueDate:     message.Asset.DueDate,
+		Ticker:      message.Asset.Ticker,
+		Type:        message.Asset.Type,
+	})
+	if err != nil {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Asset.Id, Status: enum.Canceled})
+		log.Fatalln(err)
+	}
+
+	_, err = c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Done})
+	if err != nil {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
+		log.Fatalln(err)
+	}
+}
+
+func NewRabbitMqConsumer(financeApiBaseUrl string, assetRepository ports.AssetRepository, investmentRepository ports.InvestmentRepository) *rabbitMqConsumer {
 	return &rabbitMqConsumer{
 		financeApiBaseUrl:    financeApiBaseUrl,
+		assetRepository:      assetRepository,
 		investmentRepository: investmentRepository,
 	}
 }

@@ -34,8 +34,9 @@ func (s investmentService) CreateInvestment(ctx context.Context, input dtos.Crea
 	}
 
 	m := infra.Message{
-		InvestmentId: investment.Id,
-		Ticker:       *asset.Ticker,
+		Asset:      dtos.UpdateAssetByIdInput(asset),
+		Investment: dtos.UpdateInvestmentByIdInput{Id: investment.Id, Status: investment.Status, Message: investment.Message},
+		Ticker:     *asset.Ticker,
 	}
 
 	message, err := json.Marshal(m)

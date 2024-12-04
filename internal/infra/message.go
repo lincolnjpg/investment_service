@@ -1,8 +1,11 @@
 package infra
 
-import "github.com/google/uuid"
+import (
+	"github.com/lincolnjpg/investment_service/internal/dtos"
+)
 
 type Message struct {
-	InvestmentId uuid.UUID `json:"user_asset_id,omitempty"`
-	Ticker       string    `json:"ticker,omitempty"`
+	Asset      dtos.UpdateAssetByIdInput      `json:"asset,omitempty"`
+	Investment dtos.UpdateInvestmentByIdInput `json:"investment,omitempty"`
+	Ticker     string                         `json:"ticker,omitempty"`
 }
