@@ -120,7 +120,11 @@ func (c rabbitMqConsumer) processMessage(message infra.Message) {
 	meta, _ := resultZero["meta"].(map[string]any)
 	tickerPrice, _ := meta["regularMarketPrice"].(float64)
 
-	fmt.Println(tickerPrice)
+	_, err = c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Done})
+	if err != nil {
+		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
+		log.Fatalln(err)
+	}
 
 	_, err = c.assetRepository.UpdateAssetById(context.Background(), dtos.UpdateAssetByIdInput{
 		Id:          message.Asset.Id,
@@ -133,12 +137,6 @@ func (c rabbitMqConsumer) processMessage(message infra.Message) {
 	})
 	if err != nil {
 		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Asset.Id, Status: enum.Canceled})
-		log.Fatalln(err)
-	}
-
-	_, err = c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Done})
-	if err != nil {
-		c.investmentRepository.UpdateInvestmentById(context.Background(), dtos.UpdateInvestmentByIdInput{Id: message.Investment.Id, Status: enum.Canceled})
 		log.Fatalln(err)
 	}
 }
