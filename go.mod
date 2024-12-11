@@ -17,6 +17,7 @@ require (
 )
 
 require (
+	github.com/Rhymond/go-money v1.0.14 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
